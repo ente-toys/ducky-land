@@ -2,7 +2,7 @@ import {authenticateTestSocket} from '../app/test-session.js';
 import {nearestSeaX} from '../world/flat-layout.js';
 import {isletAt} from '../world/islet-walk.js';
 import {takeArrivalSocket} from '../app/arrival-start.js';
-import {DURATIONS, playEmote, playSailEmote, SAIL_EMOTES, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
+import {DURATIONS, playEmote, playSailEmote, RUN_SPEED, SAIL_EMOTES, startJump, setWalkDestination, walkStep} from '../gameplay/player-motion.js';
 import {CHAT_INTERVAL, chatText} from './chat.js';
 import {nearbyFriend} from './friends.js';
 import {mapOf,islandMapReady} from '../world/island-maps.js';
@@ -12,6 +12,9 @@ import {BOAT_UNVEIL} from '../gameplay/boat-build.js';
 import {islandFor, harborOf, destinationsFor, near, canSail, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
+const HEARTBEAT_INTERVAL_MS = 5000;
+const HEARTBEAT_TIMEOUT_MS = 9000;
+const POSITION_SNAP_DISTANCE = 90;
 const moving = input => input.x !== 0 || input.y !== 0;
 const nowSeconds = () => performance.now() / 1000;
 
@@ -74,6 +77,7 @@ export class RoomClient {
     this.onPresence(null);
     this.id = null;
     this.player = null;
+    this.authoritativePlayer = null;
     this.arrival = null;
     this.friendPlayers = [];
     this.updateNearby();
@@ -140,18 +144,20 @@ export class RoomClient {
       if (this.islandId !== 'home') socket.send(JSON.stringify({type:'watch',islandId:this.islandId}));
       this.heartbeat = setInterval(() => {
         if (document.hidden) { pendingPing = null; return; }
+        if (socket.readyState !== WebSocket.OPEN) return;
+        const now = performance.now();
         if (pendingPing !== null) {
-          if (nowSeconds()-pendingPing > 9) {
+          if (now - pendingPing <= HEARTBEAT_TIMEOUT_MS) return;
+          // An advancing room snapshot proves the socket is still receiving game updates.
+          if (this.lastSnapshotAt === null || now - this.lastSnapshotAt > HEARTBEAT_TIMEOUT_MS) {
             this.recordReconnect('heartbeat_timeout');
             this.connect(this.wantsPlay, true);
+            return;
           }
-          return;
         }
-        if (socket.readyState === WebSocket.OPEN) {
-          socket.send('ping');
-          pendingPing = nowSeconds();
-        }
-      }, 5000);
+        pendingPing = now;
+        socket.send('ping');
+      }, HEARTBEAT_INTERVAL_MS);
     };
     socket.onmessage = ({data}) => {
       if (socket !== this.socket) return;
@@ -259,6 +265,10 @@ export class RoomClient {
 
   snapshot({epoch,tick,players,self,online,islandId='home',boats=[],globePlayers=[]}) {
     if (epoch === this.epoch && tick <= this.tick) return;
+    const snapshotAt = performance.now();
+    const previousSnapshotAt = this.lastSnapshotAt;
+    const previousPose = this.authoritativePlayer;
+    this.lastSnapshotAt = snapshotAt;
     if (!this.globeFeed) {
       this.legacyGlobePlayers = globePlayers;
       if (this.globeOpen) this.globePlayers = globePlayers;
@@ -266,8 +276,8 @@ export class RoomClient {
     this.snapshotPlayers = new Map(players.map(p => [p.id, p]));
     this.snapshotBoats = new Map(boats.map(b => [b.id, b]));
     const own=players.find(pose => pose.id === this.id);
+    this.authoritativePlayer = own;
     if (this.onReconnectDiagnostic) {
-      this.lastSnapshotAt = performance.now();
       const incident = this.reconnectIncident;
       if (incident && (own && self || !this.wantsPlay)) {
         this.reconnectIncident = null;
@@ -296,7 +306,7 @@ export class RoomClient {
     this.epoch = epoch;
     this.tick = tick;
     if (Number.isSafeInteger(online) && online >= 0) this.onPresence(online);
-    const now = nowSeconds();
+    const now = snapshotAt / 1000;
     const boatTracks=new Map();
     for (const boat of boats) {
       const last=this.boatTracks.get(boat.id);
@@ -318,7 +328,15 @@ export class RoomClient {
         if (previous) {
           this.offsetX += previous.x - this.player.x;
           this.offsetY += previous.y - this.player.y;
-          if (Math.hypot(this.offsetX,this.offsetY) > 90) {this.offsetX = this.offsetY = 0; this.correctionX = this.correctionY = 0; this.prev = null;}
+          if (Math.hypot(this.offsetX,this.offsetY) > POSITION_SNAP_DISTANCE) {
+            // Judge a walking relocation from consecutive server poses. Prediction can run ahead during a slow tick.
+            const maxTravel = POSITION_SNAP_DISTANCE + RUN_SPEED * (snapshotAt - previousSnapshotAt) / 1000;
+            if (mode !== 'walking' || !previousPose || Math.hypot(pose.x-previousPose.x,pose.y-previousPose.y) > maxTravel) {
+              this.offsetX = this.offsetY = 0;
+              this.correctionX = this.correctionY = 0;
+              this.prev = null;
+            }
+          }
         } else this.prev = null;
       } else {
         const last = this.tracks.get(pose.id);
@@ -514,8 +532,10 @@ export class RoomClient {
     const dx = this.player.x - x, dy = this.player.y - y;
     const distance2 = dx * dx + dy * dy;
     const backward = (this.offsetX - offsetX) * dx + (this.offsetY - offsetY) * dy;
-    if (backward > distance2 / 2 && distance2 > 0) {
-      const scale = distance2 / (2 * backward);
+    // A walking correction can absorb the whole predicted step when the server is falling behind.
+    const maxBackward = this.player.mode === 'walking' ? distance2 : distance2 / 2;
+    if (backward > maxBackward && distance2 > 0) {
+      const scale = maxBackward / backward;
       offsetX = this.offsetX + (offsetX - this.offsetX) * scale;
       offsetY = this.offsetY + (offsetY - this.offsetY) * scale;
       velocityX *= scale;

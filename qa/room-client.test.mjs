@@ -5,7 +5,7 @@ import {mapOf} from '../src/world/island-maps.js';
 import {ISLANDS} from '../src/gameplay/islands.js';
 const PLAIN=ISLANDS.find(island => island.id!=='home' && mapOf(island.id).home)?.id ?? 'home';
 import {destinationsFor,harborOf,boatSpots,boatHome,boatSlot,MOORING_CLEAR,harborApproachClear,boatRoom} from '../src/gameplay/islands.js';
-import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,jumpHeight,jumpPose,startJump,walkStep} from '../src/gameplay/player-motion.js';
+import {JUMP_SECONDS,JUMP_CROUCH,JUMP_AIR,JUMP_LAND,JUMP_RISE,RUN_SPEED,jumpHeight,jumpPose,startJump,walkStep} from '../src/gameplay/player-motion.js';
 
 function setup() {
   const events=[],sent=[];
@@ -200,6 +200,41 @@ test('repeated server corrections do not kick walking speed forward and back',()
   room.dispose();
 });
 
+test('sprinting stays continuous when server ticks fall behind, then snaps on a real relocation',t=>{
+  let clock=0;
+  t.mock.method(performance,'now',()=>clock);
+  const {room}=setup();
+  t.after(()=>room.dispose());
+  room.navHere=()=>({clearLine:()=>true});
+  room.snapshot(packet(1));
+  room.setAlpha(1);
+  const input={x:1,y:0,run:true};
+  let serverX=room.player.x;
+  let tick=1;
+  for(let frame=1;frame<=120;frame++){
+    clock=frame*1000/60;
+    const before=room.view().x;
+    room.step(1/60,input);
+    assert.ok(room.view().x>=before-1e-9,'the running duck does not move backward');
+    if(frame%24!==0)continue;
+    serverX+=RUN_SPEED*.1;
+    const late=packet(++tick);
+    Object.assign(late.players[0],{x:serverX,travel:RUN_SPEED});
+    late.self.ack=room.seq;
+    const drawn=room.view().x;
+    room.snapshot(late);
+    assert.ok(Math.abs(room.view().x-drawn)<1e-9,'a late snapshot must not snap the running duck backward');
+  }
+  clock+=50;
+  const relocated=packet(++tick);
+  relocated.players[0].x=serverX+1000;
+  relocated.self.ack=room.seq;
+  // Delta handling merges the pose into this map before calling snapshot.
+  room.snapshotPlayers.set(room.id,relocated.players[0]);
+  room.snapshot(relocated);
+  assert.equal(room.view().x,relocated.players[0].x);
+});
+
 test('nearby friends choose the closest live account, retain it, and respect saves, dismissals and reconnects',()=>{
   const {room}=setup();
   const candidates=[];
@@ -370,6 +405,51 @@ test('a refilled boat appears at its mooring, never slides in from the sailing o
   assert.deepEqual([fresh.x,fresh.y],[spot.x,spot.y]);
   assert.equal(fresh.travel,0);
   room.dispose();
+});
+
+test('fresh snapshots keep the socket alive while a pong is missing', t => {
+  let clock = 0;
+  let heartbeat;
+  t.mock.method(performance, 'now', () => clock);
+  t.mock.method(globalThis, 'setInterval', callback => { heartbeat = callback; });
+  globalThis.location = {href: 'https://room.example/'};
+  globalThis.document = {hidden: false};
+  t.after(() => {
+    delete globalThis.location;
+    delete globalThis.document;
+  });
+  t.mock.property(globalThis, 'WebSocket', class {
+    static OPEN = 1;
+    readyState = 1;
+    sent = [];
+    send(message) { this.sent.push(message); }
+    close() {}
+  });
+
+  const room = new RoomClient(() => {});
+  t.after(() => room.dispose());
+  room.connect();
+  const socket = room.socket;
+  const receive = message => socket.onmessage({data: JSON.stringify(message)});
+  socket.onopen();
+  receive({type: 'welcome', id: 'player'});
+  receive({type: 'snapshot', ...packet(1)});
+  clock = 5000;
+  heartbeat();
+
+  clock = 14_900;
+  receive({type: 'delta', epoch: 'epoch', islandId: 'home', baseTick: 1, tick: 2,
+    players: {removed: [], changed: []}, boats: {removed: [], changed: []}, self: packet(2).self});
+  clock = 15_000;
+  heartbeat();
+  assert.strictEqual(room.socket, socket);
+  assert.deepEqual(socket.sent, ['{"type":"updates"}', 'ping', 'ping']);
+
+  clock = 24_900;
+  receive({type: 'snapshot', ...packet(2)});
+  clock = 25_000;
+  heartbeat();
+  assert.notStrictEqual(room.socket, socket);
 });
 
 test('diagnostics keep the first reconnect trigger and record the authoritative resumed pose', async t => {
