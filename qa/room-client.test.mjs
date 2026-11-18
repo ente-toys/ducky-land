@@ -48,6 +48,31 @@ test('remote movement catches up sooner and stops predicting when updates stall'
   assert.equal(peerAt(.3),2400);
 });
 
+test('distant positions interpolate through repeated snapshots and rejoin the nearby stream', t => {
+  let clock=0;
+  t.mock.method(performance,'now',()=>clock);
+  const {room}=setup();
+  t.after(()=>room.dispose());
+  const receive = (tick, at, x, positionSampleMs) => {
+    clock=at;
+    const snapshot=packet(tick);
+    snapshot.players.push({...snapshot.players[0],id:'peer',x,travel:400,positionSampleMs});
+    room.snapshot(snapshot);
+  };
+  const peerAt = time => room.poses(time).find(pose=>pose.id==='peer').x;
+
+  receive(1,0,1800,1000);
+  receive(2,1000,2200,1000);
+  assert.equal(peerAt(1),1800);
+  receive(3,1100,2200,1000);
+  receive(4,1200,2200,1000);
+  assert.equal(peerAt(1.5),2000);
+  assert.equal(peerAt(2),2200);
+  receive(5,1500,2400,0);
+  assert.equal(peerAt(1.5),2000);
+  assert.ok(Math.abs(peerAt(1.65)-2400)<1e-9);
+});
+
 test('try-again-later backs off across failed upgrades and resets on welcome', t => {
   let retry, delay;
   t.mock.method(globalThis,'setTimeout',(callback,ms)=>{retry=callback;delay=ms;});

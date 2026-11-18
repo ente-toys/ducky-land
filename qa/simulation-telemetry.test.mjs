@@ -2,8 +2,48 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {BOAT_GAP, canSail, harborOf} from '../src/gameplay/islands.js';
 import {SAIL_ROUTE_WORK_PER_TICK, SailRouteQueue} from '../worker/sail-route-queue.js';
-import {SeaSimulation} from '../worker/simulation.js';
+import {IslandSimulation, SeaSimulation} from '../worker/simulation.js';
 import {addPlayer, makeRoom} from './room-harness.mjs';
+
+test('snapshot deltas survive cell changes and backpressure while identity changes send a full snapshot', async () => {
+  const {ctx} = await makeRoom();
+  ctx.storage.kv = new Map([['simulation-key', JSON.stringify(['delta-test', 'home'])]]);
+  const namespace = {idFromName: name=>name,get:()=>({fetch:async()=>new Response(null,{status:204})})};
+  const {room} = new IslandSimulation(ctx, {ISLAND:namespace,WORLD_PRESENCE:namespace});
+  const viewer = addPlayer(room, 0, {x:1000,y:1000});
+  const peer = addPlayer(room, 1, {x:2200,y:1000});
+  for (let n=2;n<40;n++) addPlayer(room,n,{x:2500,y:1000});
+  const info=room.connections.get(viewer.socket);
+  info.deltas=true;
+  const sendAck = tick => room.webSocketMessage(viewer.socket, JSON.stringify({type:'snapshot-ack',epoch:room.epoch,tick}));
+  const lastDelta = () => viewer.socket.notes.findLast(message=>message.type==='delta');
+
+  room.broadcast(viewer.socket);
+  const initial=JSON.parse(viewer.socket.last);
+  assert.equal(initial.players.find(p=>p.id===peer.actor.id).positionSampleMs,1000);
+  viewer.actor.x=1030;
+  room.broadcast(viewer.socket);
+  assert.equal(lastDelta().baseTick,initial.tick);
+  assert.deepEqual(lastDelta().players.changed.find(p=>p.id===peer.actor.id),{id:peer.actor.id,positionSampleMs:0});
+
+  room.broadcast(viewer.socket);
+  const outstanding=lastDelta().tick;
+  room.broadcast(viewer.socket);
+  assert.equal(lastDelta().tick,outstanding);
+  assert.equal(info.snapshotMissed,true);
+  room.timer='manual';
+  sendAck(outstanding);
+  room.broadcast(viewer.socket);
+  assert.equal(lastDelta().baseTick,outstanding);
+  assert.equal(info.snapshotMissed,false);
+  room.timer=null;
+
+  info.digest=null;
+  room.broadcast(viewer.socket);
+  const guest=JSON.parse(viewer.socket.last);
+  assert.ok(guest.tick>initial.tick);
+  assert.ok(guest.players.every(p=>!('login' in p) && !('accountId' in p)));
+});
 
 test('the sea reports sailing work and labels each measured phase', async (t) => {
   const {ctx} = await makeRoom();

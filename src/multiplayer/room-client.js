@@ -21,12 +21,12 @@ const moving = input => input.x !== 0 || input.y !== 0;
 const nowSeconds = () => performance.now() / 1000;
 
 function sample(track, now) {
-  const {from,to,start,blendSeconds=.1,vx=0,vy=0} = track;
+  const {from,to,start,poseAt=start,blendSeconds=.1,vx=0,vy=0} = track;
   const age = Math.max(0, now-start);
   const blend = Math.min(1, age / blendSeconds);
   const lead = Math.min(PEER_LEAD_SECONDS, Math.max(0, age-blendSeconds));
   const turn = to.turn - from.turn;
-  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-age), x:from.x+(to.x-from.x)*blend+vx*lead, y:from.y+(to.y-from.y)*blend+vy*lead,
+  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-Math.max(0,now-poseAt)), x:from.x+(to.x-from.x)*blend+vx*lead, y:from.y+(to.y-from.y)*blend+vy*lead,
     turn:from.turn+Math.atan2(Math.sin(turn), Math.cos(turn))*blend};
 }
 
@@ -39,12 +39,26 @@ function periodicFrom(last,to,now){
 function peerTrack(last, to, now) {
   const track = {from:to, to, start:now, blendSeconds:PEER_BLEND_SECONDS};
   if (!last || last.to.islandId !== to.islandId || last.to.mode !== to.mode) return track;
+  const sampleSeconds = (to.positionSampleMs || 0) / 1000;
+  if (sampleSeconds) {
+    // Ordinary snapshots repeat the same distant pose between position samples.
+    // Keep the existing interpolation running while refreshing animation state.
+    if (last.to.positionSampleMs === to.positionSampleMs &&
+        last.to.x === to.x && last.to.y === to.y && last.to.turn === to.turn) {
+      return {...last, to, poseAt:now};
+    }
+    return {...track, from:periodicFrom(last,to,now), blendSeconds:sampleSeconds};
+  }
+  if (last.to.positionSampleMs) {
+    return {...track, from:periodicFrom(last,to,now), blendSeconds:.15};
+  }
   const elapsed = now-last.start;
   const dx = to.x-nearestSeaX(last.to.x,to.x), dy = to.y-last.to.y;
   const distance = Math.hypot(dx,dy);
   const travel = Number.isFinite(to.travel) ? Math.max(0,to.travel) : 0;
-  if (distance > POSITION_SNAP_DISTANCE + travel * Math.min(.25,elapsed)) return track;
+  if (distance > POSITION_SNAP_DISTANCE + travel * Math.min(1,elapsed)) return track;
   track.from = periodicFrom(last,to,now);
+  if (elapsed > .25) track.blendSeconds = .15;
   if (elapsed > 0 && elapsed <= .25 && distance > 0 && travel > 0) {
     const speed = Math.min(distance/elapsed,travel);
     track.vx = speed*dx/distance;

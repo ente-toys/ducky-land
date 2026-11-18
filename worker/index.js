@@ -21,6 +21,7 @@ const RESUME_MS = 30_000;
 const CHECKPOINT_MS = 1_000;
 const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
+const FAR_POSITION_INTERVAL_MS = 1000;
 const SOCKET_COMMAND_BURST = 300;
 const SOCKET_COMMANDS_PER_SECOND = 240;
 const INPUT_TIMEOUT_MS = 350;
@@ -679,7 +680,7 @@ export class IslandRoom {
       for(const group of groups.values()) for(const pose of group.guests) {
         this.farPoses.set(pose.id,{x:pose.x,y:pose.y,turn:pose.turn,travel:pose.travel,islandId:pose.islandId});
       }
-      this.farPosesAt=now+1000;
+      this.farPosesAt=now+FAR_POSITION_INTERVAL_MS;
     }
     const boatsForView = this.remoteBoats ? [...this.boats,...this.remoteBoats] : this.boats;
     const legacyGlobeFields = new Map();
@@ -696,14 +697,17 @@ export class IslandRoom {
       // of any viewer in it keep the full update rate; distant motion is sampled.
       const cell = this.simulation && actor && !chartViewer && (groups.get(islandId)?.guests.length ?? 0)>=40 ?
         {x:Math.floor(actor.x/1024),y:Math.floor(actor.y/1024)} : null;
-      const key = `${named ? 1 : 0}|${islandId}${cell?'|cell:'+cell.x+','+cell.y:''}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}`;
+      const scope = `${named ? 1 : 0}|${islandId}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}`;
+      const key = cell ? `${scope}|cell:${cell.x},${cell.y}` : scope;
       if (!shared.has(key)) {
         const group = groups.get(islandId) ?? empty;
         let poses=named?group.named:group.guests;
-        if(cell) poses=poses.map(p=>{
-          if(Math.abs(Math.floor(p.x/1024)-cell.x)<=1 && Math.abs(Math.floor(p.y/1024)-cell.y)<=1) return p;
-          const prior=this.farPoses?.get(p.id);
-          return prior?.islandId===p.islandId ? {...p,...prior}:p;
+        if(this.simulation && !chartViewer) poses=poses.map(p=>{
+          const nearby = !cell || (Math.abs(Math.floor(p.x/1024)-cell.x)<=1 && Math.abs(Math.floor(p.y/1024)-cell.y)<=1);
+          const prior = nearby ? null : this.farPoses.get(p.id);
+          return prior?.islandId===p.islandId
+            ? {...p,...prior,positionSampleMs:FAR_POSITION_INTERVAL_MS}
+            : {...p,positionSampleMs:0};
         });
         if(chartViewer) {
           poses=[...groups.values()].flatMap(g=>named?g.named:g.guests).map(p=>seaViewPose(info.actor,p,p.islandId===islandId?Infinity:8000))
@@ -711,7 +715,7 @@ export class IslandRoom {
         } else if(localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
         const visibleBoats=chartViewer?boatsForView.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):boatsForView.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
-        shared.set(key, {key, players, boats: visibleBoats.map(wireBoat)});
+        shared.set(key, {scope, players, boats: visibleBoats.map(wireBoat)});
       }
       return shared.get(key);
     };
@@ -723,6 +727,8 @@ export class IslandRoom {
     // built boats by owner, once per broadcast (each player's self block lists theirs)
     const owned = new Map();
     for (const boat of this.boats) if (boat.owner) owned.set(boat.owner, [...(owned.get(boat.owner) ?? []), boat.id]);
+    // Acknowledged streams can afford less frequent full snapshots.
+    const keyframeTicks = this.simulation ? 300 : 50;
     for (const [socket, info] of recipients) {
       if (info.transferring) continue;
       if (this.simulation && info.deltas) {
@@ -730,7 +736,8 @@ export class IslandRoom {
           info.snapshotMissed = true;
           continue;
         }
-        if (info.snapshotMissed) info.snapshotBase = null;
+        // WebSockets deliver the outstanding frames in order. Resume the delta
+        // chain from the last frame sent, even when interim ticks were skipped.
         info.snapshotMissed = false;
         info.unacknowledged.push(tick);
       }
@@ -746,20 +753,20 @@ export class IslandRoom {
       }
       const view = snapshotView(islandId, named, info);
       if (!info.deltas) {this.sendText(socket, fullSnapshot(view, islandId, self, globeField)); continue;}
-      // A delta must describe the same chart and visibility as its full snapshot.
-      const {key} = view;
+      // Deltas can describe a new spatial cell within the same chart and
+      // identity scope. Full snapshots are needed when the scope itself changes.
       if (!view.deltaGroup) {
         view.deltaGroup = {tick, players: new Map(view.players.map(p => [p.id, p])), boats: new Map(view.boats.map(b => [b.id, b])), patches: new WeakMap()};
       }
       const group = view.deltaGroup;
       const base = info.snapshotBase;
-      if (!base || base.key !== key || tick - base.fullTick >= 50) {
+      if (!base || base.scope !== view.scope || tick - base.fullTick >= keyframeTicks) {
         this.sendText(socket, fullSnapshot(view, islandId, self, globeField));
-        info.snapshotBase = {key, group, fullTick: tick};
+        info.snapshotBase = {scope:view.scope, group, fullTick:tick};
         continue;
       }
-      let patch = group.patches.get(base.group);
-      if (!patch) {
+      let prefix = group.patches.get(base.group);
+      if (!prefix) {
         const diff = (before, after) => ({
           changed: [...after].flatMap(([id, value]) => {
             const old = before.get(id);
@@ -770,12 +777,15 @@ export class IslandRoom {
           }),
           removed: [...before.keys()].filter(id => !after.has(id)),
         });
-        patch = {players: diff(base.group.players, group.players), boats: diff(base.group.boats, group.boats)};
-        group.patches.set(base.group, patch);
+        prefix = JSON.stringify({
+          type:'delta', epoch:this.epoch, tick, baseTick:base.group.tick, islandId, online,
+          players:diff(base.group.players, group.players),
+          boats:diff(base.group.boats, group.boats),
+        }).slice(0,-1) + ',"self":';
+        group.patches.set(base.group, prefix);
       }
-      const delta = JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, ...patch, self});
-      this.sendText(socket, globeField ? delta.slice(0, -1) + globeField + '}' : delta);
-      info.snapshotBase = {key, group, fullTick: base.fullTick};
+      this.sendText(socket, prefix + JSON.stringify(self) + globeField + '}');
+      info.snapshotBase = {scope:view.scope, group, fullTick:base.fullTick};
     }
   }
 
