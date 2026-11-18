@@ -40,6 +40,7 @@ function readSnapshot(room, name) {
 export function freeze(room) {
   clearInterval(room.timer);
   room.timer = null;
+  room.sailRoutes?.clear();
   clearTimeout(room.presenceTimer);
   room.presenceTimer = null;
   clearInterval(room.globeTimer);

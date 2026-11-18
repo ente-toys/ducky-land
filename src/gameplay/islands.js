@@ -1,4 +1,5 @@
-import {BOAT_GAP,boatSeparated,nearestBoatSpace} from './boat-spacing.js';
+import {finishWork} from './work-steps.js';
+import {BOAT_GAP,boatSeparated,nearestBoatSpace,boatSpaceCandidates} from './boat-spacing.js';
 export {BOAT_GAP} from './boat-spacing.js';
 import {SEA_WIDTH,SEA_HEIGHT,SEA_VERSION,FLAT_RADIUS,FLAT_RING,FLAT_POSITIONS,FLAT_ISLETS,GLOBE_ISLET_OFFSETS,nearestSeaX,wrapSea} from '../world/flat-layout.js';
 import {placeRigid,unplaceRigid,flatRigid} from '../world/rigid.js';
@@ -32,10 +33,10 @@ export function boardingPoint(boat,nav) {
 }
 export const BOAT_RADIUS = 46;
 export const SAIL_SPEED = 570;   // 1.5x the old 380
-const DEST=new Map(), BOUNDS=new Map(), GRIDS=new Map(),CAP=new Map();
+const DEST=new Map(), BOUNDS=new Map(), GRIDS=new Map(),GRID_BUILDERS=new Map(),CAP=new Map();
 const candidateScratch=[];
 let SEEN=-1;
-const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,GRIDS,CAP]) cache.clear();}};
+const fresh=() => {if (SEEN !== mapsVersion()) {SEEN=mapsVersion(); for (const cache of [DEST,BOUNDS,GRIDS,GRID_BUILDERS,CAP]) cache.clear();}};
 export function originOffset(from,to) {
   const c=offsetOf(from,to), A=mapOf(from), B=mapOf(to);
   return {x:c.x+A.cx-B.cx, y:c.y+A.cy-B.cy};
@@ -255,16 +256,22 @@ export function dockingSpot(actor,target=null) {
 }
 
 export function landingApproach(actor,spot,boats=[]) {
+  return finishWork(landingApproachSteps(actor, spot, boats));
+}
+export function* landingApproachSteps(actor,spot,boats=[],work) {
+  const others=otherBoatPositions(actor,boats);
   if (spot.jetty) {
     const i=ISLETS.find(i=>i.id===spot.islet),p=placeIslet(actor.islandId,i,i.jetty.water,actor);
     const q={x:Math.round(p.x),y:Math.round(p.y)};
-    if (boatRoom({...actor,...q},boats) && canSail(q.x,q.y,actor.islandId) && (near(actor,q,14) || sailRoute(actor.islandId,actor,q,boats))) return q;
+    yield 16;
+    if ((yield* separatedFromBoats(q,others,BOAT_GAP+.1)) && canSail(q.x,q.y,actor.islandId) && (near(actor,q,14) || (yield* sailRouteSteps(actor.islandId,actor,q,boats,work)))) return q;
   }
   const at={x:spot.x+spot.offset.x,y:spot.y+spot.offset.y};
   const sx=at.x,sy=at.y,len=Math.hypot(actor.x-sx,actor.y-sy)||1;
   for (let t=40;t<len-14;t+=10) {
+    yield 16;
     const p={x:Math.round(sx+(actor.x-sx)*t/len), y:Math.round(sy+(actor.y-sy)*t/len)};
-    if (boatRoom({...actor,...p},boats) && canSail(p.x,p.y,actor.islandId) && sailRoute(actor.islandId,actor,p,boats)) return p;
+    if ((yield* separatedFromBoats(p,others,BOAT_GAP+.1)) && canSail(p.x,p.y,actor.islandId) && (yield* sailRouteSteps(actor.islandId,actor,p,boats,work))) return p;
   }
   return {x:actor.x,y:actor.y};
 }
@@ -303,29 +310,34 @@ export function canDock(actor) {
 }
 
 const RES=FIELD_RES, PAD=FIELD_PAD;
-function clearance(id,x,y) {
+function* clearance(id,x,y,buildFields=true) {
+  yield 4;
   const b=seaBoundsFor(id);
   if (y < b.y0 || y > b.y1) return 0;
   let best=PAD;
-  for(const p of candidates(id,x,y,PAD)){
+  // Materialize the coordinates before yielding. Other queries reuse candidateScratch.
+  for(const p of candidates(id,x,y,PAD).slice()){
     const c=Math.round((p.x-p.map.origin.x+PAD)/RES),r=Math.round((p.y-p.map.origin.y+PAD)/RES);
     const cols=Math.ceil((p.map.width+2*PAD)/RES),rows=Math.ceil((p.map.height+2*PAD)/RES);
     if(c<0||r<0||c>=cols||r>=rows)continue;
-    const {d,FW}=p.map.field();best=Math.min(best,d[r*FW+c]);
+    const field=p.map.cachedField ?? (buildFields ? (yield* p.map.fieldSteps()) : null);
+    if (!field) return 0;
+    best=Math.min(best,field.d[r*field.FW+c]);
   }
   return Math.max(0,Math.min(best-RES,isletClearance({x,y},PAD,id)));
 
 }
 const SAFE=BOAT_RADIUS+30;
-const clearSeaLine=(id,a,b) => {
+function* clearSeaLine(id,a,b,buildFields) {
   const len=Math.hypot(b.x-a.x,b.y-a.y), steps=Math.max(1,Math.ceil(len/6));
   for (let i=1;i<=steps;i++) {
-    const x=a.x+(b.x-a.x)*i/steps, y=a.y+(b.y-a.y)*i/steps, room=clearance(id,x,y);
+    const x=a.x+(b.x-a.x)*i/steps, y=a.y+(b.y-a.y)*i/steps, room=yield* clearance(id,x,y,buildFields);
     if (room >= SAFE) {i+=Math.max(0,Math.floor((room*.85-SAFE)/6)); continue;}
     for (let k=0;k<3;k++) {
       const f=(i-k/3)/steps;
       const x=a.x+(b.x-a.x)*f,y=a.y+(b.y-a.y)*f;
       const margin=Math.min(4,len*f,len*(1-f));
+      yield 24;
       if (!canSail(x,y,id) || margin>0 && !canSail(x,y,id,BOAT_RADIUS+margin)) return false;
     }
   }
@@ -347,26 +359,51 @@ function routeBounds(id){
  return {...bounds,x0:x+Math.floor((bounds.x0-x)/CELL)*CELL,y0:y+Math.floor((bounds.y0-y)/CELL)*CELL};
 }
 
-function gridFor(id) {
-  fresh();
-  if (!GRIDS.has(id)) {
-    const b=routeBounds(id), cols=Math.ceil((b.x1-b.x0)/CELL), rows=Math.ceil((b.y1-b.y0)/CELL), open=new Uint8Array(cols*rows);
-    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) open[r*cols+c]=clearance(id,b.x0+(c+.5)*CELL,b.y0+(r+.5)*CELL)*.9 >= CELL*.71+SAFE ? 1 : 0;
-    const labels=new Int32Array(open.length);let label=0,largest=[];
-    for(let start=0;start<open.length;start++)if(open[start]&&!labels[start]){
-      const queue=[start];labels[start]=++label;
-      for(let k=0;k<queue.length;k++){
-        const i=queue[k],r=Math.floor(i/cols),c=i%cols;
-        for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0]]){const nr=r+dr,nc=c+dc,j=nr*cols+nc;if(nr>=0&&nc>=0&&nr<rows&&nc<cols&&open[j]&&!labels[j]){labels[j]=label;queue.push(j);}}
+function* buildGrid(id) {
+  const b=routeBounds(id), cols=Math.ceil((b.x1-b.x0)/CELL), rows=Math.ceil((b.y1-b.y0)/CELL);
+  const open=new Uint8Array(cols*rows);
+  for (let r=0;r<rows;r++) for (let c=0;c<cols;c++)
+    open[r*cols+c]=(yield* clearance(id,b.x0+(c+.5)*CELL,b.y0+(r+.5)*CELL))*.9 >= CELL*.71+SAFE ? 1 : 0;
+  const labels=new Int32Array(open.length);
+  let label=0,largest=[];
+  for(let start=0;start<open.length;start++){
+    yield 1;
+    if(!open[start]||labels[start])continue;
+    const queue=[start];labels[start]=++label;
+    for(let k=0;k<queue.length;k++){
+      yield 1;
+      const i=queue[k],r=Math.floor(i/cols),c=i%cols;
+      for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0]]){
+        const nr=r+dr,nc=c+dc,j=nr*cols+nc;
+        if(nr>=0&&nc>=0&&nr<rows&&nc<cols&&open[j]&&!labels[j]){labels[j]=label;queue.push(j);}
       }
-      if(queue.length>largest.length)largest=queue;
     }
-    const ocean=new Uint8Array(open.length);for(const k of largest)ocean[k]=1;
-    GRIDS.set(id,{b,cols,rows,open:ocean});
+    if(queue.length>largest.length)largest=queue;
+  }
+  const ocean=new Uint8Array(open.length);
+  for(const k of largest){yield 1; ocean[k]=1;}
+  return {b,cols,rows,open:ocean};
+}
+
+function* gridFor(id) {
+  fresh();
+  while (!GRIDS.has(id)) {
+    let builder=GRID_BUILDERS.get(id);
+    if (!builder) {builder=buildGrid(id);GRID_BUILDERS.set(id,builder);}
+    const next=builder.next();
+    if (next.done) {GRIDS.set(id,next.value);GRID_BUILDERS.delete(id);}
+    else yield next.value;
   }
   return GRIDS.get(id);
 }
+
 export function sailRoute(id,from,to,boats=[],work) {
+ const report=work&&{visitLimit:work.visitLimit};
+ const route=finishWork(sailRouteSteps(id,from,to,boats,report));
+ if(report)Object.assign(work,report);
+ return route;
+}
+function* sailRouteSteps(id,from,to,boats,work) {
  const m=mapOf(id),targetX=nearestSeaX(to.x,from.x),middle=(from.x+targetX)/2,shift=middle-nearestSeaX(middle,m.cx);
  const start={x:from.x-shift,y:from.y},end={x:targetX-shift,y:to.y};
  const others=otherBoatPositions({...from,islandId:id},boats).flatMap(p=>{
@@ -375,39 +412,66 @@ export function sailRoute(id,from,to,boats=[],work) {
  });
  const budget={visits:0,limit:Math.min(FINE_ROUTE_VISITS,work?.visitLimit??FINE_ROUTE_VISITS)};
  const findRoute=chartPlanner(id,start,others,budget);
- let alternatives=0, route=findRoute(end);
+ let alternatives=0, route=yield* findRoute(end);
  // moored boats can wall in a harbour's dock point (Bog's three moorings sit 380-620 around it): aim for the
  // nearest free water beside it instead, and the arrival docks from there
  if(!route&&others.length)for(let r=BOAT_GAP+100;r<=BOAT_GAP+1000&&!route;r+=150){
-   const ring=Array.from({length:16},(_,k)=>({x:end.x+Math.cos(k*Math.PI/8)*r,y:end.y+Math.sin(k*Math.PI/8)*r}))
-     .filter(q=>canSail(q.x+shift,q.y,id)&&others.every(o=>seaBoatSeparated(q,o,BOAT_GAP+1)))
-     .sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y));
+   const ring=[];
+   for (let k=0;k<16;k++){
+     yield 8;
+     const q={x:end.x+Math.cos(k*Math.PI/8)*r,y:end.y+Math.sin(k*Math.PI/8)*r};
+     if(canSail(q.x+shift,q.y,id)&&(yield* separatedFromBoats(q,others,BOAT_GAP+1)))ring.push(q);
+   }
+   ring.sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y));
    for(const q of ring){
      alternatives++;
-     if((route=findRoute(q)))break;
+     if((route=yield* findRoute(q)))break;
    }
  }
- if(work)Object.assign(work,{fineVisits:budget.visits,alternatives});
+ if(work) {
+   work.fineVisits=(work.fineVisits??0)+budget.visits;
+   work.alternatives=(work.alternatives??0)+alternatives;
+ }
  return route?.map(p=>({...p,x:p.x+shift}))??null;
 }
+function* separatedFromBoats(point, others, gap) {
+  for (const boat of others) {
+    yield 1;
+    if (!seaBoatSeparated(point,boat,gap)) return false;
+  }
+  return true;
+}
+
 function chartPlanner(id,from,others,budget) {
-  const lineRoom=(a,b)=>{
+  function* lineRoom(a,b){
     const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy;
-    return others.every(p=>{
+    const xReach=Math.abs(dx)/2+BOAT_GAP+1,yReach=Math.abs(dy)/2+BOAT_GAP+1;
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+    for(let i=0;i<others.length;i++){
+      if(i%8===0)yield 2;
+      const p=others[i];
+      if(Math.abs(p.y-my)>yReach||Math.abs(wrapSea(p.x-mx))>xReach)continue;
+      yield 1;
       const t=l2?Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/l2)):0;
       // Movement can stop just inside the planner's extra pixel of clearance.
       // Let the first edge leave that position without getting any closer;
       // every subsequent edge still keeps the full planning margin.
       const gap=a.x===from.x&&a.y===from.y?Math.min(BOAT_GAP+1,Math.hypot(wrapSea(a.x-p.x),a.y-p.y)):BOAT_GAP+1;
-      return seaBoatSeparated({x:a.x+dx*t,y:a.y+dy*t},p,gap-1e-7);
-    });
+      if(!seaBoatSeparated({x:a.x+dx*t,y:a.y+dy*t},p,gap-1e-7))return false;
+    }
+    return true;
   };
-  const clearLine=(id,a,b)=>lineRoom(a,b)&&clearSeaLine(id,a,b);
+  function* clearLine(id,a,b,buildFields=true){return (yield* lineRoom(a,b))&&(yield* clearSeaLine(id,a,b,buildFields));}
   let plan;
-  return to => clearLine(id,from,to) ? [to] : (plan ??= prepare())(to);
+  return function* (to) {
+    // A straight sail can use exact shoreline probes while the distance field is cold.
+    if (yield* clearLine(id,from,to,false)) return [to];
+    plan ??= yield* prepare();
+    return yield* plan(to);
+  };
 
-  function prepare() {
-    const {b,cols,rows,open:sea}=gridFor(id), open=others.length?sea.slice():sea, centre=i => ({x:b.x0+(i%cols+.5)*CELL,y:b.y0+(Math.floor(i/cols)+.5)*CELL});
+  function* prepare() {
+    const {b,cols,rows,open:sea}=yield* gridFor(id), open=others.length?sea.slice():sea, centre=i => ({x:b.x0+(i%cols+.5)*CELL,y:b.y0+(Math.floor(i/cols)+.5)*CELL});
     const boatEdges=new Uint8Array(open.length);
     // The cached sea grid stays immutable. Only cells near a live boat change.
     for(const p of others){
@@ -415,59 +479,64 @@ function chartPlanner(id,from,others,budget) {
       const c0=Math.max(0,Math.floor((p.x-r-b.x0)/CELL)),c1=Math.min(cols-1,Math.floor((p.x+r-b.x0)/CELL));
       const r0=Math.max(0,Math.floor((p.y-r-b.y0)/CELL)),r1=Math.min(rows-1,Math.floor((p.y+r-b.y0)/CELL));
       for(let y=r0;y<=r1;y++)for(let x=c0;x<=c1;x++){
+        yield 1;
         const i=y*cols+x,at=centre(i);
         if(!seaBoatSeparated(at,p,r))boatEdges[i]=1;
         if(!seaBoatSeparated(at,p,BOAT_GAP+1))open[i]=0;
       }
     }
-    const nearestOpen=p => {
+    function* nearestOpen(p) {
       const c0=Math.floor((p.x-b.x0)/CELL), r0=Math.floor((p.y-b.y0)/CELL);
       for (let d=0;d<14;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
+        yield 1;
         if (Math.max(Math.abs(c-c0),Math.abs(r-r0))!==d || r<0||c<0||r>=rows||c>=cols||!open[r*cols+c]) continue;
         if (budget.visits>=budget.limit)return -1;
         budget.visits++;
-        if (clearLine(id,p,centre(r*cols+c))) return r*cols+c;
+        if (yield* clearLine(id,p,centre(r*cols+c))) return r*cols+c;
       }
       return -1;
     };
-    const connect=(p,step=60,limit=60)=>{
+    function* connect(p,step=60,limit=60){
       if (budget.visits>=budget.limit)return null;
-      const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
+      const direct=yield* nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
       const side=limit*2+1,total=side*side,start=limit*side+limit;
       const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
       const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
       for(let k=0;k<queue.length&&budget.visits<budget.limit;k++,budget.visits++){
+        yield 1;
         const i=queue[k],at=point(i),c=Math.floor((at.x-b.x0)/CELL),r=Math.floor((at.y-b.y0)/CELL),cell=r*cols+c;
-        if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&clearLine(id,at,centre(cell))){
+        if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&(yield* clearLine(id,at,centre(cell)))){
           const points=[centre(cell)];for(let j=i;j!==start;j=prev[j])points.push(point(j));points.reverse();return {index:cell,points};
         }
         const row=Math.floor(i/side),col=i%side;
         for(const [dr,dc]of [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1],[1,-1],[-1,-1]]){
           const nr=row+dr,nc=col+dc,j=nr*side+nc;if(nr<0||nc<0||nr>=side||nc>=side||prev[j]>=0)continue;
-          const q=point(j);if(canSail(q.x,q.y,id)&&clearLine(id,at,q)){prev[j]=i;queue.push(j);}
+          yield 8;
+          const q=point(j);if(canSail(q.x,q.y,id)&&(yield* clearLine(id,at,q))){prev[j]=i;queue.push(j);}
         }
       }
       return null;
     };
-    const reach=p=>connect(p)??connect(p,20,180);
-    const entrance=reach(from);
-    if(!entrance)return () => null;
+    function* reach(p){return (yield* connect(p))??(yield* connect(p,20,180));}
+    const entrance=yield* reach(from);
+    if(!entrance)return function* () {return null;};
     // Nearby dock alternatives all share this origin and obstacle grid.
     const start=entrance.index;
     const prev=new Int32Array(cols*rows).fill(-1), queue=[start]; prev[start]=start;
     let cursor=0;
-    return to => {
-      const exit=reach(to);
+    return function* (to) {
+      const exit=yield* reach(to);
       if(!exit)return null;
       const goal=exit.index;
       while(cursor<queue.length && prev[goal]<0) {
+        yield 1;
         const i=queue[cursor++], c=i%cols, r=Math.floor(i/cols);
         for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) {
           const nr=r+dr, nc=c+dc, n=nr*cols+nc;
           // Check actual edges near boats instead of inflating every blocked cell by
           // half its diagonal. That padding seals valid harbour escape corridors.
           if ((dr||dc) && nr>=0 && nc>=0 && nr<rows && nc<cols && open[n] && prev[n]<0 && (!dr||!dc||open[r*cols+nc]&&open[nr*cols+c]) &&
-              (!(boatEdges[i]||boatEdges[n]) || lineRoom(centre(i),centre(n)))) {prev[n]=i; queue.push(n);}
+              (!(boatEdges[i]||boatEdges[n]) || (yield* lineRoom(centre(i),centre(n))))) {prev[n]=i; queue.push(n);}
         }
       }
       if(prev[goal]<0)return null;
@@ -476,11 +545,11 @@ function chartPlanner(id,from,others,budget) {
       cells.push(centre(start));cells.reverse();cells.unshift(...entrance.points.slice(0,-1));cells.push(...exit.points.slice(0,-1).reverse(),to);
       const route=[]; let at=from;
       for (let k=0;k<cells.length;) {
-        if(!clearLine(id,at,cells[k]))return null;
+        if(!(yield* clearLine(id,at,cells[k])))return null;
         let j=k,step=1,blocked=cells.length;
-        while(j+step<cells.length){const next=j+step;if(!clearLine(id,at,cells[next])){blocked=next;break;}j=next;step*=2;}
+        while(j+step<cells.length){const next=j+step;if(!(yield* clearLine(id,at,cells[next]))){blocked=next;break;}j=next;step*=2;}
         let lo=j+1,hi=Math.min(cells.length-1,blocked-1);
-        while(lo<=hi){const mid=(lo+hi)>>1;if(clearLine(id,at,cells[mid])){j=mid;lo=mid+1;}else hi=mid-1;}
+        while(lo<=hi){const mid=(lo+hi)>>1;if(yield* clearLine(id,at,cells[mid])){j=mid;lo=mid+1;}else hi=mid-1;}
         route.push(cells[j]); at=cells[j]; k=j+1;
       }
       return route;
@@ -488,20 +557,45 @@ function chartPlanner(id,from,others,budget) {
   }
 }
 
-export function setSailDestination(actor,x,y,boats=[],work) {
+export function* planSailDestinationSteps(actor,x,y,boats,work) {
+  yield 8;
   if (!canSail(x,y,actor.islandId)) return null;
-  const at=freeBoatPosition({...actor,x,y},boats,520);
+  const others=otherBoatPositions({...actor,x,y},boats);
+  let at;
+  for (const point of boatSpaceCandidates({x,y},520)) {
+    if (!(yield* separatedFromBoats(point,others,BOAT_GAP+1))) continue;
+    yield 8;
+    if (canSail(point.x,point.y,actor.islandId)) {at=point;break;}
+  }
   if (!at) return null;
-  ({x,y}=at);
-  const route=sailRoute(actor.islandId,actor,{x,y},boats,work);
-  if (!route) return null;
-  actor.sailTarget=route[0];
-  actor.sailRoute=route.slice(1);
+  const route=yield* sailRouteSteps(actor.islandId,actor,at,boats,work);
+  return route ? {target:at, route} : null;
+}
+
+export function applySailPlan(actor,plan) {
+  actor.sailTarget=plan.route[0];
+  actor.sailRoute=plan.route.slice(1);
   actor.docking=false;
-  return [x,y];
+}
+
+export function setSailDestination(actor,x,y,boats=[],work) {
+  const report=work&&{visitLimit:work.visitLimit};
+  const plan=finishWork(planSailDestinationSteps(actor,x,y,boats,report));
+  if(report)Object.assign(work,report);
+  if (!plan) return null;
+  applySailPlan(actor,plan);
+  return [plan.target.x,plan.target.y];
 }
 
 const clearBoatStep=(actor,x,y,others)=>others.every(p=>seaBoatSeparated({x,y},p,BOAT_GAP+.1) || Math.hypot(wrapSea(x-p.x),y-p.y)>Math.hypot(wrapSea(actor.x-p.x),actor.y-p.y));
+export function canStartSailPlan(actor,plan,boats) {
+  const point=plan.route.find(p=>!near(actor,p,1));
+  if (!point) return true;
+  const dx=point.x-actor.x,dy=point.y-actor.y,scale=Math.min(1,6/Math.hypot(dx,dy));
+  const x=actor.x+dx*scale,y=actor.y+dy*scale;
+  return canSail(x,y,actor.islandId)&&clearBoatStep(actor,x,y,otherBoatPositions(actor,boats));
+}
+
 function slideBoatStep(actor,x,y,others) {
   let dx=x-actor.x,dy=y-actor.y;
   // Remove the inward component, keeping the glancing part of the requested

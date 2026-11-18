@@ -785,6 +785,7 @@ export class IslandRoom {
   }
 
   demote(socket, info, reason) {
+    this.sailRoutes?.cancel(info.actor);
     if (info.actor && reason !== 'taken-over') {
       if (this.simulation) this.saveBoats(Date.now(),info);
       else this.releaseBoat(info.actor.id);
@@ -942,7 +943,7 @@ export class IslandRoom {
           info.input = ZERO;
           info.boarding = null;
           info.landing = null;
-          if (actor.mode === 'sailing') this.planSailDestination(actor,command.x,command.y);
+          if (actor.mode === 'sailing') this.planSailDestination(socket,info,command.x,command.y,now);
           else setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
         }
         break;
@@ -991,16 +992,7 @@ export class IslandRoom {
           if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) break;
           info.input=ZERO; info.landing=null;
           actor.sailTarget=null; actor.sailRoute=null; actor.docking=false;
-          if (spot.harbor) {
-            const {water}=harborOf(actor.islandId);
-            const target=this.planSailDestination(actor,water.x,water.y,'dock');
-            actor.docking=Boolean(target);
-            actor.dockTarget=target?{x:target[0],y:target[1]}:null;
-            break;
-          }
-          spot.approach=landingApproach(actor,spot,this.boats);
-          info.landing=spot;
-          if (!near(actor,spot.approach,14) && !this.planSailDestination(actor,spot.approach.x,spot.approach.y,'dock')) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
+          this.planDock(socket, info, spot);
         }
         break;
       case 'emote':
@@ -1027,6 +1019,7 @@ export class IslandRoom {
 
   applyMovementInput(info, command, receivedAt) {
     const actor = info.actor;
+    if (command.x || command.y || (command.stop === true && !info.landing)) this.sailRoutes?.cancel(actor);
     if (command.x || command.y) {info.boarding = null; info.landing = null;}
     else if (command.stop === true) info.boarding = null;
     if (command.stop === true && !info.landing) {actor.path=[];actor.sailTarget=null;actor.docking=false;actor.pace=0;actor.heading=null;}
@@ -1046,8 +1039,23 @@ export class IslandRoom {
     info.throttled = null;
   }
 
-  planSailDestination(actor, x, y) {
-    return setSailDestination(actor,x,y,this.boats);
+  planSailDestination(socket, info, x, y) {
+    return setSailDestination(info.actor,x,y,this.boats);
+  }
+
+  planDock(socket, info, spot) {
+    const actor = info.actor;
+    if (spot.harbor) {
+      const {water}=harborOf(actor.islandId);
+      const target=setSailDestination(actor,water.x,water.y,this.boats);
+      actor.docking=Boolean(target);
+      actor.dockTarget=target?{x:target[0],y:target[1]}:null;
+      return;
+    }
+    spot.approach=landingApproach(actor,spot,this.boats);
+    info.landing=spot;
+    if (!near(actor,spot.approach,14) && !setSailDestination(actor,spot.approach.x,spot.approach.y,this.boats))
+      info.landing={...spot,approach:{x:actor.x,y:actor.y}};
   }
 
   stepMovement(now) {
@@ -1067,17 +1075,23 @@ export class IslandRoom {
         boat:structuredClone(this.boats.find(b=>b.id === (previousBoat ?? info.boarding)) ?? null)};
       if (actor.mode === 'sailing') {
         this.recoverSailingPosition(actor);
-        sailStep(actor,.05,info.input,now/1000,this.boats,this.rerouteBoat);
+        sailStep(actor,.05,info.input,now/1000,this.boats,this.sailRoutes && ((actor,x,y) => {
+          if (!this.queueSailRoute(socket,info,x,y,'reroute',now)) return false;
+          actor.sailTarget=null;
+          actor.sailRoute=null;
+          return true;
+        }));
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
         if (!boat) info.landing=null;
         if (boat) {
-          if (!info.landing && crossIsland(actor,id=>this.allowLanding(socket,info,id),this.boats)) {
+          const routePending = this.sailRoutes?.has(actor);
+          if (!routePending && !info.landing && crossIsland(actor,id=>this.allowLanding(socket,info,id),this.boats)) {
             changedTravel = true;
             info.input=ZERO;
             info.inputExpires=0;
           }
           Object.assign(boat,{x:actor.x,y:actor.y,turn:actor.turn,islandId:actor.islandId});
-          if (info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {
+          if (!routePending && info.landing && (near(actor,info.landing.approach,14) || !actor.sailTarget)) {
             const spot=info.landing; info.landing=null;
             if (!spot.islet&&!this.allowLanding(socket,info,spot.islandId)) continue;
             if(!spot.islet&&!this.chargeBogLanding(socket,info,spot.islandId))continue;
@@ -1087,7 +1101,7 @@ export class IslandRoom {
             changedTravel = true;
             Object.assign(actor,{x:spot.x,y:spot.y,mode:'walking',boatId:null,path:[],travel:0,pace:0,heading:null,docking:false,sailTarget:null,sailRoute:null});
             info.input=ZERO;
-          } else if (actor.docking && near(actor,actor.dockTarget??harborOf(actor.islandId).water,12)) {
+          } else if (!routePending && actor.docking && near(actor,actor.dockTarget??harborOf(actor.islandId).water,12)) {
             if (!this.allowLanding(socket,info,actor.islandId)||!this.chargeBogLanding(socket,info,actor.islandId)) continue;
             Object.assign(boat,unplaceRigid(actor.islandId,actor.islandId,boat));
             this.parkBoat(boat);
@@ -1136,6 +1150,7 @@ export class IslandRoom {
     const now = Date.now();
     this.expire(now);
     let {active, changedTravel} = this.stepMovement(now);
+    active ||= Boolean(this.sailRoutes?.size);
     if (this.simulation) this.updateKarma(now);
     else this.karma.update(now);
     for (const [socket, info] of this.connections) {
@@ -1158,6 +1173,7 @@ export class IslandRoom {
     if(this.bog?.members.has(socket)){this.bog.close(socket);return;}
     const info = this.connections.get(socket);
     if (!info) return;
+    this.sailRoutes?.cancel(info.actor);
     this.connections.delete(socket);
     if (this.globeSubscribers.delete(socket)) this.updateGlobeTimer();
     if (info.actor) {

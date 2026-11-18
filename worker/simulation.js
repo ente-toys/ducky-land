@@ -1,7 +1,8 @@
+import {SailRouteQueue} from './sail-route-queue.js';
 import {localMigration} from './simulation-migration.js';
 import {IslandRoom, wirePose} from './index.js';
 import {internalPost, presenceStub, simulationStub, worldStub} from '../server/simulation-routing.js';
-import {ISLANDS, islandFor, near, setSailDestination} from '../src/gameplay/islands.js';
+import {ISLANDS, harborOf, islandFor, near} from '../src/gameplay/islands.js';
 import {KARMA_RADIUS} from '../src/gameplay/karma-pool.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
@@ -13,7 +14,7 @@ class LocalSimulation extends IslandRoom {
   constructor(ctx, env, world, owner, tracing) {
     super(ctx, env, {world, owner});
     this.tracing = tracing;
-    this.rerouteBoat = (actor, x, y) => this.planSailDestination(actor, x, y, 'reroute');
+    if (owner === 'sea') this.sailRoutes = new SailRouteQueue();
     this.env = env;
     this.world = worldStub(env, world);
     this.presence = presenceStub(env, world);
@@ -52,11 +53,15 @@ class LocalSimulation extends IslandRoom {
       over150: 0,
       maxGap: 0,
       snapshotBytes: 0,
-      work: {movement: 0, snapshot: 0, checkpoint: 0, route_plan: 0, route_reroute: 0},
+      work: {movement: 0, snapshot: 0, checkpoint: 0, route_plan: 0, route_reroute: 0, route_work: 0},
       checkpointWrites: 0,
       routeFailures: 0,
       routeFineVisits: 0,
       routeAlternatives: 0,
+      routeQueuePeak: 0,
+      routeQueueWait: 0,
+      routeLatency: 0,
+      routeWorkUnits: 0,
     };
   }
 
@@ -81,26 +86,35 @@ class LocalSimulation extends IslandRoom {
     });
   }
 
-  planSailDestination(actor, x, y, reason = 'destination') {
-    const operation = reason === 'reroute' ? 'route_reroute' : 'route_plan';
-    return this.measureWork(operation, (span) => {
-      const work = {};
-      const result = setSailDestination(actor, x, y, this.boats, work);
-      const {fineVisits = 0, alternatives = 0} = work;
-      this.health.routeFineVisits += fineVisits;
-      this.health.routeAlternatives += alternatives;
-      if (!result) this.health.routeFailures++;
-      span?.setAttributes({
-        'room.route.reason': reason,
-        'room.route.found': Boolean(result),
-        'room.route.fine_visits': fineVisits,
-        'room.route.alternatives': alternatives,
-      });
-      return result;
-    });
+  queueSailRoute(socket, info, x, y, reason, now, landing) {
+    const queued = this.sailRoutes.request(socket, info, x, y, reason, now, landing);
+    this.health.routeQueuePeak = Math.max(this.health.routeQueuePeak, this.sailRoutes.size);
+    return queued;
+  }
+
+  planSailDestination(socket, info, x, y, now) {
+    if (!this.sailRoutes) return super.planSailDestination(socket, info, x, y);
+    return this.queueSailRoute(socket, info, x, y, 'destination', now);
+  }
+
+  planDock(socket, info, spot) {
+    if (!this.sailRoutes) return super.planDock(socket, info, spot);
+    if (spot.harbor) {
+      const {water} = harborOf(info.actor.islandId);
+      return this.queueSailRoute(socket, info, water.x, water.y, 'dock', Date.now());
+    }
+    return this.queueSailRoute(socket, info, spot.x, spot.y, 'dock', Date.now(), spot);
   }
 
   stepMovement(now) {
+    if (this.sailRoutes?.size) {
+      this.measureWork('route_work', (span) => {
+        const initialWork = this.health.routeWorkUnits;
+        this.sailRoutes.step(this, now, this.health);
+        span?.setAttribute('room.route.work_units', this.health.routeWorkUnits - initialWork);
+        span?.setAttribute('room.route.queue_depth', this.sailRoutes.size);
+      });
+    }
     return this.measureWork('movement', () => super.stepMovement(now));
   }
 
@@ -151,9 +165,11 @@ class LocalSimulation extends IslandRoom {
         route_failures: this.health.routeFailures,
         route_fine_visits: this.health.routeFineVisits,
         route_alternatives: this.health.routeAlternatives,
-        // The planner runs inline. The runtime's own event queue is not visible here.
-        route_queue_depth: 0,
-        route_queue_wait_ms: 0,
+        route_queue_depth: this.sailRoutes?.size ?? 0,
+        route_queue_peak: this.health.routeQueuePeak,
+        route_queue_wait_ms: this.health.routeQueueWait,
+        route_latency_ms: this.health.routeLatency,
+        route_work_units: this.health.routeWorkUnits,
       });
       this.health = this.newHealth();
       this.reportStartedAt = now;

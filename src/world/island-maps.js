@@ -1,3 +1,4 @@
+import {finishWork} from '../gameplay/work-steps.js';
 import {BOAT_GAP,boatSeparated,nearestBoatSpace} from '../gameplay/boat-spacing.js';
 import {outlineBogProps,loadBogScene,bogSceneReady} from './prop-outlines/bog-scene.js';
 import snowSleepers from '../../assets/world/themes/snow/sleepers.json' with {type:'json'};
@@ -203,10 +204,21 @@ else if (harbor.boats?.length) moorings = harbor.boats.map(({x, y}) => ({x, y}))
     return spaceMoorings(aroundIsland(spots));
   })();
   Object.defineProperty(HARBOR,'moorings',{enumerable:true,get:()=>boatSpots().slice(0,Math.min(PORT_BOATS,moorings.length)).map(({x,y})=>({x,y}))});
-  let FIELD = null;
-  const field = () => FIELD ??= landDistance(landAt, W, H, world.origin);
+  let fieldValue, builder;
+  function* fieldSteps() {
+    if (!fieldValue) builder ??= landDistance(landAt, W, H, world.origin);
+    while (!fieldValue) {
+      const next = builder.next();
+      if (next.done) {
+        fieldValue = next.value;
+        builder = undefined;
+      } else yield next.value;
+    }
+    return fieldValue;
+  }
+  const field = () => finishWork(fieldSteps());
   const spawn = harbor.spawn ?? world.zones?.plaza?.spawn ?? [W / 2, H / 2];
-  return {id, width: W, height: H, origin: world.origin ?? {x:0,y:0}, cx:(world.origin?.x ?? 0)+W/2, cy:(world.origin?.y ?? 0)+H/2, get world(){buildWalking();return world;}, get walk(){buildWalking();return walkMap;}, get baseWalk(){buildWalking();return baseWalk;}, get sleepers(){buildWalking();return beds;}, JETTY, HARBOR, spawn: {x: spawn[0], y: spawn[1]}, landAt, nav, shoreFor, boatSpots, field,
+  return {id, width: W, height: H, origin: world.origin ?? {x:0,y:0}, cx:(world.origin?.x ?? 0)+W/2, cy:(world.origin?.y ?? 0)+H/2, get world(){buildWalking();return world;}, get walk(){buildWalking();return walkMap;}, get baseWalk(){buildWalking();return baseWalk;}, get sleepers(){buildWalking();return beds;}, JETTY, HARBOR, spawn: {x: spawn[0], y: spawn[1]}, landAt, nav, shoreFor, boatSpots, field, fieldSteps, get cachedField(){return fieldValue;},
     art, sea, home: id === 'home', centre: centre ?? coastCentre(walking.coast)};
 }
 
@@ -216,22 +228,25 @@ function coastCentre(coast) {
   return {x: x / coast.length, y: y / coast.length};
 }
 
-function landDistance(landAt, W, H, origin = {x:0,y:0}) {
+function* landDistance(landAt, W, H, origin = {x:0,y:0}) {
   const RES = FIELD_RES, PAD = FIELD_PAD, X0 = origin.x - PAD, Y0 = origin.y - PAD, FW = Math.ceil((W + 2 * PAD) / RES), FH = Math.ceil((H + 2 * PAD) / RES);
   const d = new Float32Array(FW * FH).fill(1e9);
   const h = RES / 2, subs = [[0, 0], [-h, -h], [h, -h], [-h, h], [h, h]];
   for (let r = 0; r < FH; r++) for (let c = 0; c < FW; c++) {
+    yield 2;
     const x = X0 + c * RES, y = Y0 + r * RES;
     if (subs.some(([u, v]) => landAt(x + u, y + v))) d[r * FW + c] = 0;
   }
   const D = RES, DD = RES * Math.SQRT2;
   for (let r = 0; r < FH; r++) for (let c = 0; c < FW; c++) {
+    if (c % 8 === 0) yield 1;
     const i = r * FW + c; let v = d[i];
     if (c > 0) v = Math.min(v, d[i - 1] + D);
     if (r > 0) {v = Math.min(v, d[i - FW] + D); if (c > 0) v = Math.min(v, d[i - FW - 1] + DD); if (c < FW - 1) v = Math.min(v, d[i - FW + 1] + DD);}
     d[i] = v;
   }
   for (let r = FH - 1; r >= 0; r--) for (let c = FW - 1; c >= 0; c--) {
+    if (c % 8 === 7 || c === FW - 1) yield 1;
     const i = r * FW + c; let v = d[i];
     if (c < FW - 1) v = Math.min(v, d[i + 1] + D);
     if (r < FH - 1) {v = Math.min(v, d[i + FW] + D); if (c < FW - 1) v = Math.min(v, d[i + FW + 1] + DD); if (c > 0) v = Math.min(v, d[i + FW - 1] + DD);}
