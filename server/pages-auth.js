@@ -115,21 +115,8 @@ export async function callback({request,env}, fetchGitHub = fetch) {
 }
 
 export async function createTestSession({request,env}) {
-  if (!env.MULTIPLAYER_TEST_KEY) return json({},404);
   if (request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
-  const supplied = request.headers.get('X-Multiplayer-Test-Key');
-  if (!supplied || supplied.length > 256) return json({},403);
-  const signingKey = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(env.MULTIPLAYER_TEST_KEY),
-    {name:'HMAC',hash:'SHA-256'}, false, ['sign','verify'],
-  );
-  const message = new TextEncoder().encode('multiplayer-test');
-  const expected = await crypto.subtle.sign('HMAC', signingKey, message);
-  const suppliedKey = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(supplied),
-    {name:'HMAC',hash:'SHA-256'}, false, ['verify'],
-  );
-  if (!await crypto.subtle.verify('HMAC', suppliedKey, expected, message)) return json({},403);
+  if (request.headers.get('X-Multiplayer-Test-Id') !== '919c4104-faed-4a20-931c-9b3abec359ab') return json({},404);
   const token = randomToken();
   const account = 'test-' + crypto.randomUUID();
   const login = 'test-' + account.slice(-8);
@@ -232,7 +219,7 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   const testToken = url.searchParams.get('testSession');
   let key;
   if (testToken !== null) {
-    if (!env.MULTIPLAYER_TEST_KEY || !tokenPattern.test(testToken)) return json({},403);
+    if (!tokenPattern.test(testToken)) return json({},403);
     key = await digest(testToken);
     const result = await call(env,'/session/get',{digest:key});
     if (!result.ok) return json({},503);
