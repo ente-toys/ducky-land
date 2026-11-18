@@ -15,10 +15,7 @@
         "ISLAND_ROOM_NAME": "preview-island",
         "SENTRY_ENVIRONMENT": "preview"
       },
-      "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom", "script_name": "ducky-land-room"},
-    {"name": "ISLAND_SIM", "class_name": "IslandSimulation", "script_name": "ducky-land-room"},
-    {"name": "SEA_SIM", "class_name": "SeaSimulation", "script_name": "ducky-land-room"},
-    {"name": "WORLD_PRESENCE", "class_name": "WorldPresence", "script_name": "ducky-land-room"}]}
+      "durable_objects": {"bindings": [{"name": "ISLAND", "class_name": "IslandRoom", "script_name": "ducky-land-room"}]}
     }
   }
 }

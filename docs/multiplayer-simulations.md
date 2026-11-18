@@ -2,7 +2,7 @@
 
 Publish the room Worker and its additive migration before publishing Pages with the new class bindings. The compatible Worker continues serving the legacy Pages build. Once both versions are available, the first protocol-v2 connection requests the layout configured for that Pages environment. The production configuration in this change requests the split. Merging is the production cutover decision.
 
-The existing world object's name remains its storage identity. Each simulation key also contains that world name. Preview and production must have different world names when they share the Worker. The top-level Worker exposes no public migration endpoint.
+The existing world object's name remains its storage identity. Each simulation key also contains that world name. Automatic Pages previews use the deployed legacy class with the separate `preview-island` world. The production Pages bindings target the new classes after the Worker migration. The top-level Worker exposes no public migration endpoint.
 
 ## Baseline
 
