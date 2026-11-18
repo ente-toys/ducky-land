@@ -1,7 +1,7 @@
 import {localMigration} from './simulation-migration.js';
 import {IslandRoom, wirePose} from './index.js';
 import {internalPost, presenceStub, simulationStub, worldStub} from '../server/simulation-routing.js';
-import {ISLANDS, islandFor, near} from '../src/gameplay/islands.js';
+import {ISLANDS, islandFor, near, setSailDestination} from '../src/gameplay/islands.js';
 import {KARMA_RADIUS} from '../src/gameplay/karma-pool.js';
 import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
@@ -10,8 +10,10 @@ const fail = (status = 409) => new Response(null, {status});
 const ok = () => new Response(null, {status: 204});
 
 class LocalSimulation extends IslandRoom {
-  constructor(ctx, env, world, owner) {
+  constructor(ctx, env, world, owner, tracing) {
     super(ctx, env, {world, owner});
+    this.tracing = tracing;
+    this.rerouteBoat = (actor, x, y) => this.planSailDestination(actor, x, y, 'reroute');
     this.env = env;
     this.world = worldStub(env, world);
     this.presence = presenceStub(env, world);
@@ -37,7 +39,7 @@ class LocalSimulation extends IslandRoom {
     this.claimsInFlight = new Set();
     for (const claim of this.pendingPickups.values()) this.ctx.waitUntil(this.finishPickup(claim));
     this.health = this.newHealth();
-    this.nextReport = Date.now() + 60000;
+    this.reportStartedAt = Date.now();
     this.startPublishing();
     this.ctx.waitUntil(this.retryOutgoing());
     this.ctx.waitUntil(this.deliverEndedVisits());
@@ -45,7 +47,17 @@ class LocalSimulation extends IslandRoom {
   }
 
   newHealth() {
-    return {ticks: 0, over150: 0, maxGap: 0, snapshotBytes: 0};
+    return {
+      ticks: 0,
+      over150: 0,
+      maxGap: 0,
+      snapshotBytes: 0,
+      work: {movement: 0, snapshot: 0, checkpoint: 0, route_plan: 0, route_reroute: 0},
+      checkpointWrites: 0,
+      routeFailures: 0,
+      routeFineVisits: 0,
+      routeAlternatives: 0,
+    };
   }
 
   diagnostics() {
@@ -58,6 +70,55 @@ class LocalSimulation extends IslandRoom {
     };
   }
 
+  measureWork(operation, run) {
+    if (!this.health) return run();
+    this.health.work[operation]++;
+    if (!this.tracing) return run();
+    // Native spans time synchronous work. Workers' JS clocks can freeze between I/O events.
+    return this.tracing.enterSpan(`room.${operation}`, (span) => {
+      span.setAttribute('room.owner', this.simulation.owner);
+      return run(span);
+    });
+  }
+
+  planSailDestination(actor, x, y, reason = 'destination') {
+    const operation = reason === 'reroute' ? 'route_reroute' : 'route_plan';
+    return this.measureWork(operation, (span) => {
+      const work = {};
+      const result = setSailDestination(actor, x, y, this.boats, work);
+      const {fineVisits = 0, alternatives = 0} = work;
+      this.health.routeFineVisits += fineVisits;
+      this.health.routeAlternatives += alternatives;
+      if (!result) this.health.routeFailures++;
+      span?.setAttributes({
+        'room.route.reason': reason,
+        'room.route.found': Boolean(result),
+        'room.route.fine_visits': fineVisits,
+        'room.route.alternatives': alternatives,
+      });
+      return result;
+    });
+  }
+
+  stepMovement(now) {
+    return this.measureWork('movement', () => super.stepMovement(now));
+  }
+
+  broadcast(target) {
+    if (target ? !this.connections.has(target) : !this.connections.size)
+      return super.broadcast(target);
+    return this.measureWork('snapshot', () => super.broadcast(target));
+  }
+
+  saveBoats(now, departed) {
+    return this.measureWork('checkpoint', (span) => {
+      const written = super.saveBoats(now, departed);
+      if (written && this.health) this.health.checkpointWrites++;
+      span?.setAttribute('room.checkpoint.written', Boolean(written));
+      return written;
+    });
+  }
+
   step() {
     const now = Date.now();
     if (this.lastTick !== undefined) {
@@ -68,7 +129,11 @@ class LocalSimulation extends IslandRoom {
     }
     super.step();
     this.lastTick = this.timer ? now : undefined;
-    if (now >= this.nextReport) {
+    this.reportHealth(now);
+  }
+
+  reportHealth(now) {
+    if (now - this.reportStartedAt >= 60_000) {
       console.info('Room operation timings', {
         ...this.diagnostics(),
         operation: 'tick_gap',
@@ -76,9 +141,22 @@ class LocalSimulation extends IslandRoom {
         count: this.health.ticks,
         slow_count: this.health.over150,
         snapshot_bytes: this.health.snapshotBytes,
+        window_ms: now - this.reportStartedAt,
+        movement_steps: this.health.work.movement,
+        snapshot_broadcasts: this.health.work.snapshot,
+        checkpoint_attempts: this.health.work.checkpoint,
+        checkpoint_writes: this.health.checkpointWrites,
+        route_plans: this.health.work.route_plan,
+        route_reroutes: this.health.work.route_reroute,
+        route_failures: this.health.routeFailures,
+        route_fine_visits: this.health.routeFineVisits,
+        route_alternatives: this.health.routeAlternatives,
+        // The planner runs inline. The runtime's own event queue is not visible here.
+        route_queue_depth: 0,
+        route_queue_wait_ms: 0,
       });
       this.health = this.newHealth();
-      this.nextReport = now + 60000;
+      this.reportStartedAt = now;
     }
   }
 
@@ -94,7 +172,10 @@ class LocalSimulation extends IslandRoom {
 
   startPublishing() {
     if (this.publishTimer || !this.connections.size) return;
-    this.publishTimer = setInterval(() => this.publish(), 1000);
+    this.publishTimer = setInterval(() => {
+      this.publish();
+      this.reportHealth(Date.now());
+    }, 1000);
     this.publish();
   }
 
@@ -764,16 +845,17 @@ class LocalSimulation extends IslandRoom {
 // Store the object name on its first trusted binding request. Hibernation
 // callbacks must also be able to restore the correct world without a request.
 export class IslandSimulation {
-  constructor(ctx, env) {
+  constructor(ctx, env, tracing) {
     this.ctx = ctx;
     this.env = env;
+    this.tracing = tracing;
     this.kv = ctx.storage.kv;
     const identity = this.kv.get('simulation-key');
     if (identity) this.start(identity);
   }
   start(key) {
     const [world, owner] = JSON.parse(key);
-    this.room = new LocalSimulation(this.ctx, this.env, world, owner);
+    this.room = new LocalSimulation(this.ctx, this.env, world, owner, this.tracing);
   }
   async fetch(request) {
     if (!this.room) {

@@ -942,7 +942,7 @@ export class IslandRoom {
           info.input = ZERO;
           info.boarding = null;
           info.landing = null;
-          if (actor.mode === 'sailing') setSailDestination(actor,command.x,command.y,this.boats);
+          if (actor.mode === 'sailing') this.planSailDestination(actor,command.x,command.y);
           else setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
         }
         break;
@@ -993,14 +993,14 @@ export class IslandRoom {
           actor.sailTarget=null; actor.sailRoute=null; actor.docking=false;
           if (spot.harbor) {
             const {water}=harborOf(actor.islandId);
-            const target=setSailDestination(actor,water.x,water.y,this.boats);
+            const target=this.planSailDestination(actor,water.x,water.y,'dock');
             actor.docking=Boolean(target);
             actor.dockTarget=target?{x:target[0],y:target[1]}:null;
             break;
           }
           spot.approach=landingApproach(actor,spot,this.boats);
           info.landing=spot;
-          if (!near(actor,spot.approach,14) && !setSailDestination(actor,spot.approach.x,spot.approach.y,this.boats)) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
+          if (!near(actor,spot.approach,14) && !this.planSailDestination(actor,spot.approach.x,spot.approach.y,'dock')) info.landing={...spot,approach:{x:actor.x,y:actor.y}};
         }
         break;
       case 'emote':
@@ -1046,11 +1046,13 @@ export class IslandRoom {
     info.throttled = null;
   }
 
-  step() {
-    const now = Date.now();
+  planSailDestination(actor, x, y) {
+    return setSailDestination(actor,x,y,this.boats);
+  }
+
+  stepMovement(now) {
     let active = false;
     let changedTravel = false;
-    this.expire(now);
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       if (!actor) continue;
@@ -1065,7 +1067,7 @@ export class IslandRoom {
         boat:structuredClone(this.boats.find(b=>b.id === (previousBoat ?? info.boarding)) ?? null)};
       if (actor.mode === 'sailing') {
         this.recoverSailingPosition(actor);
-        sailStep(actor,.05,info.input,now/1000,this.boats);
+        sailStep(actor,.05,info.input,now/1000,this.boats,this.rerouteBoat);
         const boat=this.boats.find(boat => boat.id === actor.boatId && boat.occupant === actor.id);
         if (!boat) info.landing=null;
         if (boat) {
@@ -1127,6 +1129,13 @@ export class IslandRoom {
       walking.get(actor.islandId).push(actor);
     }
     for (const [islandId, walkers] of walking) if (walkers.length > 1 && separateActors(walkers,this.navFor(islandId),.05)) active=true;
+    return {active, changedTravel};
+  }
+
+  step() {
+    const now = Date.now();
+    this.expire(now);
+    let {active, changedTravel} = this.stepMovement(now);
     if (this.simulation) this.updateKarma(now);
     else this.karma.update(now);
     for (const [socket, info] of this.connections) {

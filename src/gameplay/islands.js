@@ -520,7 +520,7 @@ function slideBoatStep(actor,x,y,others) {
   return {x:actor.x+dx,y:actor.y+dy};
 }
 // Polar coast water uses the same continuous movement as every other island.
-export function sailStep(actor,dt,input,now=null,boats=[]) {
+export function sailStep(actor,dt,input,now=null,boats=[],reroute=setSailDestination) {
   const others=otherBoatPositions(actor,boats);
   delete actor.seaCurrent; // Discard obsolete current state from an older session.
   const manual=Boolean(input.x || input.y);
@@ -547,7 +547,7 @@ export function sailStep(actor,dt,input,now=null,boats=[]) {
         const goal=!manual&&target?(actor.sailRoute?.at(-1)??target):null, docking=actor.docking;
         if (boatInWay && goal && (actor.reroutes??0)<8) {
           actor.reroutes=(actor.reroutes??0)+1;
-          if (setSailDestination(actor,goal.x,goal.y,boats)) {actor.docking=docking; break;}
+          if (reroute(actor,goal.x,goal.y,boats)) {actor.docking=docking; break;}
         }
         actor.sailTarget=null; actor.sailRoute=null; actor.docking=false; break;
       }

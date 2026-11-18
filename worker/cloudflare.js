@@ -1,9 +1,21 @@
-import {env} from 'cloudflare:workers';
+import {env, tracing} from 'cloudflare:workers';
 import {instrumentDurableObjectWithSentry, logger} from '@sentry/cloudflare';
 import {sentryOptions} from '../server/sentry.js';
 import {WorldService as Room} from './world-service.js';
-export {IslandSimulation, SeaSimulation} from './simulation.js';
+import {IslandSimulation as BaseIslandSimulation, SeaSimulation as BaseSeaSimulation} from './simulation.js';
 export {WorldPresence} from './world-presence.js';
+
+export class IslandSimulation extends BaseIslandSimulation {
+  constructor(ctx, bindings) {
+    super(ctx, bindings, tracing);
+  }
+}
+
+export class SeaSimulation extends BaseSeaSimulation {
+  constructor(ctx, bindings) {
+    super(ctx, bindings, tracing);
+  }
+}
 
 const routes = new Set([
   '/room', '/bog-room', '/friends', '/outfit', '/stars', '/stars/count', '/flow', '/consume',
