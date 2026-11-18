@@ -60,7 +60,8 @@ function call(env, path, data, contextData) {
 async function upgrade(env, roomRequest, original, key, contextData) {
   if (!env.ISLAND_SIM) return fetchRoom(env,roomRequest,contextData);
   const mode = await call(env,'/simulation/mode',{world:worldName(env),
-    target:original.searchParams.get('protocol')==='2'?env.WORLD_LAYOUT:undefined,id:env.WORLD_MIGRATION_ID},contextData);
+    target:original.searchParams.get('protocol')==='2'?env.WORLD_LAYOUT:undefined,id:env.WORLD_MIGRATION_ID,
+    fleetRepair:env.WORLD_REPAIR_FLEET==='1'},contextData);
   // Pages and the Worker can deploy in either order from the same commit.
   if (mode.status===404) return fetchRoom(env,roomRequest,contextData);
   if (!mode.ok) return mode;

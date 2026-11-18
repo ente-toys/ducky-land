@@ -69,6 +69,15 @@ test(
       async fetch(request) {
         const path=new URL(request.url).pathname;
         if(path==='/fixture/fleet')return Response.json(this.room.boats);
+        if(path==='/fixture/seed-replica') {
+          const boat=this.room.boats[0];
+          this.room.boats.push(
+            {...boat,id:'home-0~old-replacement',parked:true,parkedAt:Date.now()},
+            {...boat,id:'home-0~built-repair-fixture',owner:'repair-fixture',parked:true,parkedAt:Date.now()}
+          );
+          this.room.saveBoats();
+          return Response.json({});
+        }
         if(path==='/fixture/move-boat') {
           const boat=this.room.boats.find(item=>item.id==='home-0');
           this.room.boats=this.room.boats.filter(item=>item!==boat);
@@ -139,8 +148,10 @@ test(
       if(url.pathname==='/logout')return logout(ctx);
       if(url.pathname==='/migrate') return internalPost(worldStub(env,world),'/simulation/migrate',
         {id:url.searchParams.get('id'),target:url.searchParams.get('target'),world});
+      if(url.pathname==='/repair-fleet')return internalPost(worldStub(env,world),'/simulation/mode',
+        {id:'fleet-repair',target:'split',fleetRepair:true,world});
       if(url.pathname==='/build'||url.pathname==='/built')return simulationStub(env,world,url.searchParams.get('island')??'home').fetch('https://island.internal/fixture'+url.pathname);
-      if(url.pathname==='/fleet'||url.pathname==='/move-boat'||url.pathname==='/age-boat') {
+      if(['/fleet','/move-boat','/age-boat','/seed-replica'].includes(url.pathname)) {
         const owner=url.searchParams.get('island')??'home';
         return simulationStub(env,world,owner).fetch(new Request('https://island.internal/fixture'+url.pathname,request));
       }
@@ -350,5 +361,14 @@ test(
     const returned = (await fleet('home')).filter((boat) => boat.id === startingBoat.id);
     assert.equal(returned.length, 1, 'a retried return creates no duplicate');
     assert.deepEqual([returned[0].x, returned[0].y], [startingBoat.x, startingBoat.y]);
+
+    await boatFixture('/seed-replica?world=spawn&island=blossom');
+    assert.equal((await fleet('blossom')).length, blossomCount + 2);
+    assert.deepEqual(await boatFixture('/repair-fleet?world=spawn'), {mode:'split'});
+    assert.deepEqual(await boatFixture('/repair-fleet?world=spawn'), {mode:'split'});
+    const repaired = await fleet('blossom');
+    assert.equal(repaired.length, blossomCount + 1);
+    assert.ok(repaired.some(boat => boat.id === 'home-0~built-repair-fixture'));
+    assert.equal((await fleet('home')).find(boat => boat.id === 'home-0').x, startingBoat.x);
   }
 );

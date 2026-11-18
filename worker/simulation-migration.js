@@ -1,4 +1,4 @@
-import {ISLANDS, placeFleetBoatHome} from '../src/gameplay/islands.js';
+import {ISLANDS, boatHome, boatSlot, boatSpots, islandFor, placeFleetBoatHome} from '../src/gameplay/islands.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 import {simulationStub, internalPost} from '../server/simulation-routing.js';
 
@@ -120,7 +120,32 @@ export function replaceGameplay(room, data) {
   room.karma.bogEntries.clear();
 }
 
-export async function migrateWorld(room, {id, world, target}) {
+function consolidateFleetReplicas(boats) {
+  const groups = new Map();
+  const keep = [];
+  for (const boat of boats) {
+    const home = boatHome(boat), slot = boatSlot(boat);
+    if (boat.owner || !islandFor(home) || !boatSpots(home)[slot]) {
+      keep.push(boat);
+      continue;
+    }
+    const berth = `${home}-${slot}`;
+    if (!groups.has(berth)) groups.set(berth, []);
+    groups.get(berth).push(boat);
+  }
+  for (const [berth, group] of groups) {
+    const primary = group.find(boat => boat.occupant && !boat.retireOnReturn) ??
+      group.find(boat => boat.id === berth) ?? group.find(boat => !boat.retireOnReturn) ?? group[0];
+    delete primary.retireOnReturn;
+    keep.push(primary);
+    for (const boat of group) if (boat !== primary && boat.occupant) {
+      keep.push({...boat, retireOnReturn:true});
+    }
+  }
+  return keep;
+}
+
+export async function migrateWorld(room, {id, world, target, fleetRepair = false}) {
   if (
     !id ||
     !['legacy', 'split'].includes(target) ||
@@ -142,7 +167,7 @@ export async function migrateWorld(room, {id, world, target}) {
     if (previous?.id === id && previous.target !== target) return rejected('Migration ID reused');
     if (previous?.id === id && previous.done) return Response.json(previous);
     if (previous && !previous.done && previous.id !== id) {
-      if (previous.target === 'split' && target === 'legacy' && room.settings?.mode === 'maintenance') {
+      if (previous.target === 'split' && previous.source !== 'split' && target === 'legacy' && room.settings?.mode === 'maintenance') {
         const source = readSnapshot(room, 'migration-source');
         if (!source) return rejected('Missing legacy checkpoint');
         room.ctx.storage.transactionSync(() => {
@@ -164,7 +189,10 @@ export async function migrateWorld(room, {id, world, target}) {
       return rejected('Resume the current migration ID');
     }
     const mode = room.settings?.mode ?? 'legacy';
-    if (mode === target) return rejected('Already using requested layout');
+    const retry = previous?.id === id;
+    const source = retry ? previous.source ?? (target === 'split' ? 'legacy' : 'split') : mode;
+    fleetRepair = retry ? previous.fleetRepair === true : fleetRepair === true && source === 'split' && target === 'split';
+    if (mode === target && !fleetRepair) return rejected('Already using requested layout');
     const setMode = (mode) => {
       room.sql.exec('INSERT OR REPLACE INTO world_settings VALUES(1,?,?)', world, mode);
       room.settings = {world, mode};
@@ -172,11 +200,14 @@ export async function migrateWorld(room, {id, world, target}) {
     const migration = {
       id,
       target,
+      source,
+      fleetRepair,
+      exported: retry && previous.exported === true,
       done: false,
       generation: previous?.id === id ? previous.generation : Date.now(),
     };
-    if (!previous || previous.id !== id) {
-      if (target === 'legacy') {
+    if (!retry) {
+      if (source === 'split') {
         // Already-paid effects finish at their current owner before it freezes.
         // This check only reads local storage, so it can run with the world gate closed.
         const pending = await Promise.all(
@@ -193,7 +224,7 @@ export async function migrateWorld(room, {id, world, target}) {
         if (pending.some(Boolean)) return rejected('Retry while the last account changes finish');
       }
       room.ctx.storage.transactionSync(() => {
-        if (target === 'split') storeSnapshot(room, 'migration-source', freeze(room));
+        if (source === 'legacy') storeSnapshot(room, 'migration-source', freeze(room));
         kv.put('migration', migration);
         setMode('maintenance');
       });
@@ -208,41 +239,7 @@ export async function migrateWorld(room, {id, world, target}) {
       if (!r.ok) throw Error('Migration ' + path + ' failed for ' + owner);
       return r.json();
     };
-    if (target === 'split') {
-      const data = readSnapshot(room, 'migration-source');
-      validate(data);
-      const ownerForPlayer = (row) => {
-        const pose = JSON.parse(row.pose);
-        return pose.mode === 'sailing' ? 'sea' : pose.islandId;
-      };
-      const ownerForBoat = (boat) => (boat.occupant ? 'sea' : boat.islandId);
-      if (
-        data.players.some((p) => !owners.includes(ownerForPlayer(p))) ||
-        data.boats.some((b) => !owners.includes(ownerForBoat(b)))
-      )
-        throw Error('Migration contains an unknown destination');
-      room.sql.exec('DELETE FROM simulation_owners; DELETE FROM simulation_transfers;');
-      for (const owner of owners) {
-        const players = data.players.filter((row) => ownerForPlayer(row) === owner);
-        const part = {
-          players: players.map((p) => ({...p, expires: Number.MAX_SAFE_INTEGER})),
-          boats: data.boats.filter((b) => ownerForBoat(b) === owner),
-          profiles: owner === BOG_ISLAND ? data.profiles : [],
-          visits: owner === BOG_ISLAND ? data.visits : [],
-        };
-        const expected = await checksum(part);
-        const result = await call(owner, '/migration/import', {id, data: part});
-        if (result.checksum !== expected) throw Error('Import mismatch for ' + owner);
-        for (const p of players)
-          room.sql.exec(
-            `INSERT INTO simulation_owners VALUES(?,?,?)
-          ON CONFLICT(account) DO UPDATE SET owner=excluded.owner`,
-            p.account,
-            owner,
-            migration.generation
-          );
-      }
-    } else {
+    if (source === 'split' && !migration.exported) {
       const data = {players: [], boats: [], profiles: [], visits: []};
       const pendingReturns = [];
       for (const owner of owners) {
@@ -280,6 +277,49 @@ export async function migrateWorld(room, {id, world, target}) {
           : receipt;
       });
       validate(data);
+      room.ctx.storage.transactionSync(() => {
+        storeSnapshot(room, 'migration-source', data);
+        migration.exported = true;
+        kv.put('migration', migration);
+      });
+    }
+    if (target === 'split') {
+      const data = readSnapshot(room, 'migration-source');
+      if (fleetRepair) data.boats = consolidateFleetReplicas(data.boats);
+      validate(data);
+      const ownerForPlayer = (row) => {
+        const pose = JSON.parse(row.pose);
+        return pose.mode === 'sailing' ? 'sea' : pose.islandId;
+      };
+      const ownerForBoat = (boat) => (boat.occupant ? 'sea' : boat.islandId);
+      if (
+        data.players.some((p) => !owners.includes(ownerForPlayer(p))) ||
+        data.boats.some((b) => !owners.includes(ownerForBoat(b)))
+      )
+        throw Error('Migration contains an unknown destination');
+      room.sql.exec('DELETE FROM simulation_owners; DELETE FROM simulation_transfers;');
+      for (const owner of owners) {
+        const players = data.players.filter((row) => ownerForPlayer(row) === owner);
+        const part = {
+          players: players.map((p) => ({...p, expires: Number.MAX_SAFE_INTEGER})),
+          boats: data.boats.filter((b) => ownerForBoat(b) === owner),
+          profiles: owner === BOG_ISLAND ? data.profiles : [],
+          visits: owner === BOG_ISLAND ? data.visits : [],
+        };
+        const expected = await checksum(part);
+        const result = await call(owner, '/migration/import', {id, data: part});
+        if (result.checksum !== expected) throw Error('Import mismatch for ' + owner);
+        for (const p of players)
+          room.sql.exec(
+            `INSERT INTO simulation_owners VALUES(?,?,?)
+          ON CONFLICT(account) DO UPDATE SET owner=excluded.owner`,
+            p.account,
+            owner,
+            migration.generation
+          );
+      }
+    } else {
+      const data = readSnapshot(room, 'migration-source');
       for (const p of data.players) p.expires = Date.now() + day;
       room.ctx.storage.transactionSync(() => replaceGameplay(room, data));
     }

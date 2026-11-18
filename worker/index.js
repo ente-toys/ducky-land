@@ -55,7 +55,7 @@ function publicPose(actor) {
 // Persist the chart version privately; wire poses keep their existing public shape.
 const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
-function wireBoat({owner, ownershipVersion, buildRevision, unattendedAt, returnRetryAt, ...boat}) {
+function wireBoat({owner, ownershipVersion, buildRevision, unattendedAt, returnRetryAt, retireOnReturn, ...boat}) {
   return owner ? {...boat, built:true} : boat;
 }
 const r2 = v => Math.round(v * 100) / 100, r3 = v => Math.round(v * 1000) / 1000;
@@ -275,7 +275,13 @@ export class IslandRoom {
   }
 
   returnIdleBoats(now) {
-    for (const boat of this.boats) if (this.boatReturnAt(boat) <= now) this.placeReturnedBoat(boat,now);
+    for (const boat of this.boats) {
+      if (this.boatReturnAt(boat) > now) continue;
+      if (boat.retireOnReturn) {
+        this.clearBoatResume(boat);
+        this.boats = this.boats.filter(item => item !== boat);
+      } else this.placeReturnedBoat(boat,now);
+    }
   }
 
   releaseBoat(actorId) {

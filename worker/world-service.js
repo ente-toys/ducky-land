@@ -162,7 +162,9 @@ export class WorldService extends LegacyRoom {
   async control(path, data) {
     if (path === '/simulation/migrate') return migrateWorld(this, data);
     if (path === '/simulation/mode') {
-      if (data.id && data.target && (this.settings?.mode ?? 'legacy') !== data.target) {
+      const fleetRepairPending = data.fleetRepair === true && data.target === 'split' &&
+        this.ctx.storage.kv.get('migration')?.id !== data.id;
+      if (data.id && data.target && ((this.settings?.mode ?? 'legacy') !== data.target || fleetRepairPending)) {
         const result = await migrateWorld(this, data);
         if (!result.ok) return result;
       }
