@@ -12,6 +12,9 @@ Run the project build and tests, the two Wrangler bundle checks, and the local W
 npm ci
 npm run build
 npm test
+npx wrangler deploy --dry-run --config worker/wrangler.jsonc --outdir=/tmp/ducky-room-check
+npx wrangler pages functions build functions --outdir=/tmp/ducky-pages-check --compatibility-date=2026-11-02 --compatibility-flag=nodejs_compat
+node scripts/check-simulation-bundles.mjs /tmp/ducky-pages-check/index.js /tmp/ducky-room-check/cloudflare.js
 node scripts/load-simulations.mjs
 ```
 
