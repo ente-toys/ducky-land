@@ -762,10 +762,12 @@ test('boats board once, cross authoritatively, isolate islands and survive recon
     await delay(100);
     assert.equal(captain.duck().mode,'sailing');
     assert.equal(captain.duck().x,before.x);
-    captain.send({type:'destination',...mapOf('home').spawn});
+    const water={x:before.x,y:before.y+500};
+    assert.ok(canSail(water.x,water.y));
+    captain.send({type:'destination',...water});
     await delay(100);
     assert.equal(captain.duck().mode,'sailing');
-    assert.ok(canSail(captain.duck().x,captain.duck().y));
+    assert.deepEqual([captain.duck().x,captain.duck().y],[before.x,before.y]);
     captain.send({type:'input',x:0,y:-1});
     await eventually(() => captain.duck().y<before.y-20);
     captain.send({type:'input',x:0,y:0});

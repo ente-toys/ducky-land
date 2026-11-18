@@ -16,7 +16,7 @@ import {createHomeKites, KITE_ASSETS} from './environment/home-kites.js';
 import {easeLandingBasis,canonicalCamera,turnLongitude,cameraMatrix,cameraSpan} from '../shared/sphere-camera.js';
 import {createSailingCamera} from '../shared/sailing-camera.js';
 import {sailingUpright} from './sailing-upright.js';
-import {WORLD_GEO,WORLD_ISLANDS,neighboursOf,offsetOf} from '../../world/world-map.js';
+import {WORLD_GEO,WORLD_ISLANDS,offsetOf} from '../../world/world-map.js';
 import {drawLiveIsland} from './sphere-mesh.js';
 import {createIsletView} from './islet-view.js';
 import {globeBall,uprightFade,globeRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from '../shared/globe-look.js';
@@ -104,20 +104,6 @@ function contactShadow(prop) {
   return new Graphics().ellipse(sx, sy, rx, ry).fill({color, alpha});
 }
 const acquireGround = (src, resolution) => acquire(src, resolution, {mipmaps: false});
-
-// the next island on the fewest-hops sea route from one island to another (null when there is no route)
-function nextIsland(from, to) {
-  const previous=new Map([[from,null]]), queue=[from];
-  while (queue.length) {
-    const id=queue.shift();
-    if (id === to) break;
-    for (const {island} of neighboursOf(id)) if (!previous.has(island.id)) {previous.set(island.id,id); queue.push(island.id);}
-  }
-  if (!previous.has(to) || to === from) return null;
-  let step=to;
-  while (previous.get(step) !== from) step=previous.get(step);
-  return step;
-}
 
 export class PixiIsland {
   constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}, onGlobeChange = () => {}, onPhotoReady} = {}) {
@@ -712,7 +698,6 @@ export class PixiIsland {
       if (!['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','q','e','1','2','3','4','5','6','7','m','f','home','0','+','=','-',' ','enter','shift'].includes(key)) return;
       event.preventDefault();
       this.keys.add(key);
-      if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) this.trip=null;
       if (event.repeat) return;
       if (!['f','home','0','+','=','-'].includes(key)) this.audio.unlock();
       if (key === ' ') this.jump();
@@ -812,7 +797,7 @@ export class PixiIsland {
 
   updateControlLabel() {
     const base = 'Ducky Land illustrated island. Drag to pan, scroll or pinch to zoom. M toggles sound. Home flies back to your Ducky, 0 shows the island.';
-    const play = this.player?.mode === 'sailing' ? ' WASD or arrows steer. Tap water to sail. Tap a nearby shore or press Enter to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
+    const play = this.player?.mode === 'sailing' ? ' Use the movement controls to steer. Tap a nearby shore or press Enter to dock.' : ' Click to walk. WASD or arrows move. Space jumps. Q quacks, E dances, 1 to 7 emote, F follows.';
     const chat = this.chatLayer && this.player ? ' Press C to chat.' : '';
     this.canvas.setAttribute('aria-label', base + (this.room && !this.player ? '' : play) + chat);
   }
@@ -830,51 +815,6 @@ export class PixiIsland {
     }
     return best ? {take: best.id} : this.boatBuild?.options() ?? {};
   }
-  // "Take me to …": walk to a boat, sail island to island (landing and re-boarding on the way, as a player would),
-  // and dock at the target. Any movement key or tap hands control back. Returns a reason string when it cannot start.
-  tripTo(target) {
-    if (this.globeBusy()) return 'Close the globe first.';
-    const me=this.player;
-    if (!this.room || !me) return 'Your duck is still arriving.';
-    if (this.interior?.active) return 'Step outside first.';
-    if (this.islandId === target && me.mode === 'walking') return 'You are already here.';    if (!nextIsland(this.islandId, target) && this.islandId !== target) return 'There is no way to sail there from here.';
-    this.pauseIslandBackground();
-    void this.prepareIsland(target).catch(()=>{});
-    this.trip={target, leg:null, boarded:null, docked:false};
-    this.follow=true; this.fitMode=false;
-    return '';
-  }
-  stepTrip() {
-    const trip=this.trip, me=this.player;
-    if (!trip || !me || !this.room || this.arrival || this.globeBusy()) return;
-    if (me.mode === 'walking') {
-      if (this.islandId === trip.target) {this.trip=null; return;}
-      if (trip.boarded === this.islandId) return;
-      trip.boarded=this.islandId;
-      if (!this.room.returnToBoat()) {this.trip=null; this.room.onNotice('No free boat here right now. Try again in a moment.');}
-      return;
-    }
-    if (me.mode !== 'sailing') return;
-    if (this.islandId === trip.target) {
-      if (canDock(me)) {if (!trip.docked) {trip.docked=true; this.room.disembark();}}
-      else if (trip.leg !== this.islandId && this.setDestination(harborOf(trip.target).water)) trip.leg=this.islandId;
-      return;
-    }
-    if (trip.leg === this.islandId) {
-      // the boat stopped short of the next island (a refused landing, a full island): hand control back once it
-      // has stayed stopped for a moment (the target blinks empty between route waypoints)
-      if (me.sailTarget) {trip.idleSince=null; return;}
-      if ((trip.idleSince ??= performance.now()) >= performance.now() - 1500) return;
-      // long legs can stop partway (the sea route is planned in pieces): re-send the leg while the boat still gains ground
-      const moved=!trip.stoppedAt || Math.hypot(me.x-trip.stoppedAt.x, me.y-trip.stoppedAt.y) > 200;
-      trip.stoppedAt={x:me.x, y:me.y}; trip.leg=null; trip.idleSince=null;
-      if (!moved) this.trip=null;
-      return;
-    }
-    const next=nextIsland(this.islandId, trip.target), route=destinationsFor(this.islandId).find(island => island.destination === next);
-    if (route && this.setDestination(route.dock)) {trip.leg=this.islandId; trip.idleSince=null;}
-  }
-
   travelAction() {
     if (this.globeBusy()) return;
     const options=this.travelOptions();
@@ -906,21 +846,15 @@ export class PixiIsland {
   }
 
   tap(point) {
-    if (this.interior?.active) {this.trip=null; this.interior.tap(point); return;}
+    if (this.interior?.active) {this.interior.tap(point); return;}
     if (this.globeT > 0 && this.worldView?.pinAt(point)) {if (this.globeOpen) this.closeGlobe(); else if (!this.globeBusy()) this.flyHome(); return;}
     if (this.globeBusy()) return;   // the globe is a view only: taps never walk, board or sail the hidden Ducky
-    this.trip=null;
     const p = screenToWorld(this.camera, point, this.width, this.height);
     if (this.room && this.player) {
       if (this.player.mode === 'sailing') {
-        const destination=destinationsFor(this.islandId).find(island => Math.abs(p.x-island.x)<mapFor(island.map).width*.42 && Math.abs(p.y-island.y)<mapFor(island.map).height*.4);
         const harbor=harborOf(this.islandId);
-        const islet=isletWalks(this.islandId).find(w => w.nav.walkable(p.x,p.y) || near(p,w.land,160));
         if (dockingSpot(this.player,p)) this.dock(p);
         else if ((near(p,harbor.water,140) || near(p,harbor.land,120)) && canDock(this.player)) this.dock();
-        else if (destination) this.setDestination(destination.dock);
-        else if (islet) this.setDestination(islet.water);
-        else this.setDestination(p);
         return;
       }
       const boat=this.room.boatPoses().find(boat => near(p,{x:boat.x,y:boat.y-45},100));
@@ -969,7 +903,7 @@ export class PixiIsland {
   }
 
   setDestination(point) {
-    if (this.arrival) return false;
+    if (this.arrival || this.player?.mode === 'sailing') return false;
     const destination = this.room ? this.room.destination(point.x, point.y) : this.sim.destination(point.x, point.y);
     if (destination) {
       this.marker.position.set(...destination);
@@ -1150,10 +1084,10 @@ export class PixiIsland {
       distance:(a,b)=>{const p=offsetOf(a.id,b.id);return wrapSea(p.x)**2+p.y*p.y;},
       selectTier:(data,id)=>selectIslandTier(data,id,this.app.renderer.resolution,this.width,this.height)});
     if(state.live){
-      if(!this.destinationArt&&!this.trip&&this.player?.mode!=='sailing'&&this.artShown===mapId)this.islandPrefetch?.resume(id);
+      if(!this.destinationArt&&this.player?.mode!=='sailing'&&this.artShown===mapId)this.islandPrefetch?.resume(id);
       return;
     }
-    if(!this.sailingArtWanted?.has(id)&&(this.trip||this.player?.mode==='sailing'||this.destinationArt&&this.destinationArt!==mapId))return;
+    if(!this.sailingArtWanted?.has(id)&&(this.player?.mode==='sailing'||this.destinationArt&&this.destinationArt!==mapId))return;
     if(state.job||(state.attempts??0)>=4||performance.now()<(state.retryAt??0))return;
     const controller=new AbortController();state.controller=controller;
     const cancelled=()=>controller.signal.aborted||this.disposed||this.detailStates?.get(id)!==state;
@@ -1164,7 +1098,7 @@ export class PixiIsland {
       // Landing pins can go once all live frames hold their detail sheets.
       state.lease.releaseLanding?.();
       if(this.destinationArt&&this.destinationArt!==mapId)return;
-      if(this.artShown===mapId&&!this.trip&&this.player?.mode!=='sailing')this.islandPrefetch.resume(id);
+      if(this.artShown===mapId&&this.player?.mode!=='sailing')this.islandPrefetch.resume(id);
     }).catch(error=>{if(!cancelled())console.warn(`Island ${id}: keeping sharp landing art`,error);})
       .finally(()=>{if(!state.live&&this.detailStates?.get(id)===state){
         state.job=null;if(controller.signal.aborted)return;state.attempts=(state.attempts??0)+1;state.retryAt=performance.now()+1000*2**state.attempts;
@@ -1589,7 +1523,6 @@ export class PixiIsland {
   closeGlobe() {
     if (!this.globeOpen) return false;
     this.globeOpen=false;
-    if(this.trip)Object.assign(this.trip,{leg:null,idleSince:null,stoppedAt:null,docked:false});
     this.landOnPlayer(this.globeReturn?.zoom); this.onGlobeChange?.(false);
     return true;
   }
@@ -1710,7 +1643,6 @@ export class PixiIsland {
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;
     }
-    this.stepTrip();
     const actor = this.player;
     if(actor?.mode==='sailing') {
       const target=actor.sailRoute?.at(-1)??actor.sailTarget??{x:actor.x-Math.sin(actor.turn??0)*4000,y:actor.y-Math.cos(actor.turn??0)*4000};

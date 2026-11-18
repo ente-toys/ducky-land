@@ -8,7 +8,7 @@ import {SEA_WIDTH} from '../src/world/flat-layout.js';
 import {unplaceRigid} from '../src/world/rigid.js';
 import {tileInView} from '../src/rendering/pixi/art/ground-stream.js';
 import {ISLANDS,destinationsFor,harborOf,setSailDestination,sailStep,boatRoom,canSail,BOAT_GAP,harborApproachClear,fillMoorings,createBoats} from '../src/gameplay/islands.js';
-import {OfflineFleet,RoomClient} from '../src/multiplayer/room-client.js';
+import {OfflineFleet} from '../src/multiplayer/room-client.js';
 import {makeRoom,addPlayer} from './room-harness.mjs';
 
 test('visitor boat docks at Home, then a second autopilot arrival from Pagepond docks successfully',async()=>{
@@ -34,7 +34,7 @@ test('visitor boat docks at Home, then a second autopilot arrival from Pagepond 
  }finally{clearInterval(room.timer);room.bog?.dispose();}
 });
 
-test('occupied Home dock accepts the free approach selected by client prediction',async()=>{
+test('occupied Home dock accepts a free approach',async()=>{
  const room=await makeRoom();
  try{
   // A live sailor can still occupy the reserved transit space.
@@ -45,15 +45,12 @@ test('occupied Home dock accepts the free approach selected by client prediction
   const p=addPlayer(room,9913,{islandId:'isle-251',mode:'sailing',x:dock.x,y:dock.y+1400});
   const boat=room.boats.find(b=>b.islandId==='isle-251'&&!b.occupant);
   Object.assign(boat,{x:p.actor.x,y:p.actor.y,occupant:p.actor.id});p.actor.boatId=boat.id;
-  const client=new RoomClient(()=>{});client.islandId='isle-251';client.nav=mapOf('isle-251').nav();client.player={...p.actor};client.boats=room.boats;
-  const predicted=client.predict({type:'destination',...dock},0);assert(predicted);
-  assert(Math.hypot(predicted[0]-dock.x,predicted[1]-dock.y)>=BOAT_GAP);
-  assert.deepEqual(setSailDestination(p.actor,dock.x,dock.y,room.boats),predicted);
+  const approach=setSailDestination(p.actor,dock.x,dock.y,room.boats);assert(approach);
+  assert(Math.hypot(approach[0]-dock.x,approach[1]-dock.y)>=BOAT_GAP);
   for(let k=0;k<400&&p.actor.mode==='sailing';k++){
    room.step();assert(boatRoom(boat,room.boats));
   }
   assert.equal(p.actor.islandId,'home');assert.equal(p.actor.mode,'walking');
-  client.dispose();
  }finally{clearInterval(room.timer);room.bog?.dispose();}
 });
 
@@ -142,22 +139,23 @@ test('Pagepond parked visitor can sail to Home through the saved harbour fleet',
  }finally{clearInterval(room.timer);room.bog?.dispose();}
 });
 
-test('Take me to resumes its sailing leg after opening and closing the globe',()=>{
- const player={mode:'sailing',islandId:'home',x:5000,y:9000,sailTarget:{x:8000,y:9000}};
- const game=Object.assign(Object.create(PixiIsland.prototype),{room:{player,stopInput(){player.sailTarget=null;},view:()=>player},
-  islandId:'home',trip:{target:'blossom',leg:'home',stoppedAt:{x:5000,y:9000},idleSince:0},
-  archipelago:{},worldView:{},camera:{zoom:.2},target:{},zoomMotion:{velocity:0},keys:new Set(),gestures:{clear(){}},
-  mapHere:()=>mapOf('home'),birdZoom:()=>.01,zoomFloor:()=>.01,zoomCeiling:()=>2,
-  setDestination(point){player.sailTarget=point;return [point.x,point.y];}});
- assert(game.openGlobe());assert(game.trip);game.stepTrip();assert.equal(player.sailTarget,null);
- assert(game.closeGlobe());game.stepTrip();assert.equal(game.trip.leg,'home');assert(player.sailTarget);
- assert.equal(game.follow,true);
- assert(game.openGlobe());game.globeT=1;game.worldView.pinAt=()=>true;
- game.tap({x:0,y:0});assert(game.trip,'closing via the globe pin preserves the trip');
- game.stepTrip();assert(player.sailTarget);
+test('the boat ignores a tap on open water and still accepts a tap to dock',()=>{
+ const water=harborOf('home').water;
+ const player={...water,mode:'sailing',islandId:'home'};
+ const game=Object.assign(Object.create(PixiIsland.prototype),{
+  room:{player},islandId:'home',camera:{x:3000,y:10000,zoom:1},width:100,height:100,
+  globeBusy:()=>false,setDestination:()=>assert.fail('a water tap must not start sailing'),
+  dock:()=>{docks++;},
+ });
+ let docks=0;
+ game.tap({x:50,y:50});
+ assert.equal(docks,0);
+ Object.assign(game.camera,water);
+ game.tap({x:50,y:50});
+ assert.equal(docks,1);
 });
 
-test('Pagepond and Rosybutton autopilot routes sail across the seam in both directions',()=>{
+test('Pagepond and Rosybutton planned routes sail across the seam in both directions',()=>{
  for(const [from,to,direction]of [['isle-251','sunset',1],['sunset','isle-251',-1]]){
   assert(neighboursOf(from).some(n=>n.island.id===to));
   const h=harborOf(from),actor={islandId:from,mode:'sailing',...h.water,path:[],action:0};

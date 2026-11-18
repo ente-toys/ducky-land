@@ -9,7 +9,7 @@ import {mapOf,islandMapReady} from '../world/island-maps.js';
 import {getPlayerKarma} from '../features/bog-combat/karma.js';
 import {bogLandingNotice} from '../features/bog-combat/entry.js';
 import {BOAT_UNVEIL} from '../gameplay/boat-build.js';
-import {islandFor, harborOf, destinationsFor, near, canSail, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
+import {islandFor, harborOf, destinationsFor, near, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
 const HEARTBEAT_INTERVAL_MS = 5000;
@@ -447,8 +447,8 @@ export class RoomClient {
     if (command.type==='input' && typeof command.reducedMotion==='boolean') this.player.reducedMotion=command.reducedMotion;
     if (command.type === 'jump') return startJump(this.player);
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
-    if (command.type === 'destination' && this.nav) return this.player.mode === 'sailing'
-      ? setSailDestination(this.player,command.x,command.y,this.boats) : setWalkDestination(this.player, this.navHere(), command.x, command.y);
+    if (command.type === 'destination' && this.nav && this.player.mode !== 'sailing')
+      return setWalkDestination(this.player, this.navHere(), command.x, command.y);
     if (command.type === 'disembark' && this.player.mode === 'sailing') {
       const spot=dockingSpot(this.player,Number.isFinite(command.x) ? command : null);
       if (spot && !spot.islet && bogLandingNotice(spot.islandId,getPlayerKarma({room:this}))) {
@@ -480,9 +480,9 @@ export class RoomClient {
   destination(x, y) {
     if(!islandMapReady(this.islandId))return null;
     if (!this.world || !Number.isFinite(x) || !Number.isFinite(y)) return null;
-    if (this.player?.mode === 'sailing' && !canSail(x,y,this.islandId)) return null;
+    if (this.player?.mode === 'sailing') return null;
     const w = this.worldHere(), o = w.origin ?? {x:0,y:0};
-    if (this.player?.mode !== 'sailing' && !canWalkTo(this.islandId, x, y) && (x<o.x || y<o.y || x>=o.x+w.width || y>=o.y+w.height)) return null;
+    if (!canWalkTo(this.islandId, x, y) && (x<o.x || y<o.y || x>=o.x+w.width || y>=o.y+w.height)) return null;
     const result = this.send({type:'destination',x,y});
     return Array.isArray(result) ? result : null;
   }

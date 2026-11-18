@@ -1,10 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeRoom,addPlayer} from './room-harness.mjs';
-import {destinationsFor,sailRoute} from '../src/gameplay/islands.js';
+import {destinationsFor,sailRoute,setSailDestination} from '../src/gameplay/islands.js';
 
-// Bog's three moorings sit 380-620 around its dock point, so with the boat gap the exact point was unreachable and
-// "Take me to Booquack Bog" left the boat at Home. Routes now aim for free water beside a walled-in dock.
+// Bog's moorings block the exact dock point, so the route aims for free water beside it.
 test('a 5-feather Ducky sails from a Home mooring to Booquack Bog past its moored boats and lands', async () => {
   const room=await makeRoom();
   try {
@@ -14,8 +13,7 @@ test('a 5-feather Ducky sails from a Home mooring to Booquack Bog past its moore
     const p=addPlayer(room,9101,{islandId:'home',x:boat.x,y:boat.y,mode:'sailing'});
     Object.assign(boat,{occupant:p.actor.id});p.actor.boatId=boat.id;
     room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',p.account,5);room.karma.balances.delete(p.account);
-    room.webSocketMessage(p.socket,JSON.stringify({type:'destination',seq:1,x:bog.dock.x,y:bog.dock.y}));
-    assert.ok(p.actor.sailTarget,'the server sets a course');
+    assert.ok(setSailDestination(p.actor,bog.dock.x,bog.dock.y,room.boats),'the planner finds a course');
     let landed=false;
     for (let i=0;i<20*120 && !landed;i++) {
       room.step();

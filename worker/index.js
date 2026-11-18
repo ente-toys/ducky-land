@@ -936,15 +936,13 @@ export class IslandRoom {
         break;
       case 'destination':
         if (!Number.isFinite(command.x) || !Number.isFinite(command.y)) return;
-        if (actor.mode === 'sailing' ? !canSail(command.x,command.y,actor.islandId)
-          : !canWalkTo(actor.islandId,command.x,command.y)) return;
+        if (actor.mode === 'sailing' || !canWalkTo(actor.islandId,command.x,command.y)) return;
         if (now-info.lastDestination >= 400) {
           info.lastDestination = now;
           info.input = ZERO;
           info.boarding = null;
           info.landing = null;
-          if (actor.mode === 'sailing') this.planSailDestination(socket,info,command.x,command.y,now);
-          else setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
+          setWalkDestination(actor, this.navFor(actor.islandId), command.x, command.y);
         }
         break;
       case 'board': {
@@ -1037,10 +1035,6 @@ export class IslandRoom {
     }
     info.ack = Math.max(info.ack, seq);
     info.throttled = null;
-  }
-
-  planSailDestination(socket, info, x, y) {
-    return setSailDestination(info.actor,x,y,this.boats);
   }
 
   planDock(socket, info, spot) {

@@ -5,7 +5,7 @@ import {WORLD_ISLANDS,WORLD_GEO} from '../src/world/world-map.js';
 import {sphereShores,sphereShoreGap,BOAT_CHANNEL} from '../src/world/sphere-shores.js';
 import {angle,sphereFrame} from '../src/world/sphere.js';
 import {mapOf} from '../src/world/island-maps.js';
-import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,ISLANDS,seaBoundsFor} from '../src/gameplay/islands.js';
+import {canSail,landingSpot,landingApproach,sailRoute,sailStep,setSailDestination,boardingPoint,navOf,BOAT_RADIUS,SAIL_SPEED,ISLANDS,seaBoundsFor} from '../src/gameplay/islands.js';
 import {placeIslet,reframeIslet,isletLandingFrame} from '../src/world/islet-placement.js';
 import {isletShores,isletHull,flatRingGap} from '../src/world/islet-shores.js';
 import {placeRigid} from '../src/world/rigid.js';
@@ -180,10 +180,13 @@ test('room server: Dock at an islet lands you on it, you walk, take the boat bac
   room.webSocketMessage(socket,JSON.stringify({type:'board',seq:3,boatId:boat.id}));
   for(let k=0;k<400&&actor.mode==='walking';k++)room.step();
   assert.equal(actor.mode,'sailing','took the boat back');
-  info.lastDestination=-Infinity;
-  room.webSocketMessage(socket,JSON.stringify({type:'destination',seq:4,x:start.x,y:start.y}));
-  for(let k=0;k<200&&actor.sailTarget;k++)room.step();
-  assert.ok(Math.hypot(actor.x-start.x,actor.y-start.y)<14,'sailed off again');
+  const dx=start.x-actor.x,dy=start.y-actor.y,distance=Math.hypot(dx,dy);
+  const direction=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*Math.PI/4;
+  room.webSocketMessage(socket,JSON.stringify({
+   type:'input',seq:4,x:Math.round(Math.cos(direction)),y:Math.round(Math.sin(direction)),
+  }));
+  for(let k=0;k<Math.round(distance/(SAIL_SPEED*.05));k++)room.step();
+  assert.ok(Math.hypot(actor.x-start.x,actor.y-start.y)<distance/2,'steered away from the jetty');
  }finally{clearInterval(room.timer);}
 });
 test('route planner steers round an islet and manual sailing stops at its land',()=>{

@@ -92,11 +92,6 @@ class LocalSimulation extends IslandRoom {
     return queued;
   }
 
-  planSailDestination(socket, info, x, y, now) {
-    if (!this.sailRoutes) return super.planSailDestination(socket, info, x, y);
-    return this.queueSailRoute(socket, info, x, y, 'destination', now);
-  }
-
   planDock(socket, info, spot) {
     if (!this.sailRoutes) return super.planDock(socket, info, spot);
     if (spot.harbor) {

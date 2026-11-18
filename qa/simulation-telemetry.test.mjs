@@ -28,28 +28,24 @@ test('the sea reports sailing work and labels each measured phase', async (t) =>
     },
   };
   const {room} = new SeaSimulation(ctx, {ISLAND: namespace, WORLD_PRESENCE: namespace}, tracing);
-  const {x, y} = harborOf('home').water;
-  const target = {x, y: y + BOAT_GAP + 400};
-  assert.ok(canSail(target.x, target.y, 'home'));
+  const target = harborOf('home').water;
+  const {x, y} = {x: target.x, y: target.y + BOAT_GAP + 100};
+  assert.ok(canSail(x, y, 'home'));
   const {socket, actor} = addPlayer(room, 1, {islandId: 'home', x, y, mode: 'sailing'});
   actor.boatId = 'home-0~telemetry';
   room.boats = [{id: actor.boatId, islandId: 'home', x, y, occupant: actor.id, turn: 0}];
 
   room.timer = 'manual';
   const send = (type, seq, fields) => room.webSocketMessage(socket, JSON.stringify({type, seq, ...fields}));
-  send('destination', 1, target);
+  send('destination', 1, {x, y: y + 100});
+  assert.equal(room.sailRoutes.size, 0, 'a water click does not queue a route');
+  send('disembark', 2, {});
   assert.equal(room.sailRoutes.size, 1);
-  assert.ok(!actor.sailTarget, 'the WebSocket handler queues the search');
-
-  const info = room.connections.get(socket);
-  info.lastDestination = -Infinity;
-  send('destination', 2, {...target, y: target.y + 100});
-  assert.equal(room.sailRoutes.size, 1, 'a new destination replaces the previous one');
+  assert.ok(!actor.sailTarget, 'the WebSocket handler queues the docking search');
   send('input', 3, {x: 1, y: 0});
   assert.equal(room.sailRoutes.size, 0, 'manual steering cancels queued work');
 
-  info.lastDestination = -Infinity;
-  send('destination', 4, target);
+  send('disembark', 4, {});
   const start = Date.now();
   for (let sample = 0; room.sailRoutes.size && sample < 1500; sample++) {
     const units = room.health.routeWorkUnits;
@@ -57,7 +53,7 @@ test('the sea reports sailing work and labels each measured phase', async (t) =>
     assert.ok(room.health.routeWorkUnits - units <= SAIL_ROUTE_WORK_PER_TICK);
   }
   assert.deepEqual(actor.sailTarget, target);
-  room.boats.push({id: 'home-0~obstruction', islandId: 'home', x, y: actor.y + BOAT_GAP + 1, turn: 0});
+  room.boats.push({id: 'home-0~obstruction', islandId: 'home', x, y: actor.y - BOAT_GAP - 1, turn: 0});
   room.checkpointAt = 0;
   room.step();
   assert.ok(!actor.sailTarget, 'a blocked boat waits for its replacement route');
@@ -114,7 +110,7 @@ test('a sliced route is discarded when its connection ownership changes', () => 
   const room = {connections: new Map([[socket, info]]), boats: []};
   const health = {work: {route_plan: 0}, routeQueueWait: 0, routeWorkUnits: 0};
   const now = Date.now();
-  queue.request(socket, info, point.x, point.y + 800, 'destination', now);
+  queue.request(socket, info, point.x, point.y + 800, 'dock', now);
   queue.step(room, now + 50, health, 8);
   assert.equal(queue.size, 1, 'the route started but needs more work');
   const replacement = {...actor};

@@ -334,7 +334,7 @@ test('nearby friends choose the closest live account, retain it, and respect sav
 });
 
 test('boarding and island changes clear prediction and boat interpolation without replaying old commands',()=>{
-  const {room,events}=setup();
+  const {room,events,sent}=setup();
   room.snapshot(packet(1));
   room.destination(1850,430);
   assert.equal(room.pending.length,1);
@@ -343,8 +343,10 @@ test('boarding and island changes clear prediction and boat interpolation withou
   assert.equal(room.pending.length,0);
   assert.equal(room.offsetX,0);
   assert.ok(room.emote(3),'dance is allowed on a boat');assert.equal(room.emote(4),false,'other emotes still wait for land');
-  room.destination(3960,6500);
-  assert.deepEqual(room.player.sailTarget,{x:3960,y:6500});
+  const commandCount=sent.length;
+  assert.equal(room.destination(3960,6500),null);
+  assert.equal(sent.length,commandCount);
+  assert.equal(room.player.sailTarget,null);
   room.snapshot(packet(3,'blossom','sailing'));
   assert.equal(room.pending.length,0);
   assert.equal(room.player.sailTarget,null);
@@ -366,7 +368,6 @@ test('sailing prediction uses bounded motion and sends the authoritative island 
   room.step(.05,{x:1,y:0});
   assert.equal(room.player.docking,false);
   assert.equal(room.player.sailTarget,null);
-  room.destination(3960,6500);
   room.stopInput();
   const next=packet(2,PLAIN,'sailing');
   next.self.sailTarget={x:3960,y:6500};

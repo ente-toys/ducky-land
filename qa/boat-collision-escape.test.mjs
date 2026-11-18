@@ -15,7 +15,7 @@ function step(actor,boats) {
   assert(canSail(actor.x,actor.y,actor.islandId),'the hull stays in water');
 }
 
-test('click-to-sail escapes the narrow gap between movement and routing clearance in every chart copy',()=>{
+test('a planned route escapes the narrow gap between movement and routing clearance in every chart copy',()=>{
   for(const offset of [0,SEA_WIDTH,-SEA_WIDTH])for(const {id}of ISLANDS){
     const actor=sailor('mine',{x:3000+offset,y:10000});
     // A legal movement stop at 260.5 used to be rejected by the planner's 261 margin.
@@ -41,7 +41,7 @@ test('a close boat may route round its neighbour but cannot cut through its hull
   assert(distance(actor,goal)<1);
 });
 
-test('the room accepts a close-gap escape command without recovering or teleporting its sailor',async()=>{
+test('the room accepts close-gap manual steering without recovering or teleporting its sailor',async()=>{
   const room=await makeRoom();
   try{
     const {actor,socket}=addPlayer(room,9854,{islandId:'home',mode:'sailing',x:3000,y:10000});
@@ -49,8 +49,9 @@ test('the room accepts a close-gap escape command without recovering or teleport
     Object.assign(boat,{x:actor.x,y:actor.y,occupant:actor.id});actor.boatId=boat.id;
     Object.assign(obstacle,{x:actor.x+BOAT_GAP+.5,y:actor.y});
     room.webSocketMessage(socket,JSON.stringify({type:'destination',seq:1,x:2000,y:10000}));
-    assert(actor.sailTarget,'the server accepts the destination instead of silently discarding it');
-    for(let k=0;k<100&&actor.sailTarget;k++){
+    assert.ok(!actor.sailTarget,'the server ignores water destinations');
+    room.webSocketMessage(socket,JSON.stringify({type:'input',seq:2,x:-1,y:0}));
+    for(let k=0;k<35;k++){
       const before={...actor};room.step();
       assert(distance(before,actor)<=SAIL_SPEED*dt+1e-6,'server recovery does not relocate a legal close-gap sailor');
       assert(distance(actor,obstacle)>=BOAT_GAP+.5-1e-6);
@@ -58,7 +59,7 @@ test('the room accepts a close-gap escape command without recovering or teleport
       assert.deepEqual([boat.x,boat.y],[actor.x,actor.y],'the authoritative boat follows its sailor exactly');
     }
     assert.equal(actor.mode,'sailing');
-    assert(distance(actor,{x:2000,y:10000})<1);
+    assert(distance(actor,{x:2000,y:10000})<5);
   }finally{clearInterval(room.timer);room.bog?.dispose();}
 });
 
