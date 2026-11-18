@@ -17,6 +17,7 @@ import IslandMusic from './IslandMusic.jsx';
 import WorldMap from './WorldMap.jsx';
 import BogEntry from '../features/bog-combat/BogEntry.jsx';
 import {BOG_COMBAT} from '../features/bog-combat/config.js';
+import SledEntry from '../features/sled-race/SledEntry.jsx';
 import {startHomeHeadStart,settleHomeHeadStart,finishHomeHeadStart} from './home-head-start.js';
 import {startupSession} from './arrival-start.js';
 import './pixi.css';
@@ -241,6 +242,7 @@ export default function PixiPage({signedInEntry = false}) {
       accountId={session?.user?.accountId}
       name={session?.user?.login??'Ducky'}
       onReturnToDock={()=>room.current?.returnToBoat()} onLeave={()=>room.current?.returnToBoat()}/>}
+    {!error && <SledEntry island={island} playing={status==='playing'} name={session?.user?.login??'Ducky'}/>}
     {centre && <div className={`pixi-centre${waiting ? ' pixi-centre--wait' : ''}`} key={status}>
       <div className="pixi-centre-card" role={waiting ? 'status' : 'alertdialog'} aria-live="polite" aria-label={notices[status]}>
         {/* waiting: the feather with the words under it (their dots hop); a problem: the feather, then the message and its button */}

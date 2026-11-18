@@ -3,7 +3,7 @@ import {roomBindingFlags, sentryOptions} from '../server/sentry.js';
 
 const routes = new Set([
   '/api/friends', '/api/outfit', '/api/play-access', '/api/room', '/api/session', '/api/stars',
-  '/arena-room', '/auth/github/callback', '/auth/github/start', '/auth/logout',
+  '/arena-room', '/sled-room', '/auth/github/callback', '/auth/github/start', '/auth/logout',
 ]);
 
 const monitorRequest = sentryPagesPlugin(({env}) => sentryOptions(env, 'pages', routes));

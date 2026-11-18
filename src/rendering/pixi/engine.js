@@ -1003,7 +1003,7 @@ export class PixiIsland {
       // walking view: keep the camera over your own island so zooming out frames it, never a neighbour. A Duck on
       // an islet stands outside that island's box, so the box grows to take the Duck in (pad: a little sea round it).
       const m=this.mapHere(), me=this.player, pad=1200, zoom=Math.max(camera.zoom,1e-6);
-      let x0=m.cx-m.width/2,x1=m.cx+m.width/2,y0=m.cy-m.height/2,y1=m.cy+m.height/2;
+      let x0=m.origin.x,x1=m.origin.x+m.width,y0=m.origin.y,y1=m.origin.y+m.height;
       if(me&&Number.isFinite(me.x+me.y)){x0=Math.min(x0,me.x-pad);x1=Math.max(x1,me.x+pad);y0=Math.min(y0,me.y-pad);y1=Math.max(y1,me.y+pad);}
       const rx=Math.max(0,(x1-x0)/2-this.width/(2*zoom)), ry=Math.max(0,(y1-y0)/2-this.height/(2*zoom*TILT));
       camera.x=clamp(camera.x,(x0+x1)/2-rx,(x0+x1)/2+rx); camera.y=clamp(camera.y,(y0+y1)/2-ry,(y0+y1)/2+ry);
@@ -1643,7 +1643,7 @@ export class PixiIsland {
   fit() {
     this.fly=null; this.follow = false;this.fitMode=true;
     const m=this.mapHere();
-    Object.assign(this.target, {x: m.cx, y: m.cy, zoom: this.minZoom});
+    Object.assign(this.target, {x: m.origin.x + m.width / 2, y: m.origin.y + m.height / 2, zoom: this.minZoom});
   }
 
   resize(initial = false) {
@@ -1793,7 +1793,9 @@ export class PixiIsland {
       if(x<80||x>this.width-80||y<70||y>this.height-70)this.follow=true;
     }
     if (this.follow && player) {
-      const shown=this.playerView();
+      // standing still near a sled race on the hill: watch the leader come down; walking brings the camera back
+      const race=player.action!==1&&!(input.x||input.y)?this.sledHill?.focus?.():null;
+      const shown=race??this.playerView();
       Object.assign(this.target, {x:shown.x, y:shown.y-90});
     }
     if (this.birdEye && this.spin && !this.gestures.pointers.size && !reduced) {
@@ -1954,11 +1956,13 @@ export class PixiIsland {
       }
     }
     if (player) this.bumpFrom = {x: player.x, y: player.y};
-    const live = this.room?.poses(now / 1000) ?? [];
+    // ducks racing on the sled hill are drawn on the hill by the race, not where they stood
+    const live = (this.room?.poses(now / 1000) ?? []).filter(pose => !pose.sledding);
     this.arts?.get(this.artShown)?.icelandLife?.current?.update(t, reduced, visible, flatVisible && this.scene.visible, player, live);
     if (homeShown && flatVisible) this.waterFX?.edge([...this.localDucks, ...live]);
     if (this.room) this.renderLiveDucks(live, dt, t, reduced, visible, now);
     this.karmaView?.update(dt,t,reduced,visible);
+    this.sledHill?.update();
     this.boatBuild?.update(dt,t,reduced,visible);
     this.plantReactions?.update(t);
     this.ripples.forEach(({sprite, phase,x,y}) => {sprite.position.set(x+(reduced?0:Math.sin(t*.18+phase)*6),y+(reduced?0:Math.sin(t*.24+phase)*2));sprite.scale.set(reduced ? 1 : 1 + Math.sin(t*.8+phase)*.22); sprite.alpha = reduced ? .35 : .35 + Math.sin(t+phase)*.2;});

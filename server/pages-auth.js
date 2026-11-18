@@ -251,6 +251,16 @@ export async function connect({request,env,data}, fetchGitHub = fetch) {
   return fetchRoom(env, new Request(roomUrl,{headers}), data);
 }
 
+// The sled hill's race room (same checks as the Bog; the room checks where the player is).
+export async function connectSled({request,env,data}) {
+  const url=new URL(request.url);
+  if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return json({},426);
+  if(request.headers.get('Origin')!==url.origin)return json({},403);
+  const key=await digest(cookie(request,sessionCookie));
+  if(!key)return json({},401);
+  return fetchRoom(env, new Request('https://island.internal/sled-room',{headers:new Headers({Upgrade:'websocket','X-Session-Digest':key})}), data);
+}
+
 export async function connectBog({request,env,data}) {
   const url=new URL(request.url);
   if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return json({},426);

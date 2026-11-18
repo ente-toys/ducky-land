@@ -47,7 +47,8 @@ function makeReference(world) {
         return Math.hypot(x-a[0]-dx*t,y-a[1]-dy*t)<w/2-10;
       });
       const islet=world.islets.some(([cx,cy,rx,ry])=>((x-cx)/(rx-20))**2+((y-cy)/(ry-20))**2<1);
-      if (!deck&&!islet) return false;
+      const land=(world.lands??[]).some(poly=>inPoly(x,y,poly));
+      if (!deck&&!islet&&!land) return false;
     }
     const bridge=world.bridges.some(b=>b.poly?inShape(x,y,b,-8):Math.abs(x-b.x)<b.w/2-8&&Math.abs(y-b.y)<b.h/2-12);
     return (bridge || !inWater(x,y)) && !inObstacle(x,y);

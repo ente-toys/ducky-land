@@ -7,6 +7,9 @@ import {mapOf} from '../src/world/island-maps.js';
 import {BOG_ISLAND,bogLandingNotice} from '../src/features/bog-combat/entry.js';
 import {getPlayerKarma} from '../src/features/bog-combat/karma.js';
 import {LiveBogRoom} from './bog-room.js';
+import {LiveSledRoom} from './sled-room.js';
+import {landingSpot, podiumBlockNear, podiumFront, podiumTop} from '../src/features/sled-race/hill.js';
+import {SLED_ISLAND} from '../src/features/sled-race/rules.js';
 import {DURATIONS, playEmote, playSailEmote, SAIL_EMOTES, startJump, separateActors, setWalkDestination, walkStep, atMuseumDoor} from '../src/gameplay/player-motion.js';
 import {chatText} from '../src/multiplayer/chat.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
@@ -47,10 +50,10 @@ function reply(data, status = 200) {
 function publicPose(actor) {
   const {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft=0,islandId='home',mode='walking',boatId=null,exitLocked=false} = actor;
   return {id,x,y,turn,travel,action,emoteVersion,outfit,jumpLeft,islandId,mode,boatId,exitLocked,karma:actor.karma??0,
-    ice:mode==='walking'?actor.ice??null:null,reducedMotion:actor.reducedMotion===true};
+    ice:mode==='walking'?actor.ice??null:null,reducedMotion:actor.reducedMotion===true,...(actor.sledding?{sledding:true}:{})};
 }
 // Persist the chart version privately; wire poses keep their existing public shape.
-const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
+const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION,...(actor.podium?{podium:actor.podium}:{})});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
 function wireBoat({owner, ...boat}) {
   return owner ? {...boat, built:true} : boat;
@@ -160,7 +163,7 @@ export class IslandRoom {
       if (socket.readyState !== 1) continue;
       const info = socket.deserializeAttachment();
       if (!info) continue;
-      if(info.bog)continue;
+      if(info.bog||info.sled)continue;
       const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
       const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:Date.now()};
@@ -175,6 +178,8 @@ export class IslandRoom {
     for(const socket of ctx.getWebSockets()){
       const saved=socket.readyState===1&&socket.deserializeAttachment()?.bog;
       if(saved&&!(this.bog??=new LiveBogRoom(this)).open(socket,saved))socket.close(1008,'Bog visit ended');
+      const sled=socket.readyState===1&&socket.deserializeAttachment()?.sled;
+      if(sled&&!(this.sled??=new LiveSledRoom(this)).open(socket,sled))socket.close(1008,'Sled visit ended');
     }
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));
     this.updateGlobeTimer();
@@ -294,6 +299,14 @@ export class IslandRoom {
     const now = Date.now();
     this.expire(now);
     if (pathname === '/room') return this.join(request, now);
+    if (pathname === '/sled-room') {
+      if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return reply({},426);
+      const digest=request.headers.get('X-Session-Digest'),sled=this.sled??=new LiveSledRoom(this);
+      if(!sled.admitted(digest))return reply({error:'Walk up to the sled hill on Iceland first.'},403);
+      const [client,socket]=Object.values(new WebSocketPair());
+      this.ctx.acceptWebSocket(socket);if(!sled.open(socket,{digest}))socket.close(1008,'Sled race full');
+      return new Response(null,{status:101,webSocket:client});
+    }
     if (pathname === '/bog-room') {
       if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return reply({},426);
       const params=new URL(request.url).searchParams,digest=request.headers.get('X-Session-Digest');
@@ -519,7 +532,7 @@ export class IslandRoom {
     const resumed = resume ? JSON.parse(resume.pose) : null;
     const live = previous?.[1].actor;
     const resumable = resumeId && resumed?.id === resumeId &&
-      (resumed.mode !== 'walking' || !islandFor(resumed.islandId) || this.standable(resumed));
+      (resumed.mode !== 'walking' || !islandFor(resumed.islandId) || this.standable(resumed) || Boolean(resumed.podium));
     const from = (live?.id === resumeId ? live : null) ?? (resumable ? resumed : null);
     let spawn = null;
     if (canPlay && !from) {
@@ -540,6 +553,8 @@ export class IslandRoom {
       info.actor = {id:crypto.randomUUID(), turn:0, emoteVersion:0,
         islandId:'home',mode:'walking',boatId:null,...pose,outfit, action:0,travel:0,until:0,path:[],jumpLeft:0};
       recoverIsland(info.actor);
+      // a duck that was racing comes back on the hill's plaza if its race is over (otherwise the race brings it back)
+      if (info.actor.sledding && !this.sled?.racing(user.account)) Object.assign(info.actor, landingSpot(0), {sledding:false});
       this.recoverSailingPosition(info.actor);
       if(info.actor.islandId!==BOG_ISLAND||info.actor.mode!=='walking')this.karma.endBogEntry(user.account);
       info.actor.karma=this.karma.balance(user.account);
@@ -779,6 +794,7 @@ export class IslandRoom {
 
   webSocketMessage(socket, message) {
     if(this.bog?.members.has(socket)){this.bog.message(socket,message);return;}
+    if(this.sled?.members.has(socket)){this.sled.message(socket,message);return;}
     const info = this.connections.get(socket);
     if (!info) return;
     const now = Date.now();
@@ -862,6 +878,22 @@ export class IslandRoom {
     const actor = info.actor;
     if (command.islandId && command.islandId !== actor.islandId) {
       info.ack=command.seq; this.attach(socket,info); this.broadcast(); return;
+    }
+    // a duck racing on the sled hill stays put until the race brings it back
+    if (actor.sledding) {info.ack=command.seq; return;}
+    // the sled podium: a jump from the snow in front of it lands on the nearest free block, a jump from a block lands
+    // back on the snow; up there walking only turns the duck (quacks and dances work as anywhere)
+    if (command.type === 'jump' && actor.mode === 'walking' && actor.islandId === SLED_ISLAND && !(actor.jumpLeft > 0)) {
+      if (actor.podium) Object.assign(actor, podiumFront(actor.podium), {podium:null, path:[]});
+      else {
+        const taken = new Set([...this.connections.values()].flatMap(i => i.actor?.islandId === SLED_ISLAND && i.actor.podium ? [i.actor.podium] : []));
+        const block = podiumBlockNear(actor.x, actor.y, taken);
+        if (block) Object.assign(actor, podiumTop(block), {podium:block, path:[]});
+      }
+    } else if (actor.podium && (command.type === 'input' || command.type === 'destination')) {
+      const dx = command.type === 'input' ? command.x : command.x - actor.x, dy = command.type === 'input' ? command.y : command.y - actor.y;
+      if (Number.isFinite(dx) && Number.isFinite(dy) && (dx || dy)) actor.turn = Math.atan2(dx, dy);
+      info.input = ZERO; info.ack = command.seq; this.attach(socket, info); this.broadcast(); return;
     }
     switch (command.type) {
       case 'jump':
@@ -1073,6 +1105,7 @@ export class IslandRoom {
 
   webSocketClose(socket) {
     if(this.bog?.members.has(socket)){this.bog.close(socket);return;}
+    if(this.sled?.members.has(socket)){this.sled.close(socket);return;}
     const info = this.connections.get(socket);
     if (!info) return;
     this.connections.delete(socket);
