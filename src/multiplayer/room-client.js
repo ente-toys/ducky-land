@@ -1,3 +1,4 @@
+import {authenticateTestSocket} from '../app/test-session.js';
 import {nearestSeaX} from '../world/flat-layout.js';
 import {isletAt} from '../world/islet-walk.js';
 import {takeArrivalSocket} from '../app/arrival-start.js';
@@ -103,6 +104,7 @@ export class RoomClient {
     this.onStatus(reconnecting ? 'reconnecting' : 'connecting');
     const url = new URL('/api/room', location.href);
     url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    authenticateTestSocket(url);
     url.searchParams.set('play', play ? '1' : '0');
     url.searchParams.set('globeFeed', '1');
     if (play && this.resumeId) url.searchParams.set('resume', this.resumeId);

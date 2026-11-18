@@ -1,8 +1,11 @@
+import {testSession, authenticateTestSocket} from './test-session.js';
 import {arrivalPending} from './arrival.js';
 
 // Keep the page-open session check for the game, without caching later refreshes.
 let session;
 export function startupSession(consume = false) {
+  const testing = testSession();
+  if (testing) return testing;
   const pending = session ??= fetch('/api/session').then(r => {
     if (!r.ok) throw Error('Session request failed');
     return r.json();
@@ -17,6 +20,7 @@ let early;
 export function startArrivalSocket(onIsland = () => {}) {
   if (early || !arrivalPending() || typeof WebSocket !== 'function') return;
   const url=new URL('/api/room?play=1&globeFeed=1',location.href);
+  authenticateTestSocket(url);
   url.protocol=url.protocol==='https:'?'wss:':'ws:';
   const socket=new WebSocket(url), messages=[];
   let named=false;

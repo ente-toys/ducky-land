@@ -114,6 +114,32 @@ export async function callback({request,env}, fetchGitHub = fetch) {
   }
 }
 
+export async function createTestSession({request,env}) {
+  if (!env.MULTIPLAYER_TEST_KEY) return json({},404);
+  if (request.headers.get('Origin') !== new URL(request.url).origin) return json({},403);
+  const supplied = request.headers.get('X-Multiplayer-Test-Key');
+  if (!supplied || supplied.length > 256) return json({},403);
+  const signingKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(env.MULTIPLAYER_TEST_KEY),
+    {name:'HMAC',hash:'SHA-256'}, false, ['sign','verify'],
+  );
+  const message = new TextEncoder().encode('multiplayer-test');
+  const expected = await crypto.subtle.sign('HMAC', signingKey, message);
+  const suppliedKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(supplied),
+    {name:'HMAC',hash:'SHA-256'}, false, ['verify'],
+  );
+  if (!await crypto.subtle.verify('HMAC', suppliedKey, expected, message)) return json({},403);
+  const token = randomToken();
+  const account = 'test-' + crypto.randomUUID();
+  const login = 'test-' + account.slice(-8);
+  const saved = await call(env,'/session/new',{
+    digest:await digest(token), account, login, canPlay:true, githubToken:null,
+  });
+  if (!saved.ok) return json({error:'Test session unavailable'},503);
+  return json({token,user:{accountId:account,login,canPlay:true}});
+}
+
 export async function session({request,env}) {
   const key = await digest(cookie(request,sessionCookie));
   if (!key) return json({user:null,signInAvailable:configured(env)});
@@ -203,10 +229,21 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return json({},426);
   if (request.headers.get('Origin') !== url.origin) return json({},403);
   const headers = new Headers({Upgrade:'websocket'});
-  const key = await digest(cookie(request,sessionCookie));
+  const testToken = url.searchParams.get('testSession');
+  let key;
+  if (testToken !== null) {
+    if (!env.MULTIPLAYER_TEST_KEY || !tokenPattern.test(testToken)) return json({},403);
+    key = await digest(testToken);
+    const result = await call(env,'/session/get',{digest:key});
+    if (!result.ok) return json({},503);
+    const user = await result.json();
+    if (!user?.account?.startsWith('test-') || !user.canPlay) return json({},403);
+  } else {
+    key = await digest(cookie(request,sessionCookie));
+  }
   if (key) headers.set('X-Session-Digest',key);
   const play = url.searchParams.get('play') === '1' ? '1' : '0';
-  if (key && play === '1') {
+  if (key && play === '1' && testToken === null) {
     const check = await checkPlayAccess(env,key,fetchGitHub);
     if (check.error && check.status !== 401) return json({error:check.error},check.status);
   }
