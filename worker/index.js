@@ -21,6 +21,8 @@ const RESUME_MS = 30_000;
 const CHECKPOINT_MS = 1_000;
 const PRESENCE_UPDATE_MS = 100;
 const GLOBE_UPDATE_MS = 500;
+const SOCKET_COMMAND_BURST = 300;
+const SOCKET_COMMANDS_PER_SECOND = 240;
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
 const FLOW_MS = 10 * 60 * 1000;
 const ZERO = {x:0,y:0};
@@ -148,7 +150,7 @@ export class IslandRoom {
       if(info.bog)continue;
       const actor = recoverIsland(info.actor && this.session(info.digest)?.canPlay ? {islandId:'home',mode:'walking',boatId:null,...info.actor, action:0, travel:0, path:[], until:0,jumpLeft:0} : null);
       const login = info.login ?? (actor ? this.session(info.digest)?.login : null);
-      const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:30, tokenTime:Date.now()};
+      const restored = {...info, actor, islandId:actor?.islandId ?? (islandFor(info.islandId) ? info.islandId : 'home'), login, input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:Date.now()};
       this.connections.set(socket, restored);
       if (restored.globeFeed && restored.globeSubscriptionId !== undefined) this.globeSubscribers.add(socket);
       this.recoverSailingPosition(actor);
@@ -515,7 +517,7 @@ export class IslandRoom {
     const playing = Boolean(canPlay && (from || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
     const info = {actor:null, digest:user ? digest : null, account:user?.account, expires:user?.expires, login:user?.login, globeFeed,
-      input:ZERO, inputExpires:0, tokens:30, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
+      input:ZERO, inputExpires:0, tokens:SOCKET_COMMAND_BURST, tokenTime:now, ack:0, lastDestination:-Infinity, lastEmote:-Infinity};
     if (playing) {
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
       const savedOutfit = this.sql.exec('SELECT outfit FROM outfits WHERE account=?',user.account).toArray()[0];
@@ -769,7 +771,7 @@ export class IslandRoom {
       this.ctx.waitUntil(this.scheduleExpiry());
       if (!this.connections.has(socket)) return;
     }
-    info.tokens = Math.min(30, info.tokens + (now-info.tokenTime)*.024) - 1;
+    info.tokens = Math.min(SOCKET_COMMAND_BURST, info.tokens + (now - info.tokenTime) * SOCKET_COMMANDS_PER_SECOND / 1000) - 1;
     info.tokenTime = now;
     let rejectionReason;
     if (info.tokens < 0) rejectionReason = 'rate_limit';

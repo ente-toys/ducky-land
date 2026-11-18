@@ -3,6 +3,28 @@ import test from 'node:test';
 import {sentryOptions} from '../server/sentry.js';
 import {makeRoom} from './room-harness.mjs';
 
+test('room caps the command budget at 300 and refills 240 commands per second', async t => {
+  const room = await makeRoom();
+  t.mock.timers.enable({apis: ['Date'], now: Date.now()});
+  const closes = [];
+  const socket = {close: code => closes.push(code)};
+  const info = {tokens: 0, tokenTime: Date.now()};
+  room.connections.set(socket, info);
+
+  t.mock.timers.tick(1000);
+  room.webSocketMessage(socket, '{}');
+  assert.equal(info.tokens, 239);
+
+  t.mock.timers.tick(2000);
+  room.webSocketMessage(socket, '{}');
+  assert.equal(info.tokens, 299);
+  assert.deepEqual(closes, []);
+
+  info.tokens = 0;
+  room.webSocketMessage(socket, '{}');
+  assert.deepEqual(closes, [1008]);
+});
+
 test('room reports each command rejection before closing the socket', async t => {
   const room = await makeRoom();
   t.mock.timers.enable({apis: ['Date'], now: Date.now()});
