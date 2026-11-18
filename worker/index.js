@@ -650,7 +650,7 @@ export class IslandRoom {
     }
     const legacyGlobeFields = new Map();
     const shared = new Map(), empty = {guests:[], named:[]};
-    const text = (islandId, named, info) => {
+    const snapshotView = (islandId, named, info) => {
       const combatSelf=!!info.actor&&combatAccounts.has(info.account);
       // Main-island walkers share a canonical packet, including wrapped sailors.
       // Islet visitors and sailors need the periodic image around their position.
@@ -668,9 +668,14 @@ export class IslandRoom {
         } else if(localViewer)poses=poses.map(p=>seaViewPose(localViewer,p));
         const visibleBoats=chartViewer?this.boats.map(b=>seaViewPose(info.actor,b,b.islandId===islandId?Infinity:8000)).filter(Boolean):this.boats.filter(b=>b.islandId===islandId).map(b=>localViewer?seaViewPose(localViewer,b):b);
         const players=combatSelf?[...poses,{...wirePose(info.actor),...(named?{login:info.login,accountId:info.account}:{})}]:poses;
-        shared.set(key, `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online},"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(visibleBoats.map(wireBoat))},"players":${JSON.stringify(players)},"self":`);
+        shared.set(key, {key, players, boats: visibleBoats.map(wireBoat)});
       }
       return shared.get(key);
+    };
+    const snapshotPrefix = `{"type":"snapshot","epoch":${JSON.stringify(this.epoch)},"tick":${tick},"online":${online}`;
+    const fullSnapshot = (view, islandId, self, globeField) => {
+      view.text ??= snapshotPrefix + `,"islandId":${JSON.stringify(islandId)},"boats":${JSON.stringify(view.boats)},"players":${JSON.stringify(view.players)},"self":`;
+      return view.text + JSON.stringify(self) + globeField + '}';
     };
     // built boats by owner, once per broadcast (each player's self block lists theirs)
     const owned = new Map();
@@ -678,27 +683,25 @@ export class IslandRoom {
     for (const [socket, info] of recipients) {
       const actor = info.actor;
       const islandId = actor?.islandId ?? info.islandId ?? 'home';
-      const self = actor ? JSON.stringify({ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
-        ownBoats:owned.get(info.account) ?? []}) : 'null';
+      const self = actor ? {ack:info.ack, path:actor.path, sailTarget:actor.sailTarget ?? null, docking:!!actor.docking, emoteLeft:Math.max(0,actor.until-now/1000),ice:actor.ice??null,reducedMotion:actor.reducedMotion===true,
+        ownBoats:owned.get(info.account) ?? []} : null;
       const named = !!(info.digest && info.expires > now);
       let globeField = '';
       if (!info.globeFeed) {
         if (!legacyGlobeFields.has(named)) legacyGlobeFields.set(named, `,"globePlayers":${this.serializeGlobePlayers(named, now)}`);
         globeField = legacyGlobeFields.get(named);
       }
-      const full = text(islandId, named, info) + self;
-      if (!info.deltas) {this.sendText(socket, full + globeField + '}'); continue;}
-      this.snapshotGroups ??= new Map();
-      const key = `${named ? 1 : 0}|${islandId}${info.actor&&combatAccounts.has(info.account)?'|'+info.account:''}`;
-      let group = this.snapshotGroups.get(key);
-      if (group?.tick !== tick) {
-        const snapshot = JSON.parse(full + '}');
-        group = {tick, players: new Map(snapshot.players.map(p => [p.id, p])), boats: new Map(snapshot.boats.map(b => [b.id, b])), patches: new WeakMap()};
-        this.snapshotGroups.set(key, group);
+      const view = snapshotView(islandId, named, info);
+      if (!info.deltas) {this.sendText(socket, fullSnapshot(view, islandId, self, globeField)); continue;}
+      // A delta must describe the same chart and visibility as its full snapshot.
+      const {key} = view;
+      if (!view.deltaGroup) {
+        view.deltaGroup = {tick, players: new Map(view.players.map(p => [p.id, p])), boats: new Map(view.boats.map(b => [b.id, b])), patches: new WeakMap()};
       }
+      const group = view.deltaGroup;
       const base = info.snapshotBase;
       if (!base || base.key !== key || tick - base.fullTick >= 50) {
-        this.sendText(socket, full + globeField + '}');
+        this.sendText(socket, fullSnapshot(view, islandId, self, globeField));
         info.snapshotBase = {key, group, fullTick: tick};
         continue;
       }
@@ -708,7 +711,8 @@ export class IslandRoom {
           changed: [...after].flatMap(([id, value]) => {
             const old = before.get(id);
             if (!old) return [value];
-            const fields = Object.fromEntries(Object.entries(value).filter(([field, v]) => JSON.stringify(v) !== JSON.stringify(old[field])));
+            const fields = Object.fromEntries(Object.entries(value).filter(([field, v]) => v !== old[field] &&
+              (typeof v !== 'object' || JSON.stringify(v) !== JSON.stringify(old[field]))));
             return Object.keys(fields).length ? [{id, ...fields}] : [];
           }),
           removed: [...before.keys()].filter(id => !after.has(id)),
@@ -716,7 +720,7 @@ export class IslandRoom {
         patch = {players: diff(base.group.players, group.players), boats: diff(base.group.boats, group.boats)};
         group.patches.set(base.group, patch);
       }
-      const delta = JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, ...patch, self: JSON.parse(self)});
+      const delta = JSON.stringify({type: 'delta', epoch: this.epoch, tick, baseTick: base.group.tick, islandId, online, ...patch, self});
       this.sendText(socket, globeField ? delta.slice(0, -1) + globeField + '}' : delta);
       info.snapshotBase = {key, group, fullTick: base.fullTick};
     }

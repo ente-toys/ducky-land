@@ -302,3 +302,40 @@ test('the normal movement broadcast absorbs pending presence changes', async t =
   assert.equal(deltas().length, 2);
   assert.equal(deltas()[1].baseTick, first.tick);
 });
+
+test('sailing deltas use the same viewer-specific boat set as the full snapshot', async () => {
+  const room = await makeRoom();
+  const near = addPlayer(room, 0, {x: 17500, y: 4000, mode: 'sailing'});
+  const far = addPlayer(room, 1, {x: 2000, y: 4000, mode: 'sailing'});
+  for (const viewer of [near, far]) room.connections.get(viewer.socket).deltas = true;
+  const boat = {id: 'blossom-0', islandId: 'blossom', x: 3000, y: 4000, turn: 0, occupant: null};
+  room.boats = [boat];
+
+  room.broadcast();
+  const nearFull = JSON.parse(near.socket.last);
+  const farFull = JSON.parse(far.socket.last);
+  assert.equal(nearFull.boats[0].id, boat.id);
+  assert.deepEqual(farFull.boats, []);
+
+  boat.x += 10;
+  room.broadcast();
+  const nearDelta = near.socket.notes.at(-1);
+  const farDelta = far.socket.notes.at(-1);
+  assert.equal(nearDelta.type, 'delta');
+  assert.equal(farDelta.type, 'delta');
+  assert.equal(nearDelta.baseTick, nearFull.tick);
+  assert.equal(farDelta.baseTick, farFull.tick);
+  assert.deepEqual(nearDelta.boats.changed, [{id: boat.id, x: nearFull.boats[0].x + 10}]);
+  assert.deepEqual(farDelta.boats.changed, []);
+
+  far.actor.x = 17500;
+  room.broadcast();
+  assert.equal(far.socket.notes.at(-1).boats.changed[0].islandId, 'blossom');
+  assert.equal(far.socket.notes.at(-1).boats.changed[0].id, boat.id);
+
+  near.actor.mode = 'walking';
+  room.broadcast();
+  const walkingFull = JSON.parse(near.socket.last);
+  assert.ok(walkingFull.tick > nearDelta.tick);
+  assert.deepEqual(walkingFull.boats, []);
+});

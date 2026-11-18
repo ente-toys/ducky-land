@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {productionProxy,PRODUCTION_ORIGIN,productionSignIn} from '../scripts/vite-production-proxy.mjs';
+import {roomBindingFlags,sentryOptions} from '../server/sentry.js';
+
+test('Sentry keeps safe room binding flags and correlates Pages failures by Ray ID',()=>{
+  const {beforeSendLog}=sentryOptions({},'pages',new Set(['/api/room']));
+  const flags=roomBindingFlags({overloaded:true,retryable:false,remote:'invalid',message:'private exception'});
+  assert.deepEqual(flags,{overloaded:true,retryable:false});
+  assert.deepEqual(beforeSendLog({message:'Room binding failed',attributes:{
+    room_binding_route:'/session/get',...flags,token:'private',ray_id:'not-a-ray',
+  }}).attributes,{service:'pages',room_binding_route:'/session/get',overloaded:true,retryable:false});
+  assert.deepEqual(beforeSendLog({message:'Pages request failed',attributes:{
+    route:'/api/room',ray_id:'a5c64ee86846e084-SIN',token:'private',
+  }}).attributes,{service:'pages',route:'/api/room',ray_id:'a5c64ee86846e084-SIN'});
+});
 
 test('API HTTP and WebSocket proxies preserve requests while adapting same-origin loopback traffic',()=>{
   const proxy=productionProxy()['/api'],events={};proxy.configure({on:(event,fn)=>events[event]=fn});

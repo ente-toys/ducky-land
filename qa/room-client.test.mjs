@@ -21,6 +21,61 @@ const packet=(tick,islandId='home',mode='walking')=>({epoch:'epoch',tick,islandI
   self:{ack:0,path:[],emoteLeft:0},
 });
 
+test('remote movement catches up sooner and stops predicting when updates stall', t => {
+  let clock=0;
+  t.mock.method(performance,'now',()=>clock);
+  const {room}=setup();
+  t.after(()=>room.dispose());
+  const peerAt = time => room.poses(time).find(pose=>pose.id==='peer').x;
+  const receive = (tick,x,travel) => {
+    const snapshot=packet(tick);
+    snapshot.players.push({...snapshot.players[0],id:'peer',x,travel});
+    room.snapshot(snapshot);
+  };
+  receive(1,1800,0);
+  clock=100;
+  receive(2,1810,100);
+  assert.equal(peerAt(.125),1805);
+  assert.equal(peerAt(.15),1810);
+  assert.equal(peerAt(.2),1815);
+  assert.equal(peerAt(.7),1815);
+
+  clock=200;
+  receive(3,1820,0);
+  assert.equal(peerAt(.5),1820);
+  clock=300;
+  receive(4,2400,0);
+  assert.equal(peerAt(.3),2400);
+});
+
+test('try-again-later backs off across failed upgrades and resets on welcome', t => {
+  let retry, delay;
+  t.mock.method(globalThis,'setTimeout',(callback,ms)=>{retry=callback;delay=ms;});
+  t.mock.method(Math,'random',()=>.5);
+  t.mock.property(globalThis,'WebSocket',class {
+    send() {}
+    close() {}
+  });
+  const previousLocation = Object.getOwnPropertyDescriptor(globalThis,'location');
+  Object.defineProperty(globalThis,'location',{configurable:true,value:{href:'https://room.example/'}});
+  t.after(()=>{
+    if(previousLocation)Object.defineProperty(globalThis,'location',previousLocation);
+    else delete globalThis.location;
+  });
+  const room=new RoomClient(()=>{});
+  t.after(()=>room.dispose());
+  room.connect();
+  room.socket.onclose({code:1013,wasClean:true});
+  assert.equal(delay,2250);
+  retry();
+  room.socket.onclose({code:1006,wasClean:false});
+  assert.equal(delay,4500);
+  retry();
+  room.socket.onmessage({data:JSON.stringify({type:'welcome',id:'player'})});
+  room.socket.onclose({code:1006,wasClean:false});
+  assert.equal(delay,262.5);
+});
+
 test('only an existing page reconnect sends its previous player ID', t => {
   const originalSocket = globalThis.WebSocket;
   const originalLocation = Object.getOwnPropertyDescriptor(globalThis,'location');

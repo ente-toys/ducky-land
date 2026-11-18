@@ -1,3 +1,6 @@
+import {logger} from '@sentry/cloudflare';
+import {roomBindingFlags} from './sentry.js';
+
 const sessionCookie = '__Host-ducky_session';
 const flowCookie = '__Host-ducky_oauth';
 const cookieAge = 7 * 24 * 60 * 60;
@@ -41,8 +44,22 @@ function room(env) {
   return env.ISLAND.get(env.ISLAND.idFromName(env.ISLAND_ROOM_NAME ?? 'main-island'));
 }
 
+async function fetchRoom(env, request) {
+  try {
+    return await room(env).fetch(request);
+  } catch (error) {
+    if (env.SENTRY_DSN) {
+      logger.error('Room binding failed', {
+        room_binding_route: new URL(request.url).pathname,
+        ...roomBindingFlags(error),
+      });
+    }
+    throw error;
+  }
+}
+
 function call(env, path, data) {
-  return room(env).fetch(new Request('https://island.internal'+path, {
+  return fetchRoom(env, new Request('https://island.internal'+path, {
     method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),
   }));
 }
@@ -239,7 +256,7 @@ export async function connect({request,env}, fetchGitHub = fetch) {
   const resumeId = url.searchParams.get('resume');
   if (play === '1' && resumeId) roomUrl.searchParams.set('resume', resumeId);
   if (url.searchParams.get('globeFeed') === '1') roomUrl.searchParams.set('globeFeed', '1');
-  return room(env).fetch(new Request(roomUrl,{headers}));
+  return fetchRoom(env, new Request(roomUrl,{headers}));
 }
 
 export async function connectBog({request,env}) {
@@ -251,7 +268,7 @@ export async function connectBog({request,env}) {
   const headers=new Headers({Upgrade:'websocket','X-Session-Digest':key});
   const params=new URLSearchParams();
   for(const k of ['team','mode'])if(url.searchParams.has(k))params.set(k,url.searchParams.get(k));
-  return room(env).fetch(new Request('https://island.internal/bog-room?'+params,{headers}));
+  return fetchRoom(env, new Request('https://island.internal/bog-room?'+params,{headers}));
 }
 
 async function checkPlayAccess(env, key, fetchGitHub) {

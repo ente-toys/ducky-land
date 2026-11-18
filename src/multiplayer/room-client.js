@@ -15,14 +15,18 @@ const ZERO = {x:0,y:0};
 const HEARTBEAT_INTERVAL_MS = 5000;
 const HEARTBEAT_TIMEOUT_MS = 9000;
 const POSITION_SNAP_DISTANCE = 90;
+const PEER_BLEND_SECONDS = .05;
+const PEER_LEAD_SECONDS = .05;
 const moving = input => input.x !== 0 || input.y !== 0;
 const nowSeconds = () => performance.now() / 1000;
 
 function sample(track, now) {
-  const {from,to,start} = track;
-  const blend = Math.min(1, Math.max(0, (now-start) * 10));
+  const {from,to,start,blendSeconds=.1,vx=0,vy=0} = track;
+  const age = Math.max(0, now-start);
+  const blend = Math.min(1, age / blendSeconds);
+  const lead = Math.min(PEER_LEAD_SECONDS, Math.max(0, age-blendSeconds));
   const turn = to.turn - from.turn;
-  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-(now-start)), x:from.x+(to.x-from.x)*blend, y:from.y+(to.y-from.y)*blend,
+  return {...to, jumpLeft:Math.max(0,(to.jumpLeft ?? 0)-age), x:from.x+(to.x-from.x)*blend+vx*lead, y:from.y+(to.y-from.y)*blend+vy*lead,
     turn:from.turn+Math.atan2(Math.sin(turn), Math.cos(turn))*blend};
 }
 
@@ -30,6 +34,23 @@ function sample(track, now) {
 function periodicFrom(last,to,now){
  const from=last?sample(last,now):to;
  return {...from,x:nearestSeaX(from.x,to.x)};
+}
+
+function peerTrack(last, to, now) {
+  const track = {from:to, to, start:now, blendSeconds:PEER_BLEND_SECONDS};
+  if (!last || last.to.islandId !== to.islandId || last.to.mode !== to.mode) return track;
+  const elapsed = now-last.start;
+  const dx = to.x-nearestSeaX(last.to.x,to.x), dy = to.y-last.to.y;
+  const distance = Math.hypot(dx,dy);
+  const travel = Number.isFinite(to.travel) ? Math.max(0,to.travel) : 0;
+  if (distance > POSITION_SNAP_DISTANCE + travel * Math.min(.25,elapsed)) return track;
+  track.from = periodicFrom(last,to,now);
+  if (elapsed > 0 && elapsed <= .25 && distance > 0 && travel > 0) {
+    const speed = Math.min(distance/elapsed,travel);
+    track.vx = speed*dx/distance;
+    track.vy = speed*dy/distance;
+  }
+  return track;
 }
 
 export class RoomClient {
@@ -119,6 +140,8 @@ export class RoomClient {
     if (!reconnecting) {
       this.resumeId = null;
       this.reconnectIncident = null;
+      this.overloadBackoff = false;
+      this.failures = 0;
     }
     this.lastPongAt = null;
     this.lastSnapshotAt = null;
@@ -209,6 +232,7 @@ export class RoomClient {
       if (message.type === 'chat') this.onChat(message.id, message.text);
       if (message.type === 'welcome' || message.type === 'role') {
         if (message.type === 'welcome') {
+          this.overloadBackoff = false;
           this.globeFeed = message.globeFeed === true;
           if (this.globeOpen) this.sendGlobeSubscription();
           this.onFriendsChanged();
@@ -236,8 +260,11 @@ export class RoomClient {
       }
       this.onStatus('reconnecting');
       this.failures = (this.failures ?? 0) + 1;
+      if (code === 1013) this.overloadBackoff = true;
+      const maxDelay = this.overloadBackoff ? 15_000 : 5000;
+      const initialDelay = this.overloadBackoff ? 3000 : 350;
       this.retryTimer = setTimeout(() => this.connect(this.wantsPlay, true),
-        Math.min(5000, 350 * 2 ** (this.failures-1)) * (.5 + Math.random() * .5));
+        Math.min(maxDelay, initialDelay * 2 ** (this.failures-1)) * (.5 + Math.random() * .5));
     };
     if (held) {
       if (socket.readyState === 1) socket.onopen();
@@ -340,7 +367,7 @@ export class RoomClient {
         } else this.prev = null;
       } else {
         const last = this.tracks.get(pose.id);
-        tracks.set(pose.id, {from:periodicFrom(last,pose,now), to:pose, start:now});
+        tracks.set(pose.id, peerTrack(last,pose,now));
       }
     }
     this.tracks = tracks;

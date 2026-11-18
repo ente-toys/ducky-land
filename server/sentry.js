@@ -5,13 +5,21 @@ const errorTypes = new Set([
 ]);
 const spanAttributes = ['sentry.op', 'sentry.origin', 'http.request.method', 'http.response.status_code', 'app.route'];
 const logMessages = new Set(['Pages request completed', 'Pages request failed', 'Room request completed', 'Room request failed', 'Room socket closed', 'Room socket error',
-  'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
+  'Room binding failed', 'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
+const roomBindingRoutes = new Set(['/room', '/bog-room', '/consume', '/flow', '/friends', '/outfit',
+  '/session/access', '/session/get', '/session/new', '/session/revoke', '/stars', '/stars/count']);
+const roomFailureFlags = ['overloaded', 'retryable', 'remote'];
 const socketRejectionReasons = new Set(['rate_limit', 'non_text_message', 'message_too_large']);
 const logNumbers = ['status', 'duration_ms', 'connections', 'players', 'watchers', 'close_code',
   'count', 'mean_ms', 'max_ms', 'slow_count', 'last_checkpoint_ms', 'last_confirmed_checkpoint_ms'];
 const roomOperations = new Set(['initialize', 'tick', 'tick_gap', 'checkpoint', 'checkpoint_sync', 'alarm', 'alarm_schedule', 'socket_close', 'socket_error']);
 const uuid = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const logMetadata = ['sentry.sdk.name', 'sentry.sdk.version', 'sentry.trace.parent_span_id'];
+
+export function roomBindingFlags(error) {
+  return Object.fromEntries(roomFailureFlags.filter(key => typeof error?.[key] === 'boolean')
+    .map(key => [key, error[key]]));
+}
 
 function scrubException({type, mechanism, stacktrace}) {
   return {
@@ -108,6 +116,11 @@ export function sentryOptions(env, service, routes) {
           ...(environment && {'sentry.environment': environment}),
           ...(release && {'sentry.release': release}),
           ...(routes.has(attributes.route) && {route: attributes.route}),
+          ...(log.message === 'Room binding failed' && roomBindingRoutes.has(attributes.room_binding_route) && {
+            room_binding_route: attributes.room_binding_route, ...roomBindingFlags(attributes),
+          }),
+          ...(log.message === 'Pages request failed' && typeof attributes.ray_id === 'string' &&
+            /^[a-f0-9]{16}(?:-[A-Z]{3})?$/i.test(attributes.ray_id) && {ray_id: attributes.ray_id}),
           ...(roomOperations.has(attributes.operation) && {operation: attributes.operation}),
           ...(typeof attributes.object_id === 'string' && /^[0-9a-f]{64}$/i.test(attributes.object_id) && {object_id: attributes.object_id}),
           ...(typeof attributes.room_epoch === 'string' && uuid.test(attributes.room_epoch) && {room_epoch: attributes.room_epoch}),

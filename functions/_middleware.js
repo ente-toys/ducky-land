@@ -18,7 +18,8 @@ export const onRequest = [
     try {
       response = await context.next();
     } catch (error) {
-      logger.error('Pages request failed', {route, duration_ms: Date.now() - started});
+      logger.error('Pages request failed', {route, duration_ms: Date.now() - started,
+        ray_id: context.request.headers.get('CF-Ray')});
       throw error;
     }
     logger[response.status >= 500 ? 'error' : 'info']('Pages request completed', {
