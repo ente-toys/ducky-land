@@ -103,12 +103,21 @@ test('Sunbob continuous deck and ground tiles share density and exact sheet pixe
 
 test('Sunbob wooden landing deck adds no sheet compression or boundary error',async t=>{
  if(!process.env.ART_MANIFEST)return t.skip('requires the production manifest');
- const m=JSON.parse(await readFile(process.env.ART_MANIFEST));
- const e=m['/pixi-art/themes/sunflower/bigger/landing-pier.svg'];
- const tier=e.tiers.find(t=>t.sheet&&t.scale>=1);assert(tier);assert(tier.lossless);
+ const src='/pixi-art/themes/sunflower/bigger/landing-pier.svg';
+ const manifest=JSON.parse(await readFile(process.env.ART_MANIFEST));
+ const entry=manifest[src];
+ const tier=entry.tiers.find(t=>t.sheet&&t.scale>=1);
+ assert(tier);
+ assert(tier.sourceLossless&&tier.lossless);
  const rect={width:tier.frameWidth,height:tier.frameHeight};
  const actual=await sharp('dist'+tier.sheet).extract({...rect,left:tier.x,top:tier.y}).ensureAlpha().raw().toBuffer();
- const expected=await sharp('dist'+tier.url).extract({...rect,left:tier.offsetX,top:tier.offsetY}).ensureAlpha().raw().toBuffer();
+ // The production build only ships the sheet. Render the authored SVG at the
+ // same density to get an independent, lossless reference for the frame.
+ const density=Math.max(1,72*Math.max(tier.width/entry.w,tier.height/entry.h));
+ const reference=sharp(await readFile('public'+src),{density}).resize(tier.width,tier.height,{fit:'fill'});
+ if(entry.padding)reference.extend({top:2,bottom:2,left:2,right:2,extendWith:'copy'});
+ const expected=await sharp(await reference.png().toBuffer())
+  .extract({...rect,left:tier.offsetX,top:tier.offsetY}).ensureAlpha().raw().toBuffer();
  for(const pixels of [actual,expected])for(let i=0;i<pixels.length;i+=4)if(!pixels[i+3])pixels.fill(0,i,i+3);
  assert.deepEqual(actual,expected);
 });

@@ -68,14 +68,31 @@ test('built landing and simulated detail delivery meet byte, sharpness and time 
   assert(tier.bytes<=5500000,`${id}: ${tier.bytes} landing bytes`);
   assert(tier.sharpZoom>=tier.zoom*2-1e-8,`${id}: initial sharp range`);
   assert.equal(spec.kind,'webp');assert(!spec.overBudget);
-  const plan=JSON.parse(await readFile('dist'+spec.plan)),rasters=spec.raster??plan.raster;
-  const bytes=(await Promise.all([...rasters,spec.plan].map(async url=>(await stat('dist'+url)).size))).reduce((a,b)=>a+b,0);
+  const planBody=await readFile('dist'+spec.plan),plan=JSON.parse(planBody);
+  let rasterBytes;
   if(spec.rasterPack){
    assert.equal(spec.raster,undefined,'individual frame URLs stay out of the startup index');
-   const body=await readFile('dist'+spec.rasterPack.url);let end=0;
-   for(const [offset,length]of spec.rasterPack.ranges){assert.equal(offset,end);assert.equal(body.toString('ascii',offset,offset+4),'RIFF');assert.equal(body.toString('ascii',offset+8,offset+12),'WEBP');end+=length;}
-   assert.equal(end,body.length);assert.equal(body.length,bytes-(await stat('dist'+spec.plan)).size);
+   const {url,ranges}=spec.rasterPack;
+   const body=await readFile('dist'+url);
+   assert.equal(ranges.length,plan.sheets.length);
+   let end=0;
+   for(const [offset,length]of ranges){
+    assert.equal(offset,end);
+    assert(length>=12&&offset+length<=body.length);
+    assert.equal(body.toString('ascii',offset,offset+4),'RIFF');
+    assert.equal(body.toString('ascii',offset+8,offset+12),'WEBP');
+    assert.equal(body.readUInt32LE(offset+4)+8,length);
+    end+=length;
+   }
+   assert.equal(end,body.length);
+   rasterBytes=body.length;
+  }else{
+   const rasters=spec.raster??plan.raster;
+   assert.equal(rasters.length,plan.sheets.length);
+   rasterBytes=(await Promise.all(rasters.map(async url=>(await stat('dist'+url)).size))).reduce((a,b)=>a+b,0);
   }
+  assert.equal(rasterBytes,spec.rasterBytes);
+  const bytes=planBody.length+rasterBytes;
   const {local,cell}=await expectedDetailDelivery(plan.sheets,bytes);
   assert(local<=1.5,`${id}: local ${local}`);assert(cell<=5,`${id}: 4G ${cell}`);
   t.diagnostic(`${id}: landing ${tier.bytes}, detail ${bytes}, expected local ${local.toFixed(2)}s, 4G ${cell.toFixed(2)}s`);
