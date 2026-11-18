@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
-import {createPirateFleet,pirateClearance,pirateMotion,pirateFacing,PIRATE_COUNT,PIRATE_RADIUS,PIRATE_BOAT_GAP,PIRATE_ART,pirateBoatPoint} from '../src/gameplay/pirate-fleet.js';
+import {createPirateFleet,pirateClearance,pirateMotion,pirateFacing,PIRATE_COUNT,PIRATE_RADIUS,PIRATE_BOAT_GAP,PIRATE_ART,pirateBoatPoint,PIRATE_WIDTHS} from '../src/gameplay/pirate-fleet.js';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {ISLETS} from '../src/world/islets.js';
 import {mapOf} from '../src/world/island-maps.js';
@@ -9,9 +9,9 @@ import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {placeIslet} from '../src/world/islet-placement.js';
 const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
 const home=mapOf('home');
-test('18 ambient ships use all three approved flat vector designs, at the requested double size',async()=>{
+test('18 ambient ships use all three approved flat vector designs, with a raft rider at seated player scale',async()=>{
  const fleet=createPirateFleet();assert.equal(fleet.ships.length,PIRATE_COUNT);assert.equal(PIRATE_COUNT,18);assert.equal(new Set(fleet.ships.map(s=>s.art)).size,3);
- for(const ship of fleet.ships){assert.ok(ship.width>=600);assert.ok(pirateClearance(ship.p)>950);}
+ for(const ship of fleet.ships){assert.equal(ship.width,PIRATE_WIDTHS[ship.art]);assert.ok(ship.width>=350&&ship.width<=420);assert.ok(pirateClearance(ship.p)>950);}
  const dir=new URL('../public/pixi-art/pirate-ships/',import.meta.url);assert.equal((await readdir(dir)).filter(n=>/\.(png|jpe?g|webp)$/i.test(n)).length,0);
  for(const art of PIRATE_ART){const text=await readFile(new URL(art+'.svg',dir),'utf8');assert.ok(text.includes('#232323'));assert.ok(text.includes('viewBox="0 0 1024 1024"'));assert.ok(!/<(?:image|linearGradient|radialGradient|filter)\b|data:image/i.test(text));assert.ok(text.length<100000);}
 });
@@ -21,7 +21,7 @@ test('twenty minutes of wandering remain on open water, spread around the world 
   const old=f.ships.map(s=>[...s.p]);f.update(.1);
   for(let i=0;i<f.ships.length;i++){assert.ok(distance(old[i],f.ships[i].p)<11,'no teleport');if(k%40===0)min=Math.min(min,pirateClearance(f.ships[i].p));}
  }
- assert.ok(min>PIRATE_RADIUS+60,'double-size hulls keep a shore margin: '+min);
+ assert.ok(min>PIRATE_RADIUS+60,'hulls keep a shore margin: '+min);
  for(let k=0;k<f.ships.length;k++)total+=distance(start[k],f.ships[k].p);assert.ok(total>18000,'fleet actively wanders');
  assert.ok(new Set(start.map(p=>Math.floor((Math.atan2(p[1]-home.cy,p[0]-home.cx)+Math.PI)/(Math.PI/3)))).size>=5);
 });
