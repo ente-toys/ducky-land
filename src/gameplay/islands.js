@@ -366,26 +366,31 @@ function gridFor(id) {
   }
   return GRIDS.get(id);
 }
-export function sailRoute(id,from,to,boats=[]) {
+export function sailRoute(id,from,to,boats=[],work) {
  const m=mapOf(id),targetX=nearestSeaX(to.x,from.x),middle=(from.x+targetX)/2,shift=middle-nearestSeaX(middle,m.cx);
  const start={x:from.x-shift,y:from.y},end={x:targetX-shift,y:to.y};
  const others=otherBoatPositions({...from,islandId:id},boats).flatMap(p=>{
    const x=nearestSeaX(p.x,middle)-shift;
    return [-SEA_WIDTH,0,SEA_WIDTH].map(offset=>({...p,x:x+offset}));
  });
- const findRoute=chartPlanner(id,start,others);
- let route=findRoute(end);
+ const budget={visits:0,limit:Math.min(FINE_ROUTE_VISITS,work?.visitLimit??FINE_ROUTE_VISITS)};
+ const findRoute=chartPlanner(id,start,others,budget);
+ let alternatives=0, route=findRoute(end);
  // moored boats can wall in a harbour's dock point (Bog's three moorings sit 380-620 around it): aim for the
  // nearest free water beside it instead, and the arrival docks from there
  if(!route&&others.length)for(let r=BOAT_GAP+100;r<=BOAT_GAP+1000&&!route;r+=150){
    const ring=Array.from({length:16},(_,k)=>({x:end.x+Math.cos(k*Math.PI/8)*r,y:end.y+Math.sin(k*Math.PI/8)*r}))
      .filter(q=>canSail(q.x+shift,q.y,id)&&others.every(o=>seaBoatSeparated(q,o,BOAT_GAP+1)))
      .sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y));
-   for(const q of ring)if((route=findRoute(q)))break;
+   for(const q of ring){
+     alternatives++;
+     if((route=findRoute(q)))break;
+   }
  }
+ if(work)Object.assign(work,{fineVisits:budget.visits,alternatives});
  return route?.map(p=>({...p,x:p.x+shift}))??null;
 }
-function chartPlanner(id,from,others) {
+function chartPlanner(id,from,others,budget) {
   const lineRoom=(a,b)=>{
     const dx=b.x-a.x,dy=b.y-a.y,l2=dx*dx+dy*dy;
     return others.every(p=>{
@@ -415,23 +420,23 @@ function chartPlanner(id,from,others) {
         if(!seaBoatSeparated(at,p,BOAT_GAP+1))open[i]=0;
       }
     }
-    let fineVisits=0;
     const nearestOpen=p => {
       const c0=Math.floor((p.x-b.x0)/CELL), r0=Math.floor((p.y-b.y0)/CELL);
       for (let d=0;d<14;d++) for (let r=r0-d;r<=r0+d;r++) for (let c=c0-d;c<=c0+d;c++) {
         if (Math.max(Math.abs(c-c0),Math.abs(r-r0))!==d || r<0||c<0||r>=rows||c>=cols||!open[r*cols+c]) continue;
-        if (fineVisits>=FINE_ROUTE_VISITS)return -1;
-        fineVisits++;
+        if (budget.visits>=budget.limit)return -1;
+        budget.visits++;
         if (clearLine(id,p,centre(r*cols+c))) return r*cols+c;
       }
       return -1;
     };
     const connect=(p,step=60,limit=60)=>{
+      if (budget.visits>=budget.limit)return null;
       const direct=nearestOpen(p);if(direct>=0)return {index:direct,points:[centre(direct)]};
       const side=limit*2+1,total=side*side,start=limit*side+limit;
       const prev=new Int32Array(total).fill(-1),queue=[start];prev[start]=start;
       const point=i=>({x:p.x+(i%side-limit)*step,y:p.y+(Math.floor(i/side)-limit)*step});
-      for(let k=0;k<queue.length&&fineVisits<FINE_ROUTE_VISITS;k++,fineVisits++){
+      for(let k=0;k<queue.length&&budget.visits<budget.limit;k++,budget.visits++){
         const i=queue[k],at=point(i),c=Math.floor((at.x-b.x0)/CELL),r=Math.floor((at.y-b.y0)/CELL),cell=r*cols+c;
         if(c>=0&&r>=0&&c<cols&&r<rows&&open[cell]&&clearLine(id,at,centre(cell))){
           const points=[centre(cell)];for(let j=i;j!==start;j=prev[j])points.push(point(j));points.reverse();return {index:cell,points};
@@ -483,12 +488,12 @@ function chartPlanner(id,from,others) {
   }
 }
 
-export function setSailDestination(actor,x,y,boats=[]) {
+export function setSailDestination(actor,x,y,boats=[],work) {
   if (!canSail(x,y,actor.islandId)) return null;
   const at=freeBoatPosition({...actor,x,y},boats,520);
   if (!at) return null;
   ({x,y}=at);
-  const route=sailRoute(actor.islandId,actor,{x,y},boats);
+  const route=sailRoute(actor.islandId,actor,{x,y},boats,work);
   if (!route) return null;
   actor.sailTarget=route[0];
   actor.sailRoute=route.slice(1);

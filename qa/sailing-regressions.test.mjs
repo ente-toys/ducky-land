@@ -207,3 +207,24 @@ test('Home ground culling returns to authored tile coordinates after repeated la
  const source=readFileSync(new URL('../src/rendering/pixi/engine.js',import.meta.url),'utf8');
  assert(source.includes('unplaceRigid(this.islandId,this.islandId,this.camera)'));
 });
+
+
+test('a blocked dock search shares the fine-work budget across alternatives and keeps the current route', () => {
+ const islandId = 'home';
+ const destination = {x:4000,y:9500};
+ const boats = Array.from({length:26},(_,index) => {
+  const angle = index * 2 * Math.PI / 26;
+  return {id:`home-0~dock-fixture-${index}`,islandId,
+   x:destination.x + 1600 * Math.cos(angle),y:destination.y + 1600 * Math.sin(angle)};
+ });
+ const sailTarget = {x:4400,y:12300};
+ const sailRoute = [{x:5100,y:12300}];
+ const actor = {id:'sailor',islandId,x:4000,y:12300,mode:'sailing',sailTarget,sailRoute,docking:true};
+ const work = {visitLimit:8};
+ assert.equal(setSailDestination(actor,destination.x,destination.y,boats,work),null);
+ assert.ok(work.alternatives > 1, 'the search considered multiple alternate dock targets');
+ assert.equal(work.fineVisits,work.visitLimit, 'alternatives share the exhausted budget');
+ assert.strictEqual(actor.sailTarget,sailTarget);
+ assert.strictEqual(actor.sailRoute,sailRoute);
+ assert.equal(actor.docking,true);
+});
