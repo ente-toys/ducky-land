@@ -9,10 +9,12 @@
   "preview_urls": false,
   "observability": {
     "enabled": true,
+    "redact_query_string": true,
     "logs": {
       "enabled": true,
       "invocation_logs": true,
-      "persist": true
+      "persist": true,
+      "destinations": ["sentry-room-logs"]
     }
   },
   "limits": {"cpu_ms": 60000},
