@@ -5,7 +5,7 @@ import {BOG_RADAR_ICON, BOG_RADAR_SIZE_PX} from '../features/bog-combat/bog-rada
 import {mapOf} from '../world/island-maps.js';
 import {unplaceRigid} from '../world/rigid.js';
 import {TELESCOPE_ART, telescopeLandmarks} from '../world/telescope-landmarks.js';
-import {TELEPORTERS, TELEPORTER_MAP_ICON, TELEPORTER_LOCKED_MAP_ICON} from '../gameplay/teleport.js';
+import {TELEPORTERS, TELEPORT_COST, TELEPORTER_MAP_ICON, TELEPORTER_LOCKED_MAP_ICON} from '../gameplay/teleport.js';
 
 const width = 1000;
 const scale = width / NEARBY_MAP_WIDTH;
@@ -107,6 +107,8 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
   const mapUnitsPerPixel = iconSize / BOG_RADAR_SIZE_PX;
   const teleporterSize = 21 * mapUnitsPerPixel;
   const showTeleporterArrow = !indoors && !globeOpen && frame.teleporterBearing !== null;
+  const teleporterGuide = showTeleporterArrow ? 'Blue arrow points toward this island’s harbor teleporter.'
+    : frame.playing && !frame.teleporterUnlocked ? `Collect ${TELEPORT_COST} golden feathers to reveal the arrow to your harbor teleporter.` : '';
   return <>
   {globeOpen && <button type="button" className="pixi-world-back" onClick={() => island.current?.closeGlobe()}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#564537" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -114,7 +116,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
   <button type="button" className={`pixi-world-map${globeOpen ? ' pixi-world-map--hidden' : ''}`} disabled={indoors || globeOpen}
     aria-label="Open the world view" title="Open the world view" onClick={() => island.current?.openGlobe()}>
     <svg ref={svg} id="pixi-world-map-view" viewBox={`0 0 ${width} ${height}`} role="img"
-      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Green portal pins mark harbor teleporters.${showTeleporterArrow ? ' Blue arrow: direction to this island’s harbor teleporter.' : ''} Telescope badges: stargazing spots. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
+      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Green portal pins mark harbor teleporters. ${teleporterGuide} Telescope badges: stargazing spots. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
       <defs>
         <clipPath id="pixi-world-map-terrain-clip"><circle cx={width / 2} cy={height / 2} r={width / 2}/></clipPath>
         <pattern id="pixi-world-map-waves" width="180" height="120" patternUnits="userSpaceOnUse">
