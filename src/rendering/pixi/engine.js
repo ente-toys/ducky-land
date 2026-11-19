@@ -86,6 +86,7 @@ const {leases:textureLeases,acquire,release}=createTextureLeases();
 const SOLO_HIDDEN=new Set(WORLD_ISLANDS.map(island=>island.id));
 const ZERO = {x:0,y:0};
 const SIM_STEP = 1 / 60;
+const MIN_GAMEPLAY_ZOOM = .4;
 const renderJumpLeft = (left, accumulator) => left > 0
   ? Math.min(JUMP_SECONDS, left + SIM_STEP - accumulator)
   : 0;
@@ -1446,13 +1447,9 @@ export class PixiIsland {
   }
 
   birdZoom() {const b=this.archipelago.bounds; return .43*this.height*2*Math.PI/(b.x1-b.x0);}
-  // Zooming out stops at your own island framed in sea; the globe opens only from the globe button, and while it is
-  // open you cannot zoom back down onto an island (you sail there instead).
-  walkingMinZoom() {
-    const id=WORLD_ISLANDS.find(i=>(i.theme??i.id)===this.artShown)?.id??this.islandId;
-    return Math.min(this.minZoom,this.detailStates?.get(id)?.lease.tier.zoom??this.minZoom);
+  zoomFloor() {
+    return this.archipelago && this.globeOpen ? this.birdZoom() : MIN_GAMEPLAY_ZOOM;
   }
-  zoomFloor() {return this.archipelago && this.globeOpen ? this.birdZoom() : this.walkingMinZoom()*(this.archipelago ? .97 : .8);}
   // Walking on your own island with the globe shut: only this island is drawn. Neighbours, their live art and
   // their globe previews come back for the globe, a fly home, a landing or sailing.
   walkSolo() {
@@ -1461,7 +1458,7 @@ export class PixiIsland {
   zoomCeiling() {
     if (!this.archipelago || !this.globeOpen) {
       const id=WORLD_ISLANDS.find(i=>(i.theme??i.id)===this.artShown)?.id??this.room?.islandId??this.islandId;
-      return detailZoomLimit(this.detailStates?.get(id));
+      return Math.max(MIN_GAMEPLAY_ZOOM, detailZoomLimit(this.detailStates?.get(id)));
     }
     const top=this.minZoom*.95;
     // stay a whole globe (t >= .97): below that the live world would have to be drawn into it
@@ -1557,7 +1554,7 @@ export class PixiIsland {
     const me=this.room?.view() ?? this.player;
     if (!me) {this.fit(); return;}
     Object.assign(this.camera,localPoint(this.islandId,spherePoint(this.islandId,this.camera)));
-    const zoom=Math.max(this.minZoom*1.05, Math.min(this.width/1500, this.height/1000));
+    const zoom=Math.max(MIN_GAMEPLAY_ZOOM, this.minZoom*1.05, Math.min(this.width/1500, this.height/1000));
     this.spin=null; this.follow=false; this.fitMode=false;
     this.fly={at:performance.now(), ms:this.motion.matches ? 0 : 700, x0:this.camera.x, y0:this.camera.y, z0:this.camera.zoom, zoom};
     if (this.overPin) {this.overPin=false; this.canvas.style.cursor=''; this.worldView?.hoverPin(false);}
@@ -1575,7 +1572,7 @@ export class PixiIsland {
   fit() {
     this.fly=null; this.follow = false;this.fitMode=true;
     const m=this.mapHere();
-    Object.assign(this.target, {x: m.cx, y: m.cy, zoom: this.minZoom});
+    Object.assign(this.target, {x: m.cx, y: m.cy, zoom: clamp(this.minZoom, this.zoomFloor(), this.zoomCeiling())});
   }
 
   resize(initial = false) {
@@ -1589,6 +1586,7 @@ export class PixiIsland {
       this.camera.zoom = Math.min(this.width / 1500, this.height / 1000);
       const cam = new URLSearchParams(location.search).get('cam')?.split(',').map(Number);
       if (cam?.length === 3 && cam.every(Number.isFinite)) Object.assign(this.camera, {x: cam[0], y: cam[1], zoom: cam[2]});
+      this.camera.zoom = Math.max(MIN_GAMEPLAY_ZOOM, this.camera.zoom);
       Object.assign(this.target, this.camera);
     } else if(this.fitMode){this.fit();Object.assign(this.camera,this.target);}
     else if(this.archipelago){
@@ -1757,9 +1755,9 @@ export class PixiIsland {
     } else if (!this.birdEye || (this.gestures.pointers.size && performance.now()-(this.dragAt||0)>80)) this.spin=null;
     if (this.fly) this.stepFly(now, player);
     if(!this.globeOpen){
-      const limit=this.zoomCeiling();
-      this.target.zoom=Math.min(this.target.zoom,limit);
-      this.camera.zoom=Math.min(this.camera.zoom,limit);
+      const ceiling=this.zoomCeiling();
+      this.target.zoom=clamp(this.target.zoom,MIN_GAMEPLAY_ZOOM,ceiling);
+      this.camera.zoom=clamp(this.camera.zoom,MIN_GAMEPLAY_ZOOM,ceiling);
     }
     easeZoomCamera(this.camera, this.target, this.zoomMotion, dt, reduced, this.birdEye && (this.gestures.pointers.size || this.spin) ? 30 : 14);
     if (this.globeAim) {
@@ -1771,7 +1769,7 @@ export class PixiIsland {
         if (w<1e-7 && !this.spin && !this.gestures.pointers.size) this.globeAim=null;
       }
     }
-    const viewMinZoom=this.globeOpen?this.minZoom:this.walkingMinZoom();
+    const viewMinZoom=this.globeOpen?this.minZoom:MIN_GAMEPLAY_ZOOM;
     this.birdEye=!!this.archipelago && this.camera.zoom<viewMinZoom*.95;
 
     const solo=this.walkSolo();

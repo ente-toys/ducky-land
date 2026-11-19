@@ -185,14 +185,24 @@ test('detail batches small sources within a frame and swaps per-piece frames ato
 });
 
 
-test('a wide landing stays in the walking view even when it is wider than the old fit floor',t=>{
+test('gameplay zoom keeps a 0.4 floor through landing, fit, and the detail clamp',t=>{
  const prior=globalThis.document;globalThis.document={hidden:false};t.after(()=>globalThis.document=prior);
  const game=cameraGame({id:1,x:2000,y:2000,mode:'walking',islandId:'home'});
  game.minZoom=.3;game.camera.zoom=game.target.zoom=.12;
- game.archipelago={update(){}};
+ game.archipelago={update(){},bounds:{x0:0,x1:80000}};
  game.detailStates=new Map([['home',{live:false,job:Promise.resolve(),lease:{tier:{zoom:.12,sharpZoom:.15,detailSharpZoom:1}}}]]);
- assert(game.zoomFloor()<.12);assert.equal(game.zoomCeiling(),.15);
- game.frameAt(16);assert.equal(game.birdEye,false);assert.equal(game.globeT,0);
+ assert.equal(game.zoomFloor(),.4);
+ assert.equal(game.zoomCeiling(),.4);
+ game.frameAt(16);
+ assert.equal(game.camera.zoom,.4);
+ assert.equal(game.target.zoom,.4);
+ assert.equal(game.birdEye,false);
+ assert.equal(game.globeT,0);
+ game.fit();
+ assert.equal(game.target.zoom,.4);
+ game.globeOpen=true;
+ assert.equal(game.zoomFloor(),game.birdZoom());
+ assert(game.zoomFloor()<.4);
 });
 
 
@@ -203,7 +213,7 @@ test('all islands and DPRs regain the camera limit from main only after detail a
   game.app={renderer:{resolution:dpr}};
   const state={live:false,lease:{tier:{sharpZoom:.25,detailSharpZoom:.34}}};
   game.detailStates=new Map([[island.id,state]]);
-  assert.equal(game.zoomCeiling(),.25,`${island.id} DPR ${dpr}: landing clamp`);
+  assert.equal(game.zoomCeiling(),.4,`${island.id} DPR ${dpr}: landing clamp respects gameplay floor`);
   state.live=true;
   assert.equal(game.zoomCeiling(),mainWalkingZoomCeiling(),`${island.id} DPR ${dpr}: main range`);
  }

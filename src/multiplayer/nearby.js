@@ -2,7 +2,7 @@ import {SEA_WIDTH, wrapSea} from '../world/flat-layout.js';
 
 const CELL = 1000;
 const COLUMNS = SEA_WIDTH / CELL;
-const LIMIT = 96;
+const LIMIT = 40;
 
 export const nearbyCell = ({x,y}) => ({
   x: Math.floor((wrapSea(x) + SEA_WIDTH / 2) / CELL),

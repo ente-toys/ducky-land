@@ -22,7 +22,7 @@ import {loadTest} from '../scripts/load-room.mjs';
 const themedIslands = () => [...THEME_OF].filter(([, theme]) => readyThemes().includes(theme)).map(([id]) => id);
 const area = ring => ring.reduce((a, p, i) => {const q = ring[(i + 1) % ring.length]; return a + p[0] * q[1] - q[0] * p[1];}, 0) / 2;
 
-test('nearby views cap crowded snapshots, preserve self, and follow the spectator camera', async () => {
+test('nearby views send at most 40 ducks, preserve self, and follow the spectator camera', async () => {
   const room = await makeRoom();
   const viewer = addPlayer(room, 1, {x: 1050, y: 1050});
   for (let i = 2; i <= 101; i++) addPlayer(room, i, {x:1500+i/100, y:1500});
@@ -32,9 +32,10 @@ test('nearby views cap crowded snapshots, preserve self, and follow the spectato
   room.connections.get(viewer.socket).nearby = true;
   room.broadcast(viewer.socket);
   const player = JSON.parse(viewer.socket.last);
-  assert.equal(player.players.length, 96);
+  assert.equal(player.players.length, 40);
   assert.equal(player.self.pose.id, viewer.actor.id);
   assert.ok(!player.players.some(p=>p.id===far.actor.id));
+  assert.ok(player.players.every(p=>p.x<=1500.41), 'the nearest ducks are selected before applying the cap');
 
   room.webSocketMessage(guest, JSON.stringify({type:'watch-cell',islandId:'home',...nearbyCell(far.actor)}));
   room.broadcast(guest);
