@@ -46,6 +46,6 @@ Keep the compatible Worker deployed. Set the production Pages variables `WORLD_L
 
 Rolling back the Worker binary alone could start the old simulation against stale data. Complete the reverse migration and verify a walking player, a sailing player and a quiet observer before retiring the split code.
 
-## Repair surplus boats
+## Repair the public boat fleet
 
-For a world already using split simulations, set the Pages variables `WORLD_LAYOUT=split`, `WORLD_REPAIR_FLEET=1`, and `WORLD_MIGRATION_ID` to a new identifier. A compatible join temporarily pauses admissions and repairs the persisted fleet across all islands and the sea. The repair keeps one public boat per original berth, preserves player-built boats, and defers removal of any occupied surplus boat until it has been unattended for six hours. Use the same ID to retry an interrupted repair. After the repair completes, clear `WORLD_REPAIR_FLEET`.
+For a world already using split simulations, set the Pages variables `WORLD_LAYOUT=split`, `WORLD_REPAIR_FLEET=1`, and `WORLD_MIGRATION_ID` to a new identifier. A compatible join temporarily pauses admissions and repairs the persisted fleet across all islands and the sea. The repair keeps one public boat per original berth, including boats away from home, and restores missing boats where there is a safe position near their original mooring. It preserves player-built boats and defers removal of any occupied surplus boat until it has been unattended for six hours. Use the same ID to retry an interrupted repair. After the repair completes, clear `WORLD_REPAIR_FLEET`.

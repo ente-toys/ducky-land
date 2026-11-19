@@ -6,6 +6,7 @@ import test from 'node:test';
 import {setTimeout as delay} from 'node:timers/promises';
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
+import {boardingPoint, canSail, harborOf, navOf} from '../src/gameplay/islands.js';
 
 test(
   'split world migrates, routes spawns and sailors, and returns unattended boats after restart',
@@ -70,10 +71,11 @@ test(
         const path=new URL(request.url).pathname;
         if(path==='/fixture/fleet')return Response.json(this.room.boats);
         if(path==='/fixture/seed-replica') {
-          const boat=this.room.boats[0];
+          const boat=this.room.boats.find(item=>item.id==='blossom-0');
+          this.room.boats=this.room.boats.filter(item=>item!==boat);
           this.room.boats.push(
             {...boat,id:'home-0~old-replacement',parked:true,parkedAt:Date.now()},
-            {...boat,id:'home-0~built-repair-fixture',owner:'repair-fixture',parked:true,parkedAt:Date.now()}
+            {...boat,id:'blossom-0~built-repair-fixture',owner:'repair-fixture',parked:true,parkedAt:Date.now()}
           );
           this.room.saveBoats();
           return Response.json({});
@@ -371,13 +373,24 @@ test(
     assert.equal(returned.length, 1, 'a retried return creates no duplicate');
     assert.deepEqual([returned[0].x, returned[0].y], [startingBoat.x, startingBoat.y]);
 
+    const visiting = await boatFixture('/move-boat?world=spawn');
     await boatFixture('/seed-replica?world=spawn&island=blossom');
     assert.equal((await fleet('blossom')).length, blossomCount + 2);
     assert.deepEqual(await boatFixture('/repair-fleet?world=spawn'), {mode:'split'});
     assert.deepEqual(await boatFixture('/repair-fleet?world=spawn'), {mode:'split'});
     const repaired = await fleet('blossom');
-    assert.equal(repaired.length, blossomCount + 1);
-    assert.ok(repaired.some(boat => boat.id === 'home-0~built-repair-fixture'));
-    assert.equal((await fleet('home')).find(boat => boat.id === 'home-0').x, startingBoat.x);
+    const restoredMooring = repaired.find(boat => boat.id === 'blossom-0');
+    assert.ok(restoredMooring, 'repair restores a missing public berth');
+    assert.equal(restoredMooring.occupant, null);
+    assert.ok(canSail(restoredMooring.x, restoredMooring.y, 'blossom'));
+    const nav = navOf('blossom');
+    const boarding = boardingPoint(restoredMooring, nav);
+    const pier = harborOf('blossom').land;
+    assert.deepEqual(nav.route(pier.x, pier.y, boarding.x, boarding.y).at(-1), [boarding.x, boarding.y]);
+    assert.equal(repaired.length, blossomCount + 2);
+    assert.ok(repaired.some(boat => boat.id === 'blossom-0~built-repair-fixture'));
+    assert.ok(!repaired.some(boat => boat.id === 'home-0~old-replacement'));
+    assert.deepEqual(repaired.find(boat => boat.id === 'home-0'), visiting);
+    assert.ok(!(await fleet('home')).some(boat => boat.id === 'home-0'));
   }
 );

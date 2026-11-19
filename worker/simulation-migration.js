@@ -1,4 +1,4 @@
-import {ISLANDS, boatHome, boatSlot, boatSpots, islandFor, placeFleetBoatHome} from '../src/gameplay/islands.js';
+import {ISLANDS, boatHome, boatSlot, boatSpots, createBoats, islandFor, placeFleetBoatHome} from '../src/gameplay/islands.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 import {simulationStub, internalPost} from '../server/simulation-routing.js';
 
@@ -120,7 +120,7 @@ export function replaceGameplay(room, data) {
   room.karma.bogEntries.clear();
 }
 
-function consolidateFleetReplicas(boats) {
+function repairFleet(boats) {
   const groups = new Map();
   const keep = [];
   for (const boat of boats) {
@@ -141,6 +141,13 @@ function consolidateFleetReplicas(boats) {
     for (const boat of group) if (boat !== primary && boat.occupant) {
       keep.push({...boat, retireOnReturn:true});
     }
+  }
+  // The export includes boats visiting other islands, out at sea and in
+  // pending returns, so it also accounts for berths whose boats are away.
+  for (const boat of createBoats()) {
+    if (groups.has(boat.id)) continue;
+    const restored = placeFleetBoatHome(boat, keep);
+    if (restored) keep.push(restored);
   }
   return keep;
 }
@@ -285,7 +292,7 @@ export async function migrateWorld(room, {id, world, target, fleetRepair = false
     }
     if (target === 'split') {
       const data = readSnapshot(room, 'migration-source');
-      if (fleetRepair) data.boats = consolidateFleetReplicas(data.boats);
+      if (fleetRepair) data.boats = repairFleet(data.boats);
       validate(data);
       const ownerForPlayer = (row) => {
         const pose = JSON.parse(row.pose);
