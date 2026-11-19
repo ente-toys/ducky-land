@@ -2157,7 +2157,7 @@ export class PixiIsland {
       }
       if (showNames && pose.login && !entry.nameplate) {
         entry.nameplate = document.createElement('div');
-        entry.nameplate.className = 'pixi-duck-name';
+        entry.nameplate.className = isPlayer ? 'pixi-duck-name pixi-duck-name--self' : 'pixi-duck-name';
         entry.nameplate.textContent = `@${pose.login}`;
         this.nameLayer.appendChild(entry.nameplate);
       }

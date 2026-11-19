@@ -180,6 +180,16 @@
   border-radius: 7px;
   font: 600 10px/1.25 system-ui, sans-serif;
 }
+.pixi-duck-name--self {
+  z-index: 1;
+  padding: 2px 7px;
+  color: #332b23;
+  background: #ffda69;
+  border-color: #564537;
+  box-shadow: 0 2px 0 #56453755;
+  font-size: 12px;
+  font-weight: 750;
+}
 .pixi-chat-bubble, .pixi-chat {
   color: #3d2b1c;
   background: #ffda69;
@@ -222,7 +232,7 @@
   border: 0;
   border-radius: 50%;
 }
-.pixi-online, .pixi-join-toast, .pixi-friend-prompt {
+.pixi-online, .pixi-join-toast, .pixi-friend-prompt, .pixi-watch-island {
   color: #332b23;
   background: #fff9df;
   border: 1px solid #564537;
@@ -241,12 +251,22 @@
   pointer-events: none;
 }
 .pixi-watch-island {
+  box-sizing: border-box;
+  min-height: 44px;
+  max-width: 14rem;
+  padding: 0 32px 0 14px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23332b23' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  text-overflow: ellipsis;
+  cursor: pointer;
   pointer-events: auto;
-  max-width: min(35vw, 12rem);
-  padding: 6px 8px;
-  border: 0;
-  border-radius: 8px;
-  font: inherit;
+}
+.pixi-watch-island:focus-visible { outline: 3px solid #367969; outline-offset: 3px; }
+@media (forced-colors: active) {
+  .pixi-watch-island { appearance: auto; background-image: none; padding-right: 14px; }
 }
 .pixi-online {
   display: flex;
@@ -797,6 +817,13 @@ button.pixi-stargaze-tag { overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 600px), (pointer: coarse) {
   .pixi-camera, .pixi-chat-dock, .pixi-online { bottom: var(--world-map-bottom); }
   .pixi-presence-dock { display: contents; }
+  .pixi-watch-island {
+    position: fixed;
+    z-index: 6;
+    left: max(16px, env(safe-area-inset-left));
+    bottom: calc(var(--world-map-bottom) + 52px);
+    max-width: min(14rem, calc(100% - max(16px, env(safe-area-inset-left)) - max(16px, env(safe-area-inset-right)) - var(--world-map-width) - 8px));
+  }
   .pixi-presence-dock > .pixi-camera, .pixi-online { position: fixed; }
   .pixi-presence-dock > .pixi-camera { left: max(16px, env(safe-area-inset-left)); bottom: var(--world-map-bottom); }
   .pixi-chat-dock {
