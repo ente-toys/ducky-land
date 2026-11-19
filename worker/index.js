@@ -56,6 +56,7 @@ function publicPose(actor) {
 // Persist the chart version privately; wire poses keep their existing public shape.
 const savedPose=actor=>({...publicPose(actor),seaVersion:actor.seaVersion??SEA_VERSION});
 // a built boat's owner is an account id: clients only learn which boats are theirs (from their own self block)
+const ghostBoat = boat => Boolean(boat.occupant && Number.isFinite(boat.unattendedAt));
 function wireBoat({owner, ownershipVersion, buildRevision, unattendedAt, returnRetryAt, retireOnReturn, ...boat}) {
   return owner ? {...boat, built:true} : boat;
 }
@@ -297,6 +298,12 @@ export class IslandRoom {
   boatObstacles() {
     if(!this.remoteBoats?.length&&!this.parkingReservations?.size)return this.boats;
     return [...this.boats,...(this.remoteBoats??[]),...(this.parkingReservations?.values()??[])];
+  }
+
+  // A sailor who disconnected keeps the boat for a resume, but nobody is in it to draw.
+  // Others neither see nor sail into it until the rider comes back.
+  liveBoats(boats) {
+    return boats.some(ghostBoat) ? boats.filter(boat => !ghostBoat(boat)) : boats;
   }
 
   boatParking(boat,landing) {
@@ -790,7 +797,7 @@ export class IslandRoom {
       }
       this.farPosesAt=now+FAR_POSITION_INTERVAL_MS;
     }
-    const boatsForView = this.remoteBoats ? [...this.boats,...this.remoteBoats] : this.boats;
+    const boatsForView = this.liveBoats(this.remoteBoats ? [...this.boats,...this.remoteBoats] : this.boats);
     const legacyGlobeFields = new Map();
     const shared = new Map(), indexes = new Map(), empty = {guests:[], named:[]};
     const snapshotView = (islandId, named, info) => {
@@ -1223,7 +1230,7 @@ export class IslandRoom {
   stepMovement(now) {
     let active = false;
     let changedTravel = false;
-    const obstacles=this.boatObstacles();
+    const obstacles=this.liveBoats(this.boatObstacles());
     for (const [socket, info] of this.connections) {
       const actor = info.actor;
       if (!actor) continue;
