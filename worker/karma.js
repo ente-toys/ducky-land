@@ -37,16 +37,15 @@ export class RoomKarma {
     if(this.room.ctx.storage.transactionSync)this.room.ctx.storage.transactionSync(save);else save();
     this.balances.set(account,balance-cost);this.bogEntries.set(account,entry);return entry;
   }
-  payTeleport(account, source, arrival) {
-    const balance = this.balance(account) - teleportPrice(arrival.islandId);
+  payTeleport(account, source, destination, saveArrival) {
+    const balance = this.balance(account) - teleportPrice(destination);
     if (balance < 0) return null;
-    const enteringBog = arrival.islandId === BOG_ISLAND;
+    const enteringBog = destination === BOG_ISLAND;
     const leavingBog = source === BOG_ISLAND;
     const entry = enteringBog ? {id:crypto.randomUUID(),lives:5,combat:null} : null;
     this.room.ctx.storage.transactionSync(() => {
       this.room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',account,balance);
-      this.room.saveLocation(account,arrival);
-      this.room.sql.exec('DELETE FROM resumes WHERE account=?',account);
+      saveArrival();
       if (entry) this.room.sql.exec('INSERT OR REPLACE INTO bog_entries VALUES(?,?)',account,JSON.stringify(entry));
       if (leavingBog) this.room.sql.exec('DELETE FROM bog_entries WHERE account=?',account);
     });

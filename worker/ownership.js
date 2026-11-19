@@ -40,14 +40,16 @@ export class OwnershipDirectory {
     return this.sql.exec('SELECT * FROM simulation_transfers WHERE id=?', id).toArray()[0];
   }
 
-  prepare({id, account, source, destination, generation, chargeBog = false}) {
+  prepare({id, account, source, destination, generation, chargeBog = false, teleportFare = 0}) {
+    // Existing transfers store 1 for the sailing ticket, or 0 for no charge.
+    const charge = teleportFare || Number(chargeBog);
     const prior = this.transfer(id);
     if (prior)
       return prior.account === account &&
         prior.source === source &&
         prior.destination === destination &&
         prior.generation === generation &&
-        prior.charge === Number(chargeBog)
+        prior.charge === charge
         ? prior
         : null;
     const current = this.locate(account);
@@ -59,7 +61,7 @@ export class OwnershipDirectory {
       source,
       destination,
       generation,
-      Number(chargeBog)
+      charge
     );
     return this.transfer(id);
   }

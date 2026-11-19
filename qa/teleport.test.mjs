@@ -12,6 +12,11 @@ function playerAtMachine(room, balance, islandId='home') {
   return player;
 }
 
+function savedPose(room, account, table = 'room_checkpoints') {
+  const row = room.sql.exec(`SELECT pose FROM ${table} WHERE account=?`,account).toArray()[0];
+  return row ? JSON.parse(row.pose) : null;
+}
+
 function request(room, player, destination, islandId=player.actor.islandId, seq=++player.seq) {
   room.webSocketMessage(player.socket,JSON.stringify({type:'teleport',islandId,destination,seq}));
   assert.equal(JSON.parse(player.socket.last).self.ack,seq);
@@ -32,8 +37,8 @@ test('every main island has a reachable machine beside its harbor', () => {
   }
 });
 
-test('teleport debits exactly two feathers and persists the arrival', async () => {
-  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,2);
+test('teleport debits exactly three feathers and persists the arrival', async () => {
+  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,3);
   const info=room.connections.get(p.socket);
   Object.assign(info,{boarding:'home-0',input:{x:1,y:0}});
   p.actor.path=[{x:1,y:1}];
@@ -43,10 +48,11 @@ test('teleport debits exactly two feathers and persists the arrival', async () =
   assert.deepEqual(p.actor.path,[]);
   assert.deepEqual(info.input,{x:0,y:0});
   assert.equal(info.boarding,null);
-  assert.deepEqual(room.savedLocation(p.account),{islandId:'sunset',...TELEPORTERS.get('sunset').arrival,turn:0});
+  const {islandId,x,y,turn} = savedPose(room,p.account);
+  assert.deepEqual({islandId,x,y,turn},{islandId:'sunset',...TELEPORTERS.get('sunset').arrival,turn:0});
   const restored=new room.constructor(room.ctx);
   assert.equal(restored.karma.balance(p.account),0);
-  assert.equal(restored.savedLocation(p.account).islandId,'sunset');
+  assert.equal(savedPose(restored,p.account,'resumes').islandId,'sunset');
   request(room,p,'sunset','home',p.seq);
   request(room,p,'blossom','home');
   assert.equal(p.actor.islandId,'sunset');
@@ -55,8 +61,8 @@ test('teleport debits exactly two feathers and persists the arrival', async () =
 
 test('teleport rejects invalid trips without changing saved state or balance', async () => {
   const room=await makeRoom({transactional:true}), p=playerAtMachine(room,2);
-  request(room,p,BOG_ISLAND);
-  assert.match(p.socket.notes.findLast(note => note.type==='travel-notice').text,/7 golden feathers/);
+  request(room,p,'sunset');
+  assert.match(p.socket.notes.findLast(note => note.type==='travel-notice').text,/3 golden feathers/);
   request(room,p,'unknown');
   request(room,p,'home');
   p.actor.mode='sailing';
@@ -66,20 +72,24 @@ test('teleport rejects invalid trips without changing saved state or balance', a
   request(room,p,'sunset');
   assert.equal(p.actor.islandId,'home');
   assert.equal(room.karma.balance(p.account),2);
-  assert.equal(room.savedLocation(p.account),null);
+  assert.equal(savedPose(room,p.account),null);
 });
 
-test('Bog teleports charge seven on entry and two on exit', async () => {
-  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,9);
+test('Bog teleports charge eight on entry and three on exit', async () => {
+  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,11);
+  const shortRoom=await makeRoom({transactional:true}), short=playerAtMachine(shortRoom,7);
+  request(shortRoom,short,BOG_ISLAND);
+  assert.match(short.socket.notes.findLast(note => note.type==='travel-notice').text,/8 golden feathers/);
+  assert.equal(shortRoom.karma.balance(short.account),7);
   request(room,p,BOG_ISLAND);
   assert.equal(p.actor.islandId,BOG_ISLAND);
-  assert.equal(p.actor.karma,2);
+  assert.equal(p.actor.karma,3);
   assert.equal(room.karma.bogEntry(p.account).lives,5);
   assert.equal(room.chargeBogLanding(p.socket,room.connections.get(p.socket),BOG_ISLAND),true);
-  assert.equal(p.actor.karma,2);
+  assert.equal(p.actor.karma,3);
   request(room,p,'home','home');
   assert.equal(p.actor.islandId,BOG_ISLAND);
-  assert.equal(room.karma.balance(p.account),2);
+  assert.equal(room.karma.balance(p.account),3);
   request(room,p,'home');
   assert.equal(p.actor.islandId,'home');
   assert.equal(p.actor.karma,0);
@@ -87,13 +97,12 @@ test('Bog teleports charge seven on entry and two on exit', async () => {
 });
 
 test('a failed arrival write rolls back the feather debit', async () => {
-  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,7);
-  room.saveLocation=() => {throw Error('fixture write failure');};
-  assert.throws(() => room.karma.payTeleport(p.account,'home',{
-    islandId:BOG_ISLAND,...TELEPORTERS.get(BOG_ISLAND).arrival,turn:0,mode:'walking',
+  const room=await makeRoom({transactional:true}), p=playerAtMachine(room,8);
+  assert.throws(() => room.karma.payTeleport(p.account,'home',BOG_ISLAND,() => {
+    throw Error('fixture write failure');
   }),/fixture write failure/);
   const restored=new room.constructor(room.ctx);
-  assert.equal(restored.karma.balance(p.account),7);
+  assert.equal(restored.karma.balance(p.account),8);
   assert.equal(restored.karma.bogEntry(p.account),null);
-  assert.equal(restored.savedLocation(p.account),null);
+  assert.equal(savedPose(restored,p.account),null);
 });

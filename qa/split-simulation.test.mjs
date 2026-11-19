@@ -18,6 +18,7 @@ test(
     import {worldStub,simulationStub,presenceStub,internalPost} from './server/simulation-routing.js';
     import {connect,createTestSession,logout} from './server/pages-auth.js';
     import {boardingPoint,harborOf} from './src/gameplay/islands.js';
+    import {TELEPORTERS} from './src/gameplay/teleport.js';
     export {WorldPresence};
     export class TestWorld extends WorldService {
       async fetch(request) {
@@ -40,6 +41,12 @@ test(
           const retryArena=await this.control('/simulation/arena-entry',{...data,owner:bog,generation:124});
           return Response.json({claim:await claim.json(),again:await again.json(),duplicate:duplicateClaim.status,
             charges:[first.status,second.status],balance:this.karma.balance(account),entry:entry?.id,arena:(await retryArena.json()).entry.id});
+        }
+        if(new URL(request.url).pathname==='/fixture/teleport-balance') {
+          const {account,balance}=await request.json();
+          this.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',account,balance);
+          this.karma.balances.set(account,balance);
+          return Response.json({});
         }
         if(new URL(request.url).pathname==='/fixture/stages')
           return Response.json(this.sql.exec('SELECT state FROM simulation_transfers').toArray());
@@ -119,6 +126,13 @@ test(
           return Response.json({});
         }
         if(path==='/fixture/built')return Response.json(this.room.boats.filter(b=>b.owner).map(b=>b.id));
+        if(path==='/fixture/teleporter') {
+          const {balance}=await request.json();
+          const info=[...this.room.connections.values()].find(i=>i.actor);
+          Object.assign(info.actor,TELEPORTERS.get(info.actor.islandId).arrival);
+          this.room.karma.balances.set(info.account,balance);
+          return internalPost(worldStub(this.env,this.room.simulation.world),'/fixture/teleport-balance',{account:info.account,balance});
+        }
         if(path==='/fixture/dock') {
           const info=[...this.room.connections.values()].find(i=>i.actor);
           const boat=this.room.boats.find(b=>!b.occupant);
@@ -151,7 +165,7 @@ test(
       if(url.pathname==='/repair-fleet')return internalPost(worldStub(env,world),'/simulation/mode',
         {id:'fleet-repair',target:'split',fleetRepair:true,world});
       if(url.pathname==='/build'||url.pathname==='/built')return simulationStub(env,world,url.searchParams.get('island')??'home').fetch('https://island.internal/fixture'+url.pathname);
-      if(['/fleet','/move-boat','/age-boat','/seed-replica'].includes(url.pathname)) {
+      if(['/fleet','/move-boat','/age-boat','/seed-replica','/teleporter'].includes(url.pathname)) {
         const owner=url.searchParams.get('island')??'home';
         return simulationStub(env,world,owner).fetch(new Request('https://island.internal/fixture'+url.pathname,request));
       }
@@ -341,6 +355,36 @@ test(
     assert.equal(rejoined.welcome.id, overflow.welcome.id);
     assert.equal(rejoined.snapshot.islandId, overflow.snapshot.islandId);
     rejoined.socket.close();
+
+    const teleportSession = await request('/session?world=teleport', {
+      method:'POST',
+      headers:{'X-Multiplayer-Test-Id':'919c4104-faed-4a20-931c-9b3abec359ab',Origin:'https://game.test'},
+    });
+    assert.equal(teleportSession.status,200);
+    const teleportParams = 'world=teleport&play=1&testSession=' + (await teleportSession.json()).token;
+    assert.ok((await request('/migrate?world=teleport&target=split&id=teleport-cutover')).ok);
+    const origin = await join(teleportParams);
+    const seedBalance = balance => request('/teleporter?world=teleport',{method:'POST',body:JSON.stringify({balance})});
+    assert.ok((await seedBalance(2)).ok);
+    const travel = (player, islandId, destination, seq) => player.socket.send(JSON.stringify({type:'teleport',islandId,destination,seq}));
+    travel(origin,'home','sunset',1);
+    const refused = await wait(() => origin.messages.find(m => m.type === 'travel-notice'));
+    assert.match(refused.text,/3 golden feathers/);
+    assert.ok((await seedBalance(11)).ok);
+    travel(origin,'home','isle-249',2);
+    await wait(() => origin.messages.find(m => m.type === 'transfer'));
+    const bog = await join(teleportParams + '&resume=' + origin.welcome.id);
+    assert.equal(bog.welcome.id,origin.welcome.id);
+    assert.equal(bog.welcome.ack,2);
+    assert.equal(bog.snapshot.islandId,'isle-249');
+    assert.equal((await wait(() => bog.messages.find(m => m.type === 'karma-state'))).balance,3);
+    travel(bog,'isle-249','sunset',3);
+    await wait(() => bog.messages.find(m => m.type === 'transfer'));
+    const sunset = await join(teleportParams + '&resume=' + bog.welcome.id);
+    assert.equal(sunset.welcome.ack,3);
+    assert.equal(sunset.snapshot.islandId,'sunset');
+    assert.equal((await wait(() => sunset.messages.find(m => m.type === 'karma-state'))).balance,0);
+    for (const {socket} of [origin,bog,sunset]) if (socket.readyState === 1) socket.close();
 
     const boatFixture = async (path, options) => {
       const response = await request(path, options);

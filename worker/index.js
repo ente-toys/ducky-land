@@ -105,7 +105,7 @@ export class IslandRoom {
     info.actor.karma=this.karma.balance(info.account);
     return true;
   }
-  teleport(info, command) {
+  teleport(socket, info, command) {
     const {actor, account} = info;
     const destination = command.destination;
     const machine = TELEPORTERS.get(destination);
@@ -116,19 +116,31 @@ export class IslandRoom {
       return 'Return to the island before using the teleporter.';
     }
     if (!machine || destination === actor.islandId) return 'Choose another island.';
-    const arrival = {islandId:destination,...machine.arrival,mode:'walking',turn:0};
+    const arrival = {islandId:destination,...machine.arrival,mode:'walking',turn:0,
+      boatId:null,path:[],travel:0,pace:0,heading:null,sailTarget:null,sailRoute:null,
+      dockTarget:null,docking:false,exitLocked:false,ice:null,jumpLeft:0,action:0,until:0};
     if (!this.standable(arrival)) return 'That teleporter is unavailable.';
-    let balance;
-    try {
-      balance = this.karma.payTeleport(account,actor.islandId,arrival);
-    } catch (error) {
-      console.error('Teleport transaction failed',error);
-      return 'The teleporter is unavailable. Try again.';
+    const fare = teleportPrice(destination);
+    if (this.karma.balance(account) < fare) return `You need ${fare} golden feathers for that trip.`;
+    const before = this.simulation && {actor:structuredClone(actor)};
+    let balance = actor.karma;
+    if (!this.simulation) {
+      const pose = JSON.stringify(savedPose({...actor,...arrival,karma:this.karma.balance(account)-fare}));
+      try {
+        balance = this.karma.payTeleport(account,actor.islandId,destination,() => {
+          this.sql.exec('INSERT OR REPLACE INTO room_checkpoints VALUES(?,?,?)',account,info.digest,pose);
+          this.sql.exec('DELETE FROM resumes WHERE account=?',account);
+        });
+      } catch (error) {
+        console.error('Teleport transaction failed',error);
+        return 'The teleporter is unavailable. Try again.';
+      }
+      if (balance === null) return `You need ${fare} golden feathers for that trip.`;
+      this.savedCheckpointRows.set(account,{digest:info.digest,pose});
     }
-    if (balance === null) return `You need ${teleportPrice(destination)} golden feathers for that trip.`;
-    Object.assign(actor,arrival,{karma:balance,boatId:null,path:[],travel:0,pace:0,heading:null,
-      sailTarget:null,sailRoute:null,dockTarget:null,docking:false,exitLocked:false,ice:null,jumpLeft:0,action:0,until:0});
-    Object.assign(info,{islandId:destination,boarding:null,landing:null,input:ZERO,inputExpires:0});
+    Object.assign(actor,arrival,{karma:balance});
+    Object.assign(info,{islandId:destination,boarding:null,landing:null,input:ZERO,inputExpires:0,throttled:null});
+    if (this.simulation) this.transferIfNeeded(socket,info,null,before,fare);
     return null;
   }
   constructor(ctx, bindings, simulation = null, inactiveWorld = false) {
@@ -1058,8 +1070,8 @@ export class IslandRoom {
     if (!command || !Number.isSafeInteger(command.seq) || command.seq <= Math.max(info.ack, info.throttled?.seq ?? 0)) return;
     const actor = info.actor;
     if (command.type === 'teleport') {
-      const notice = this.teleport(info,command);
       info.ack = command.seq;
+      const notice = this.teleport(socket,info,command);
       this.attach(socket,info);
       if (notice) this.send(socket,{type:'travel-notice',text:notice});
       this.broadcast();

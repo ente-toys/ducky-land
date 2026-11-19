@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nearbyMapFrame,nearbyHeading} from '../src/app/nearby-map.js';
+import {nearbyMapFrame,nearbyHeading,nearbyTeleporterBearing} from '../src/app/nearby-map.js';
 import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {mapOf} from '../src/world/island-maps.js';
 const m=mapOf('home'),centre={x:m.cx,y:m.cy};
@@ -43,4 +43,18 @@ test('the minimap reflects a coast when sailing on its opposite-meridian image',
  const home=mapOf('home');
  const frame=nearbyMapFrame('home',{x:home.cx+40000,y:home.cy-39000});
  assert.deepEqual(frame[0],{id:'home',x:0,y:-1000,bearing:0,flip:-1});
+});
+
+test('the minimap arrow points to the current harbor when the teleporter is unlocked', async () => {
+  const {TELEPORTERS} = await import('../src/gameplay/teleport.js');
+  const {SEA_WIDTH} = await import('../src/world/flat-layout.js');
+  for (const [id, machine] of TELEPORTERS) {
+    const east = {x:machine.x + 500, y:machine.y};
+    const westAcrossSeam = {x:machine.x - 500 + SEA_WIDTH, y:machine.y};
+    assert.equal(nearbyTeleporterBearing(id, east, false), null);
+    assert.equal(nearbyTeleporterBearing(id, null, true), null);
+    assert.equal(nearbyTeleporterBearing(id, machine, true), null);
+    assert.equal(nearbyTeleporterBearing(id, east, true), -90);
+    assert.equal(nearbyTeleporterBearing(id, westAcrossSeam, true), 90);
+  }
 });

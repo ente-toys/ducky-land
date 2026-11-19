@@ -1,3 +1,4 @@
+import {TELEPORTERS} from '../gameplay/teleport.js';
 import {mapPoint} from '../world/sphere-coordinates.js';
 import {nearestSeaImage} from '../world/flat-layout.js';
 import {flatRigid,seaCentreY} from '../world/rigid.js';
@@ -30,3 +31,11 @@ export function nearbyFriends(islandId, point, friends, radius = NEARBY_MAP_WIDT
 }
 
 export function nearbyHeading(id,p,dx,dy){return Math.atan2(dx,-dy)*180/Math.PI;}
+
+export function nearbyTeleporterBearing(islandId, player, unlocked) {
+  const machine = TELEPORTERS.get(islandId);
+  if (!player || !unlocked || !machine) return null;
+  const image = nearestSeaImage(machine.x, machine.y, player, seaCentreY(islandId));
+  const dx = image.x - player.x, dy = image.y - player.y;
+  return dx === 0 && dy === 0 ? null : Math.round(nearbyHeading(islandId, player, dx, dy));
+}

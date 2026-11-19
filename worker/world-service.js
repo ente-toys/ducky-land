@@ -4,6 +4,7 @@ import {OwnershipDirectory} from './ownership.js';
 import {presenceStub, simulationStub, internalPost} from '../server/simulation-routing.js';
 import {islandFor, near} from '../src/gameplay/islands.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
+import {TELEPORTERS, teleportPrice} from '../src/gameplay/teleport.js';
 import {randomOutfit} from '../src/gameplay/outfits.js';
 import {pickSpawnIsland} from '../src/gameplay/world-spawn.js';
 import {FRIEND_RADIUS} from '../src/multiplayer/friends.js';
@@ -250,6 +251,14 @@ export class WorldService extends LegacyRoom {
       if (prior.state !== 'prepared') return fail();
       const session = this.session(digest);
       if (!session?.canPlay || session.account !== prior.account) return fail(403);
+      if (prior.charge > 1) {
+        let committed;
+        const balance = this.karma.payTeleport(prior.account, prior.source, prior.destination, () => {
+          committed = this.directory.commit(data.id);
+          if (!committed) throw Error('Ownership changed during teleport');
+        });
+        return balance === null ? fail(403) : Response.json(committed);
+      }
       const result = this.ctx.storage.transactionSync(() => {
         if (prior.destination === BOG_ISLAND && prior.charge && !this.karma.beginBogEntry(prior.account))
           return null;
@@ -303,11 +312,13 @@ export class WorldService extends LegacyRoom {
       return Response.json({owner: 'home'});
     }
     if (path === '/simulation/prepare') {
-      if (
+      if (data.teleportFare) {
+        if (!TELEPORTERS.has(owner) || !TELEPORTERS.has(data.destination) ||
+            data.teleportFare !== teleportPrice(data.destination)) return fail(400);
+      } else if (
         ((owner === 'sea') === (data.destination === 'sea') && owner !== BOG_ISLAND) ||
         (data.destination !== 'sea' && !islandFor(data.destination))
-      )
-        return fail(400);
+      ) return fail(400);
       const result = this.directory.prepare({...data, source: owner});
       return result ? Response.json(result) : fail();
     }

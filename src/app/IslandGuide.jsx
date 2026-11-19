@@ -1,3 +1,4 @@
+import {TELEPORT_COST} from '../gameplay/teleport.js';
 import {useEffect, useRef, useState} from 'react';
 import {RULES} from '../features/bog-combat/rules.js';
 import {KARMA_REQUIRED} from '../features/bog-combat/entry.js';
@@ -60,7 +61,7 @@ export default function IslandGuide({island}){
      </div>}
      {tab==='world'&&<div className="pixi-guide-world">
       <section><h3>Make yourself at home</h3><p>Explore as a guest, or sign in with GitHub to play and save your Ducky’s spot. Dress up with caps, shades, accessories, and shoes.</p></section>
-      <section><h3>Seven islands. Plenty to discover.</h3><p>Visit Home, Sunbob Fields, Pagepond, Rosybutton Bay, Campfire Commons, Iceland, and Booquack Bog.</p><p>Skate on Iceland, visit Home’s museum, or stop by a telescope to take photos and find your star. Open the globe to explore the whole world.</p></section>
+      <section><h3>Seven islands. Plenty to discover.</h3><p>Visit Home, Sunbob Fields, Pagepond, Rosybutton Bay, Campfire Commons, Iceland, and Booquack Bog.</p><p>Skate on Iceland, visit Home’s museum, or stop by a telescope to take photos and find your star. Open the globe to explore the whole world.</p><p>Harbor teleporters cost {TELEPORT_COST} golden feathers per trip. The blue minimap arrow points to your harbor teleporter once you have enough. Booquack Bog also charges its entry fee.</p></section>
       <section><h3>Take the scenic route</h3><p>Board a boat at a port or along the shore. Sail between islands and out to the small islets. The sea wraps around the world.</p><p>Stranded on an islet? Find wood, rope, and sail cloth to build a boat on the shore.</p></section>
       <section><h3>Better with company</h3><p>Chat with nearby Duckies and make friends. Choose whether friends appear on your mini-map and globe. Take a Polaroid to save or share, and pick a track in the Ente Music player.</p></section>
      </div>}
