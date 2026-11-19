@@ -3,9 +3,10 @@ import {mapOf,mapsVersion} from '../world/island-maps.js';
 import {ISLETS} from '../world/islets.js';
 import {coastPolygons,coastDistance} from '../world/island-coasts.js';
 import {mapPoint} from '../world/sphere-coordinates.js';
+import {seaCentreY} from '../world/rigid.js';
 import {placeIslet} from '../world/islet-placement.js';
 import {SAIL_SPEED} from './islands.js';
-import {FLAT_RADIUS,nearestSeaX} from '../world/flat-layout.js';
+import {FLAT_RADIUS,nearestSeaImage,nearestSeaX} from '../world/flat-layout.js';
 export const PIRATE_COUNT=18,PIRATE_RADIUS=360,PIRATE_BOAT_GAP=560;
 export const PIRATE_ART=['p3_duckhull','p5_raft','p6_treasure'];
 // The raft includes a painted rider: 420 keeps that Ducky at the seated player scale.
@@ -151,5 +152,5 @@ export function createPirateFleet({count=PIRATE_COUNT,seed=713913}={}){
 }
 export function pirateMotion(ship,t,reduced=false){return{bob:reduced?0:Math.sin(t*1.15+ship.phase)*2.3,roll:reduced?0:Math.sin(t*.73+ship.phase)*.012};}
 export function pirateFacing(ship,horizontal,dt){const next=horizontal>.18?1:horizontal<-.18?-1:ship.flip;if(next!==ship.flip){ship.flipAge+=dt;if(ship.flipAge>.8){ship.flip=next;ship.flipAge=0;}}else ship.flipAge=0;return ship.flip;}
-export const pirateLocal=(id,p,reference=null)=>{const q=mapPoint('home',id,{x:p[0],y:p[1]});return Number.isFinite(reference?.x)?{...q,x:nearestSeaX(q.x,reference.x)}:q;};
-export const pirateBoatPoint=(boat,id)=>{const q=mapPoint(boat.islandId??id,'home',boat);return [nearestSeaX(q.x,mapOf('home').cx),q.y];};
+export const pirateLocal=(id,p,reference=null)=>{const q=mapPoint('home',id,{x:p[0],y:p[1]});return Number.isFinite(reference?.x)?nearestSeaImage(q.x,q.y,reference,seaCentreY(id)):q;};
+export const pirateBoatPoint=(boat,id)=>{const q=mapPoint(boat.islandId??id,'home',boat);const image=nearestSeaImage(q.x,q.y,{x:mapOf('home').cx,y:mapOf('home').cy},seaCentreY('home'));return [image.x,image.y];};

@@ -1,3 +1,4 @@
+import {placeRigid} from '../world/rigid.js';
 import {authenticateTestSocket} from '../app/test-session.js';
 import {nearestSeaX} from '../world/flat-layout.js';
 import {nearbyCell} from './nearby.js';
@@ -525,7 +526,7 @@ export class RoomClient {
         Object.assign(this.player,refusedLandingPosition(this.player,spot.islandId,this.boats),{sailTarget:null,sailRoute:null,docking:false});
       }
       if (spot && (spot.islet || !bogLandingNotice(spot.islandId,getPlayerKarma({room:this})))) {
-        const approach=spot.harbor ? harborOf(this.islandId).water : landingApproach(this.player,spot,this.boats);
+        const approach=spot.harbor ? placeRigid(this.islandId,this.islandId,harborOf(this.islandId).water,this.player) : landingApproach(this.player,spot,this.boats);
         this.player.sailTarget=null; this.player.sailRoute=null; this.player.docking=false;
         if (!near(this.player,approach,14) || spot.harbor) {
           const routed=setSailDestination(this.player,approach.x,approach.y,this.boats);

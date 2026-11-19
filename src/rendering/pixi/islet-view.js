@@ -1,9 +1,8 @@
-import {nearestSeaX} from '../../world/flat-layout.js';
 import {createArtQueue, preparationFrame} from './art/island-preparation.js';
 import {Container,Graphics,Matrix,RenderTexture} from 'pixi.js';
 import {ISLETS,ISLET_ART,ISLET_META,ISLET_VIEWBOX} from '../../world/islets.js';
 import {svgLayerContexts} from './art/svg-context.js';
-import {isletPlacement,placeIslet} from '../../world/islet-placement.js';
+import {isletImage,isletPlacement} from '../../world/islet-placement.js';
 export {isletPlacement};
 
 export {ISLET_VIEWBOX};
@@ -61,13 +60,15 @@ export async function createIsletView(app,scene,objects){
    layer.visible=!onGlobe;
    if(onGlobe){for(const v of views)for(const p of v.props)p.sprite.visible=false;return;}
    {
-    placed=views.map(({i,root,props},n)=>{const base=isletPlacement(id,i),r={...base,x:nearestSeaX(base.x,camera.x)};
-     if(from===id&&placed[n]?.x===r.x)return placed[n];
+    placed=views.map(({i,root,props},n)=>{
+     const r=isletImage(id,i,camera),previous=placed[n];
+     if(from===id&&previous?.x===r.x&&previous.y===r.y&&previous.flip===r.flip)return previous;
      const k=i.width/ISLET_VIEWBOX;
-     for(const {piece,sprite}of props){const p=placeIslet(id,i,[(piece.foot[0]-512)*k,(piece.foot[1]-512)*k],camera);
-      sprite.position.set(p.x,p.y);sprite.zIndex=p.y;sprite.rotation=Math.atan2(r.sin,r.cos);
+     for(const {piece,sprite}of props){
+      const x=r.x+(piece.foot[0]-512)*k,y=r.y+r.flip*(piece.foot[1]-512)*k;
+      sprite.position.set(x,y);sprite.zIndex=y;
      }
-     root.setFromMatrix(new Matrix(r.cos,r.sin,-r.sin,r.cos,r.x,r.y));return r;
+     root.setFromMatrix(new Matrix(1,0,0,r.flip,r.x,r.y));return r;
     });
     from=id;
    }

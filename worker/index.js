@@ -1,7 +1,7 @@
 import {seaViewPose} from '../src/world/sea-view.js';
-import {SEA_VERSION,FLAT_ISLETS,nearestSeaX} from '../src/world/flat-layout.js';
+import {SEA_VERSION,SEA_WIDTH,FLAT_ISLETS,nearestSeaX,nearestSeaY} from '../src/world/flat-layout.js';
 import {nearbyCell, validNearbyCell, nearbyIndex, nearbyPoses} from '../src/multiplayer/nearby.js';
-import {unplaceRigid} from '../src/world/rigid.js';
+import {placeRigid,seaCentreY,unplaceRigid} from '../src/world/rigid.js';
 import {reframeIslet} from '../src/world/islet-placement.js';
 import {ISLETS} from '../src/world/islets.js';
 import {mapOf} from '../src/world/island-maps.js';
@@ -736,7 +736,9 @@ export class IslandRoom {
       const localViewer={islandId,x:m.cx,y:m.cy};
       // Cache viewers in the same square together. Players within one square
       // of any viewer in it keep the full update rate; distant motion is sampled.
-      const cell = info.nearby ? (actor ? nearbyCell(actor) : info.watchCell ?? nearbyCell(m.spawn)) :
+      const centreY=seaCentreY(islandId);
+      const shiftY=actor?.mode==='sailing'?actor.y-nearestSeaY(actor.y,centreY):0;
+      const cell = info.nearby ? (actor ? nearbyCell({x:actor.x,y:actor.y-shiftY}) : info.watchCell ?? nearbyCell(m.spawn)) :
         this.simulation && actor && !chartViewer && (groups.get(islandId)?.guests.length ?? 0)>=40 ?
         {x:Math.floor(actor.x/1024),y:Math.floor(actor.y/1024)} : null;
       const scope = `${named ? 1 : 0}|${islandId}${chartViewer?'|sea:'+chartViewer.id:''}${combatSelf?'|'+info.account:''}${info.nearby?'|nearby':''}`;
@@ -751,10 +753,16 @@ export class IslandRoom {
             const canonical = {islandId,x:m.cx,y:m.cy};
             const candidates = chartViewer ? [...groups.values()].flatMap(g=>named?g.named:g.guests)
               .filter(p=>p.islandId===islandId || kind==='sea' || p.mode==='sailing') : poses;
-            indexes.set(indexKey, nearbyIndex(candidates.map(p=>seaViewPose(canonical,p))));
+            const projected=candidates.map(p=>seaViewPose(canonical,p));
+            const images=kind==='sea'?projected.flatMap(p=>{
+              const reflected={...p,x:p.x+SEA_WIDTH/2,y:2*centreY+SEA_WIDTH/2-p.y,
+                turn:Math.atan2(Math.sin(p.turn),-Math.cos(p.turn))};
+              return [p,reflected].flatMap(image=>[-SEA_WIDTH,0,SEA_WIDTH].map(offset=>({...image,y:image.y+offset})));
+            }):projected;
+            indexes.set(indexKey, nearbyIndex(images));
           }
           poses = nearbyPoses(indexes.get(indexKey),cell);
-          if (chartViewer) poses=poses.map(p=>({...p,x:nearestSeaX(p.x,chartViewer.x)}));
+          if (chartViewer) poses=poses.map(p=>({...p,x:nearestSeaX(p.x,chartViewer.x),y:p.y+shiftY}));
         } else if(this.simulation && !chartViewer) poses=poses.map(p=>{
           const nearby = !cell || (Math.abs(Math.floor(p.x/1024)-cell.x)<=1 && Math.abs(Math.floor(p.y/1024)-cell.y)<=1);
           const prior = nearby ? null : this.farPoses.get(p.id);
@@ -1124,7 +1132,8 @@ export class IslandRoom {
   planDock(socket, info, spot) {
     const actor = info.actor;
     if (spot.harbor) {
-      const {water}=harborOf(actor.islandId);
+      const id=actor.islandId;
+      const water=placeRigid(id,id,harborOf(id).water,actor);
       const target=setSailDestination(actor,water.x,water.y,this.boats);
       actor.docking=Boolean(target);
       actor.dockTarget=target?{x:target[0],y:target[1]}:null;

@@ -3,6 +3,7 @@ import {worldIsland} from '../world/world-map.js';
 import {nearbyMapFrame, nearbyHeading, nearbyFriends, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
 import {BOG_RADAR_ICON, BOG_RADAR_SIZE_PX} from '../features/bog-combat/bog-radar.js';
 import {mapOf} from '../world/island-maps.js';
+import {unplaceRigid} from '../world/rigid.js';
 import {TELESCOPE_ART, telescopeLandmarks} from '../world/telescope-landmarks.js';
 
 const width = 1000;
@@ -72,16 +73,19 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
       }));
       const bogX = radar.current.x * scale, bogY = radar.current.y * scale, bogVisible = radar.current.visible;
       // free boats around the island you are on (the server only sends this island's boats)
-      const here = engine.islandId, map = mapOf(here);
+      const here = engine.islandId, map = mapOf(here), reference = player ?? engine.camera;
       const boats = (engine.room?.boats ?? []).filter(boat => !boat.occupant && (!boat.built || engine.room?.ownBoats?.has(boat.id)) && boat.islandId === here)
-        .map(boat => `${Math.round((boat.x - map.cx) * scale)},${Math.round((boat.y - map.cy) * scale)}`).join(' ');
+        .map(boat => {
+          const p=unplaceRigid(here,here,boat,reference);
+          return `${Math.round((p.x - map.cx) * scale)},${Math.round((p.y - map.cy) * scale)}`;
+        }).join(' ');
       // friends who are playing: a dot where they are, or on the rim pointing their way when off the map
       const friends = nearbyFriends(here, engine.player ?? engine.camera, engine.room?.friendMarks?.() ?? [], width / 2 / scale)
         .map(f => ({...f, x: Math.round(f.x * scale), y: Math.round(f.y * scale)}));
       const friendsKey = friends.map(f => `${f.accountId}:${f.x},${f.y},${f.rim}`).join(' ');
       setFrame(previous => previous.friendsKey === friendsKey && previous.here === here && previous.boats === boats && previous.playing === playing && previous.heading === heading && previous.bogX === bogX && previous.bogY === bogY && previous.bogVisible === bogVisible && islands.every((item, index) => {
         const old = previous.islands[index];
-        return old?.id === item.id && old.x === item.x && old.y === item.y && Math.abs(old.bearing-item.bearing)<.1;
+        return old?.id === item.id && old.x === item.x && old.y === item.y && old.flip === item.flip && Math.abs(old.bearing-item.bearing)<.1;
       }) ? previous : {islands, playing, heading, bogX, bogY, bogVisible, here, boats, friends, friendsKey});
     }
     update();
@@ -117,7 +121,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
           return <g className="pixi-nearby-island" key={item.id}
             style={{transform: `translate(${width / 2 + item.x}px, ${height / 2 + item.y}px)`}}>
             <title>{island.name}</title>
-            <g transform={`rotate(${item.bearing})`}>
+            <g transform={`rotate(${item.bearing}) scale(1,${item.flip})`}>
               <clipPath id={`pixi-map-land-${shape.id}`}><path d={shape.d}/></clipPath>
               <path d={shape.d} fill={shape.fill} stroke={SAND} strokeWidth="14" strokeLinejoin="round" paintOrder="stroke"/>
               {/* a soft darker band just inside the coast, like the shore in the game */}
@@ -131,9 +135,9 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
               <circle cx={shape.dock.x} cy={shape.dock.y} r="9" fill="#fff9df" stroke="#564537" strokeWidth="4"/>
               {/* free boats, drawn with the game's own boat (side view), kept upright */}
               {item.id === frame.here && frame.boats && frame.boats.split(' ').map(at => <image key={at} href={BOAT}
-                x="-55" y="-80" width="110" height="96" transform={`translate(${at}) rotate(${-item.bearing})`}/>)}
+                x="-55" y="-80" width="110" height="96" transform={`translate(${at}) rotate(${-item.bearing}) scale(1,${item.flip})`}/>)}
               {(telescopeLandmarks[item.id] ?? []).map(({id, x, y}) =>
-                <g key={id} transform={`translate(${(x - shape.cx) * scale} ${(y - shape.cy) * scale}) rotate(${-item.bearing}) scale(${iconSize / BOG_RADAR_SIZE_PX})`}>
+                <g key={id} transform={`translate(${(x - shape.cx) * scale} ${(y - shape.cy) * scale}) rotate(${-item.bearing}) scale(${iconSize / BOG_RADAR_SIZE_PX},${item.flip * iconSize / BOG_RADAR_SIZE_PX})`}>
                   <title>{island.name} telescope</title>
                   <circle r="9" fill="#fff9df" stroke="#564537" strokeWidth="1.5"/>
                   <image href={TELESCOPE_ART} x="-6" y="-7" width="12" height="14"/>

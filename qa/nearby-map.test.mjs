@@ -22,14 +22,25 @@ test('minimap positions and headings stay fixed across island frame changes',()=
 });
 
 test('minimap shows the nearest islands the short way round the wrapping sea, before and after crossing the edge', async () => {
-  const {FLAT_POSITIONS, wrapSea} = await import('../src/world/flat-layout.js');
+  const {FLAT_POSITIONS, SEA_WIDTH, wrapSea} = await import('../src/world/flat-layout.js');
   const {mapOf: map} = await import('../src/world/island-maps.js');
   const h = map('home');
   for (const dx of [0, 7500, -30000, -45000, -72000, 45000, 79000]) {
     const p = {x: h.cx + dx, y: h.cy + 3000};
     const truth = ['home', 'blossom', 'isle-251', 'sunset', 'isle-250', 'isle-55', 'isle-249']
-      .map(id => Math.hypot(wrapSea(FLAT_POSITIONS[id].x - dx), FLAT_POSITIONS[id].y - 3000)).sort((a, b) => a - b).slice(0, 3);
+      .map(id => {
+        const {x,y}=FLAT_POSITIONS[id];
+        return Math.min(Math.hypot(wrapSea(x-dx),y-3000),
+          Math.hypot(wrapSea(x+SEA_WIDTH/2-dx),SEA_WIDTH/2-y-3000),
+          Math.hypot(wrapSea(x+SEA_WIDTH/2-dx),-SEA_WIDTH/2-y-3000));
+      }).sort((a, b) => a - b).slice(0, 3);
     const shown = nearbyMapFrame('home', p, null).map(i => Math.hypot(i.x, i.y));
     shown.forEach((d, k) => assert.ok(Math.abs(d - truth[k]) < 1, `x ${dx}: island ${k} at ${d.toFixed(0)}, nearest is ${truth[k].toFixed(0)}`));
   }
+});
+
+test('the minimap reflects a coast when sailing on its opposite-meridian image', () => {
+ const home=mapOf('home');
+ const frame=nearbyMapFrame('home',{x:home.cx+40000,y:home.cy-39000});
+ assert.deepEqual(frame[0],{id:'home',x:0,y:-1000,bearing:0,flip:-1});
 });

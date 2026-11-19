@@ -8,7 +8,25 @@ export const FLAT_POSITIONS=Object.fromEntries(Object.entries(SEA_ANCHORS).map((
 export const wrapSea=x=>x-SEA_WIDTH*Math.floor((x+SEA_WIDTH/2)/SEA_WIDTH);
 export const nearestSeaX=(x,reference)=>x-SEA_WIDTH*Math.floor((x-reference+SEA_WIDTH/2)/SEA_WIDTH);
 export function flatOffset(from,to){const a=FLAT_POSITIONS[from],b=FLAT_POSITIONS[to];return {x:b.x-a.x,y:b.y-a.y};}
-export const seaLonLat=(x,y)=>({lon:wrapSea(x)/SEA_WIDTH*2*Math.PI,lat:Math.max(-Math.PI/2,Math.min(Math.PI/2,-y/SEA_WIDTH*2*Math.PI))});
+// A straight course can run through either pole. The next band reverses
+// latitude and shifts longitude by half a turn. Two bands make a full lap.
+export const nearestSeaY=(y,reference)=>y-SEA_WIDTH*Math.round((y-reference)/SEA_WIDTH);
+export function seaImages(x,y,reference,centreY){
+ const direct={x:nearestSeaX(x,reference.x),y:nearestSeaY(y,reference.y),flip:1};
+ const reflected={x:nearestSeaX(x+SEA_WIDTH/2,reference.x),
+   y:nearestSeaY(2*centreY+SEA_HEIGHT-y,reference.y),flip:-1};
+ return [direct,reflected];
+}
+export function nearestSeaImage(x,y,reference,centreY){
+ const [direct,reflected]=seaImages(x,y,reference,centreY);
+ const distance=p=>(p.x-reference.x)**2+(p.y-reference.y)**2;
+ return distance(reflected)<distance(direct)?reflected:direct;
+}
+export function seaLonLat(x,y){
+ const band=Math.floor((y+SEA_HEIGHT/2)/SEA_HEIGHT),flip=band%2===0?1:-1;
+ return {lon:wrapSea(x+(flip<0?SEA_WIDTH/2:0))/SEA_WIDTH*2*Math.PI,
+   lat:-flip*(y-band*SEA_HEIGHT)/SEA_WIDTH*2*Math.PI,flip};
+}
 // Frozen pre-wrap offsets, used only to keep the live globe exactly as shipped.
 export const GLOBE_ISLET_OFFSETS={
  'sea-1-1':{home:'isle-249',x:0,y:9500},

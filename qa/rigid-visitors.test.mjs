@@ -62,3 +62,16 @@ test('child masks inherit the visitor correction once', () => {
   withRigidVisitors('home','isle-249',[o],()=>assert.deepEqual(state(mask),before));
   o.destroy({children:true});
 });
+
+test('a rider stays upright in the reflected island image',()=>{
+ const m=mapOf('home'),reference={x:m.cx+40000,y:m.cy-40000};
+ const r=flatRigid('home','home',reference),o=actor(r.x+30,r.y+90);
+ assert.equal(r.d,-1);
+ const saved=state(o),original=matrix(o);
+ const copy=new Matrix(1,0,0,-1,r.x-r.cx,r.y+r.cy);
+ withRigidVisitors('home','home',[o],()=>{
+   equalMatrix(copy.append(matrix(o)),original);
+ },reference);
+ assert.deepEqual(state(o),saved);
+ o.destroy();
+});

@@ -1,8 +1,8 @@
 import {finishWork} from './work-steps.js';
 import {BOAT_GAP,boatSeparated,nearestBoatSpace,boatSpaceCandidates} from './boat-spacing.js';
 export {BOAT_GAP} from './boat-spacing.js';
-import {SEA_WIDTH,SEA_HEIGHT,SEA_VERSION,FLAT_RADIUS,FLAT_RING,FLAT_POSITIONS,FLAT_ISLETS,GLOBE_ISLET_OFFSETS,nearestSeaX,wrapSea} from '../world/flat-layout.js';
-import {placeRigid,unplaceRigid,flatRigid} from '../world/rigid.js';
+import {SEA_WIDTH,SEA_HEIGHT,SEA_VERSION,FLAT_RADIUS,FLAT_RING,FLAT_POSITIONS,FLAT_ISLETS,GLOBE_ISLET_OFFSETS,nearestSeaX,nearestSeaY,nearestSeaImage,seaImages,wrapSea} from '../world/flat-layout.js';
+import {placeRigid,unplaceRigid,flatRigid,seaCentreY} from '../world/rigid.js';
 import {SAIL_EMOTES} from './player-motion.js';
 import {placeIslet,unplaceIslet} from '../world/islet-placement.js';
 import {isletClearance,ISLETS} from '../world/islets.js';
@@ -57,9 +57,9 @@ export function seaBoundsFor(id='home') {
   fresh();
   if (!BOUNDS.has(id)) {
     const m=mapOf(id),c=FLAT_POSITIONS[id];
-    // Extra polar coast room preserves existing harbours, moorings and walking.
+    // The route grid spans a full chart period, with room for routes near its edges.
     BOUNDS.set(id,{x0:m.cx-SEA_WIDTH/2-20000,x1:m.cx+SEA_WIDTH/2+20000,
-      y0:m.cy-c.y-SEA_HEIGHT/2-7000,y1:m.cy-c.y+SEA_HEIGHT/2+7000});
+      y0:m.cy-c.y-SEA_HEIGHT-7000,y1:m.cy-c.y+SEA_HEIGHT+7000});
   }
   return BOUNDS.get(id);
 }
@@ -93,8 +93,13 @@ export const boatSpot = boat => boatSpots(boatHome(boat))[boatSlot(boat)] ?? boa
 const seaBoatSeparated=(a,b,gap)=>boatSeparated({...a,x:nearestSeaX(a.x,b.x)},b,gap);
 
 // Compare in the actor's island frame, including boats sailing in a neighbour's frame.
-const otherBoatPositions = (actor,boats) => boats.filter(b=>b.id!==(actor.boatId??actor.id))
-  .map(b=>{const p=b.islandId===actor.islandId?b:placeRigid(actor.islandId,b.islandId,b);return {...p,x:nearestSeaX(p.x,actor.x)};});
+const otherBoatPositions = (actor,boats) => {
+  const centreY=seaCentreY(actor.islandId);
+  return boats.filter(b=>b.id!==(actor.boatId??actor.id)).map(b=>{
+    const p=b.islandId===actor.islandId?b:placeRigid(actor.islandId,b.islandId,b);
+    return nearestSeaImage(p.x,p.y,actor,centreY);
+  });
+};
 export function boatRoom(actor,boats=[]) {
   return otherBoatPositions(actor,boats).every(p=>seaBoatSeparated(actor,p,BOAT_GAP+.1));
 }
@@ -105,7 +110,7 @@ export function freeBoatPosition(actor,boats=[],reach=1040) {
 // Dock targets are transit space, including their images in neighbouring charts.
 export function harborApproachClear(actor) {
   return ISLANDS.every(({id})=>{
-    const water=id===actor.islandId?harborOf(id).water:placeRigid(actor.islandId,id,harborOf(id).water,actor);
+    const water=placeRigid(actor.islandId,id,harborOf(id).water,actor);
     return seaBoatSeparated(actor,water,BOAT_GAP+24);
   });
 }
@@ -136,9 +141,7 @@ export function placeFleetBoatHome(boat, boats) {
 // A refused ticket must leave room to turn and sail away, outside the dock cove.
 export function refusedLandingPosition(actor,islandId,boats=[]) {
   const m=mapOf(islandId),h=harborOf(islandId);
-  // Wait on the open-sea side of the island (north, toward the main chart). A
-  // south apron sits inside the polar current, which carries the boat back into
-  // the refused cove whichever way it steers.
+  // Wait on the open-sea side of the island, clear of the dock cove.
   const y=m.origin.y-900;
   const origin=placeRigid(actor.islandId,islandId,{x:h.water.x,y},actor);
   const others=otherBoatPositions(actor,boats), room=600;
@@ -269,7 +272,8 @@ export function dockingSpot(actor,target=null) {
   if (spot && !spot.islet && HARBOR_ONLY.has(spot.islandId)) return spot.islandId===actor.islandId && canDock(actor) ? {...harborOf(actor.islandId).land,islandId:actor.islandId,harbor:true} : null;
   if (target) return spot;
   const {land,water}=harborOf(actor.islandId);
-  if ((!spot || (!spot.islet && spot.islandId===actor.islandId && (near(spot,land,200) || near(actor,water,150)))) && canDock(actor))
+  const nearbyWater=placeRigid(actor.islandId,actor.islandId,water,actor);
+  if ((!spot || (!spot.islet && spot.islandId===actor.islandId && (near(spot,land,200) || near(actor,nearbyWater,150)))) && canDock(actor))
     return {...land,islandId:actor.islandId,harbor:true};
   return spot;
 }
@@ -301,16 +305,19 @@ function candidates(id,x,y,pad=0){
  const out=candidateScratch;out.length=0;
  let caps=CAP.get(pad);
  if(!caps){caps=WORLD_ISLANDS.map(island=>{const m=mapOf(island.id);return {island,map:m,reach:Math.hypot(m.width,m.height)/2+pad};});CAP.set(pad,caps);}
+ const centreY=seaCentreY(id),reference={x,y};
  for(const c of caps){
-  const F=flatRigid(id,c.island.id),ox=wrapSea(x-F.x),oy=y-F.y;
-  if(ox*ox+oy*oy>c.reach*c.reach)continue;
-  out.push({map:c.map,x:F.cx+F.a*ox+F.b*oy,y:F.cy+F.c*ox+F.d*oy});
+  const F=flatRigid(id,c.island.id);
+  for(const image of seaImages(F.x,F.y,reference,centreY)){
+   const ox=x-image.x,oy=y-image.y;
+   if(ox*ox+oy*oy>c.reach*c.reach)continue;
+   out.push({map:c.map,x:F.cx+ox,y:F.cy+image.flip*oy});
+  }
  }
  return out;
 }
 export function canSail(x,y,id='home',radius=BOAT_RADIUS){
  if(!Number.isFinite(x+y))return false;
- const b=seaBoundsFor(id);if(y<b.y0||y>b.y1)return false;
  for(const p of candidates(id,x,y,Math.ceil(radius))){
   if(p.map.landAt(p.x,p.y))return false;
   for(let k=0;k<16;k++){const a=k*Math.PI/8;if(p.map.landAt(p.x+Math.cos(a)*radius,p.y+Math.sin(a)*radius))return false;}
@@ -320,7 +327,8 @@ export function canSail(x,y,id='home',radius=BOAT_RADIUS){
 }
 
 export function canDock(actor) {
-  const at=harborOf(actor.islandId ?? 'home').water,water={...at,x:nearestSeaX(at.x,actor.x)};
+  const id=actor.islandId ?? 'home';
+  const water=placeRigid(id,id,harborOf(id).water,actor);
   if (!near(actor,water,650)) return false;
   const distance=Math.hypot(actor.x-water.x,actor.y-water.y);
   const steps=Math.max(1,Math.ceil(distance/6));
@@ -331,8 +339,6 @@ export function canDock(actor) {
 const RES=FIELD_RES, PAD=FIELD_PAD;
 function* clearance(id,x,y,buildFields=true) {
   yield 4;
-  const b=seaBoundsFor(id);
-  if (y < b.y0 || y > b.y1) return 0;
   let best=PAD;
   // Materialize the coordinates before yielding. Other queries reuse candidateScratch.
   for(const p of candidates(id,x,y,PAD).slice()){
@@ -424,11 +430,13 @@ export function sailRoute(id,from,to,boats=[],work) {
 }
 function* sailRouteSteps(id,from,to,boats,work) {
  const m=mapOf(id),targetX=nearestSeaX(to.x,from.x),middle=(from.x+targetX)/2,shift=middle-nearestSeaX(middle,m.cx);
- const start={x:from.x-shift,y:from.y},end={x:targetX-shift,y:to.y};
- const others=otherBoatPositions({...from,islandId:id},boats).flatMap(p=>{
-   const x=nearestSeaX(p.x,middle)-shift;
-   return [-SEA_WIDTH,0,SEA_WIDTH].map(offset=>({...p,x:x+offset}));
- });
+ const centreY=seaCentreY(id),middleY=(from.y+to.y)/2,shiftY=middleY-nearestSeaY(middleY,centreY);
+ const start={x:from.x-shift,y:from.y-shiftY},end={x:targetX-shift,y:to.y-shiftY};
+ const reference={x:middle,y:middleY};
+ const others=otherBoatPositions({...from,islandId:id},boats).flatMap(p=>
+   seaImages(p.x,p.y,reference,centreY).flatMap(image=>
+     [-SEA_WIDTH,0,SEA_WIDTH].map(offset=>({x:image.x+offset-shift,y:image.y-shiftY}))));
+
  const budget={visits:0,limit:Math.min(FINE_ROUTE_VISITS,work?.visitLimit??FINE_ROUTE_VISITS)};
  const findRoute=chartPlanner(id,start,others,budget);
  let alternatives=0, route=yield* findRoute(end);
@@ -439,7 +447,7 @@ function* sailRouteSteps(id,from,to,boats,work) {
    for (let k=0;k<16;k++){
      yield 8;
      const q={x:end.x+Math.cos(k*Math.PI/8)*r,y:end.y+Math.sin(k*Math.PI/8)*r};
-     if(canSail(q.x+shift,q.y,id)&&(yield* separatedFromBoats(q,others,BOAT_GAP+1)))ring.push(q);
+     if(canSail(q.x+shift,q.y+shiftY,id)&&(yield* separatedFromBoats(q,others,BOAT_GAP+1)))ring.push(q);
    }
    ring.sort((a,b)=>Math.hypot(a.x-start.x,a.y-start.y)-Math.hypot(b.x-start.x,b.y-start.y));
    for(const q of ring){
@@ -451,7 +459,7 @@ function* sailRouteSteps(id,from,to,boats,work) {
    work.fineVisits=(work.fineVisits??0)+budget.visits;
    work.alternatives=(work.alternatives??0)+alternatives;
  }
- return route?.map(p=>({...p,x:p.x+shift}))??null;
+ return route?.map(p=>({x:p.x+shift,y:p.y+shiftY}))??null;
 }
 function* separatedFromBoats(point, others, gap) {
   for (const boat of others) {
@@ -678,12 +686,13 @@ export function sailStep(actor,dt,input,now=null,boats=[],reroute=setSailDestina
 export function arrivalDestination(actor,boats=[]) {
   if (actor.mode !== 'sailing') return null;
   return destinationsFor(actor.islandId).find(island => {
-    if (Math.abs(wrapSea(actor.x-island.dock.x))<=65 && Math.abs(actor.y-island.dock.y)<=50 &&
-      (!actor.sailTarget || (Math.abs(wrapSea(actor.sailTarget.x-island.dock.x))<=65 && Math.abs(actor.sailTarget.y-island.dock.y)<=50))) return true;
+    const dock=placeRigid(actor.islandId,island.destination,harborOf(island.destination).water,actor);
+    if (Math.abs(actor.x-dock.x)<=65 && Math.abs(actor.y-dock.y)<=50 &&
+      (!actor.sailTarget || (Math.abs(actor.sailTarget.x-dock.x)<=65 && Math.abs(actor.sailTarget.y-dock.y)<=50))) return true;
     // Routing an occupied dock ends at nearby free water. Cross from there once
     // stopped, with the same hull/shore checks and without relaxing boat spacing.
-    if (actor.sailTarget || !near(actor,island.dock,520) ||
-      boatRoom({...actor,...island.dock},boats) || !boatRoom(actor,boats)) return false;
+    if (actor.sailTarget || !near(actor,dock,520) ||
+      boatRoom({...actor,...dock},boats) || !boatRoom(actor,boats)) return false;
     return canDock({...actor,...unplaceRigid(actor.islandId,island.destination,actor),islandId:island.destination});
   }) ?? null;
 }

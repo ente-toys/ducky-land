@@ -1,5 +1,5 @@
 import {furnitureDepth,usesFurnitureDepth} from './furniture-depth.js';
-import {nearestSeaX,wrapSea} from '../../world/flat-layout.js';
+import {wrapSea} from '../../world/flat-layout.js';
 import {installPixelRecovery} from './art/pixel-residency.js';
 import {createIslandPrefetch} from './art/island-prefetch.js';
 import {selectIslandTier} from '../../app/ducky-prefetch.js';
@@ -22,7 +22,7 @@ import {createIsletView} from './islet-view.js';
 import {globeBall,uprightFade,globeRoll,rollBasis,lonLat,lookOf,centreOf,LAT_MAX} from '../shared/globe-look.js';
 import {unplaceRigid,flatRigid} from '../../world/rigid.js';
 import {withRigidVisitors} from '../shared/rigid-visitors.js';
-import {localPoint,spherePoint} from '../../world/sphere-coordinates.js';
+import {localPoint,seaPoint,spherePoint} from '../../world/sphere-coordinates.js';
 import {previewMoorings, boatsForView} from './boat-preview.js';
 import {easeZoomCamera} from '../shared/zoom-motion.js';
 import {planIslandArt,planIslandSheets} from './art/island-budget.js';
@@ -541,7 +541,8 @@ export class PixiIsland {
   switchIsland(id) {
     const previousIsland=this.islandId;
     const landed=this.player?.mode==='walking'?isletWalks(id).find(w=>near(this.player,w.land,100))?.islet:null;
-    const reframe=p=>landed?reframeIslet(previousIsland,id,landed,p):unplaceRigid(previousIsland,id,p);
+    const reference={...this.camera};
+    const reframe=p=>landed?reframeIslet(previousIsland,id,landed,p):unplaceRigid(previousIsland,id,p,reference);
     const hop=this.ready ? islandOffset(this.islandId,id) : null;
     this.islandId=id;
     this.archipelago?.setCurrent(id);
@@ -945,7 +946,7 @@ export class PixiIsland {
       return;
     }
     const bounds=this.room?seaBoundsFor(this.islandId):{x0:HOME_ORIGIN.x+100,y0:HOME_ORIGIN.y+100,x1:HOME_ORIGIN.x+world.width-100,y1:HOME_ORIGIN.y+world.height-100};
-    if(!this.room)camera.x=clamp(camera.x,bounds.x0,bounds.x1);camera.y=clamp(camera.y,bounds.y0,bounds.y1);
+    if(!this.room)camera.x=clamp(camera.x,bounds.x0,bounds.x1);if(this.player?.mode!=='sailing')camera.y=clamp(camera.y,bounds.y0,bounds.y1);
   }
 
   transientForCopies() {
@@ -1385,7 +1386,10 @@ export class PixiIsland {
       if(artOf(id)===this.destinationArt&&!state?.live){state?.controller?.abort();continue;}
       this.freeArt(artOf(id));
     }
-    return visible.filter(i=>!i.home&&this.artReady(i.map));
+    return visible.filter(i=>{
+      const image=flatRigid(this.islandId,i.id,this.camera);
+      return this.artReady(i.map)&&(!i.home||image.y!==i.y||image.d<0);
+    });
   }
 
   copyVisitors(copies) {
@@ -1427,7 +1431,7 @@ export class PixiIsland {
         } finally {
           covers.forEach((b,i) => {b.sprite.visible=coverVisibility[i];});
         }
-      });
+      },this.camera);
     }
     this.scene.visible=sceneVisible;
     this.showArt(this.artShown);
@@ -1442,8 +1446,8 @@ export class PixiIsland {
     if (this.globeT > .001) return this.worldView?.stickers ?? [];
     const m=cameraMatrix(this.camera,this.width,this.height,TILT),out=[];
     const push=(kind,id,r,scale=1)=>out.push({kind,id,a:(m.a*r.a+m.c*r.b)*scale,b:(m.b*r.a+m.d*r.b)*scale,c:(m.a*r.c+m.c*r.d)*scale,d:(m.b*r.c+m.d*r.d)*scale,x:m.a*r.x+m.c*r.y+m.tx,y:m.b*r.x+m.d*r.y+m.ty});
-    for (const island of WORLD_ISLANDS) push('island',island.id,flatRigid(this.islandId,island.id));
-    (this.isletView?.placed ?? []).forEach((r,k) => {if (this.isletView.layer.children[k]?.visible) push('islet',`islet-${k}`,{a:r.cos,b:r.sin,c:-r.sin,d:r.cos,x:r.x,y:r.y});});
+    for (const island of WORLD_ISLANDS) push('island',island.id,flatRigid(this.islandId,island.id,this.camera));
+    (this.isletView?.placed ?? []).forEach((r,k) => {if (this.isletView.layer.children[k]?.visible) push('islet',`islet-${k}`,{a:1,b:0,c:0,d:r.flip,x:r.x,y:r.y});});
     return out;
   }
 
@@ -1513,7 +1517,9 @@ export class PixiIsland {
     this.fly=null; this.spin=null; this.follow=false; this.fitMode=false; this.zoomAnchor=null; this.globeAim=null;
     this.stopInput(); this.zoomMotion.velocity=0;
     this.globeOpen=true; this.quietAt=performance.now();
-    Object.assign(this.camera,{x:m.cx,y:m.cy,zoom:this.birdZoom()}); Object.assign(this.target,this.camera);
+    const point=this.player?.mode==='sailing'
+      ? localPoint(this.islandId,seaPoint(this.islandId,this.player)) : {x:m.cx,y:m.cy};
+    Object.assign(this.camera,{...point,zoom:this.birdZoom()}); Object.assign(this.target,this.camera);
     this.onGlobeChange?.(true);
     return true;
   }
@@ -1646,9 +1652,14 @@ export class PixiIsland {
     if (this.room && this.room.islandId !== this.islandId) this.switchIsland(this.room.islandId);
     if (this.room && this.room.mode !== this.travelMode) {
       if(this.travelMode==='sailing'&&this.room.mode==='walking'&&this.player){
-        const shift=this.camera.x-nearestSeaX(this.camera.x,this.player.x);
-        this.camera.x-=shift;this.target.x-=shift;
-        if(shift)this.travelView?.switchIsland(this.islandId,p=>({x:p.x-shift,y:p.y}));
+        const id=this.islandId,reference={...this.camera};
+        const landed=isletWalks(id).find(w=>near(this.player,w.land,100))?.islet;
+        const reframe=p=>landed?reframeIslet(id,id,landed,p):unplaceRigid(id,id,p,reference);
+        const camera=reframe(this.camera),target=reframe(this.target);
+        if(camera.x!==this.camera.x||camera.y!==this.camera.y){
+          Object.assign(this.camera,camera);Object.assign(this.target,target);
+          this.travelView?.switchIsland(id,reframe);
+        }
       }
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
       this.follow=Boolean(this.player); this.fitMode=false;

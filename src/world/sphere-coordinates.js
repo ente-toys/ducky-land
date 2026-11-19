@@ -1,5 +1,5 @@
 import {worldIsland,WORLD_GEO} from './world-map.js';
-import {flatOffset,FLAT_POSITIONS,seaLonLat,wrapSea} from './flat-layout.js';
+import {flatOffset,FLAT_POSITIONS,seaLonLat,nearestSeaImage} from './flat-layout.js';
 import {mapOf} from './island-maps.js';
 import {expMap,logMap,transport,sphereFrame} from './sphere.js';
 export function spherePoint(id,p){const m=mapOf(id);return expMap(worldIsland(id),p.x-m.cx,p.y-m.cy,WORLD_GEO.Rw);}
@@ -18,7 +18,7 @@ export function copyTransform(from,to){
 
 // Sailing geography is independent of each island's unchanged globe art projection.
 export function seaPosition(id,p){const m=mapOf(id),c=FLAT_POSITIONS[id];return {x:c.x+p.x-m.cx,y:c.y+p.y-m.cy};}
-export function seaFrame(id,p){const q=seaPosition(id,p),{lon,lat}=seaLonLat(q.x,q.y);return {...sphereFrame(lon,lat),lon,lat};}
+export function seaFrame(id,p){const q=seaPosition(id,p),{lon,lat,flip}=seaLonLat(q.x,q.y);return {...sphereFrame(lon,lat),lon,lat,flip};}
 // The flat chart squeezes each pole into a single point, so near Iceland and Bog the pin follows
 // the island's own globe art (as it does while walking), blending back to the chart further out.
 // Docking or setting sail there no longer makes the pin jump.
@@ -26,7 +26,8 @@ const POLE_ISLANDS=['isle-55','isle-249'];
 export function seaPoint(id,p){
  const flat=seaFrame(id,p).center,q=seaPosition(id,p);
  for(const pole of POLE_ISLANDS){
-  const c=FLAT_POSITIONS[pole],m=mapOf(pole),dx=wrapSea(q.x-c.x),dy=q.y-c.y,d=Math.hypot(dx,dy);
+  const c=FLAT_POSITIONS[pole],m=mapOf(pole),image=nearestSeaImage(c.x,c.y,q,0);
+  const dx=q.x-image.x,dy=(q.y-image.y)*image.flip,d=Math.hypot(dx,dy);
   const r0=Math.max(m.width,m.height)/2,r1=r0*1.6;
   if(d>=r1)continue;
   const art=spherePoint(pole,{x:m.cx+dx,y:m.cy+dy}),t=Math.max(0,(d-r0)/(r1-r0)),v=art.map((a,k)=>a*(1-t)+flat[k]*t),n=Math.hypot(...v);
@@ -34,4 +35,4 @@ export function seaPoint(id,p){
  }
  return flat;
 }
-export function seaHeading(id,p,turn){const f=seaFrame(id,p);return f.east.map((v,k)=>v*Math.sin(turn)-f.north[k]*Math.cos(turn));}
+export function seaHeading(id,p,turn){const f=seaFrame(id,p);return f.east.map((v,k)=>v*Math.sin(turn)-f.north[k]*Math.cos(turn)*f.flip);}

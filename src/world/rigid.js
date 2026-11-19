@@ -1,4 +1,4 @@
-import {nearestSeaX,wrapSea} from './flat-layout.js';
+import {FLAT_POSITIONS,nearestSeaImage,nearestSeaX} from './flat-layout.js';
 import {mapOf,mapsVersion} from './island-maps.js';
 import {mapPoint} from './sphere-coordinates.js';
 
@@ -21,7 +21,11 @@ export function flatRigid(from,to,reference=null){
   r={a:1,b:0,c:0,d:1,x:c.x,y:c.y};
   r.cx=m.cx;r.cy=m.cy;cache.set(key,r);
  }
- return reference===null?r:{...r,x:nearestSeaX(r.x,reference.x)};
+ if(reference===null)return r;
+ if(!Number.isFinite(reference.y))return {...r,x:nearestSeaX(r.x,reference.x)};
+ const image=nearestSeaImage(r.x,r.y,reference,seaCentreY(from));
+ return {...r,x:image.x,y:image.y,d:image.flip};
 }
 export function placeRigid(from,to,p,reference=null){const r=flatRigid(from,to,reference),x=p.x-r.cx,y=p.y-r.cy;return {x:r.x+r.a*x+r.c*y,y:r.y+r.b*x+r.d*y};}
-export function unplaceRigid(from,to,p){const r=flatRigid(from,to),x=wrapSea(p.x-r.x),y=p.y-r.y;return {x:r.cx+r.a*x+r.b*y,y:r.cy+r.c*x+r.d*y};}
+export const seaCentreY=id=>mapOf(id).cy-FLAT_POSITIONS[id].y;
+export function unplaceRigid(from,to,p,reference=p){const r=flatRigid(from,to,reference),x=p.x-r.x,y=p.y-r.y;return {x:r.cx+r.a*x+r.b*y,y:r.cy+r.c*x+r.d*y};}

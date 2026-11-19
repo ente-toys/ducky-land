@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {WORLD_ISLANDS} from '../src/world/world-map.js';
 import {mapOf} from '../src/world/island-maps.js';
-import {SEA_WIDTH,SEA_HEIGHT,SEA_VERSION,FLAT_POSITIONS,FLAT_ISLETS,GLOBE_ISLET_OFFSETS,wrapSea,nearestSeaX} from '../src/world/flat-layout.js';
+import {SEA_WIDTH,SEA_HEIGHT,SEA_VERSION,FLAT_POSITIONS,FLAT_ISLETS,GLOBE_ISLET_OFFSETS,wrapSea,nearestSeaImage,nearestSeaX} from '../src/world/flat-layout.js';
 import {seaFrame,seaPoint,seaHeading,seaPosition,mapPoint} from '../src/world/sphere-coordinates.js';
 import {seaViewPose} from '../src/world/sea-view.js';
 import {flatRigid,unplaceRigid} from '../src/world/rigid.js';
@@ -41,7 +41,7 @@ test('coast, islet and multiplayer images agree on both sides of the seam',()=>{
  for(const i of ISLETS){const p=placeIslet('home',i,[0,0],viewer),q=unplaceIslet('home',i,p);const globe=seaPoint('home',p);for(let k=0;k<3;k++)close(globe[k],i.center[k]);close(q.x,0);close(q.y,0);assert.ok(Math.abs(p.x-viewer.x)<=SEA_WIDTH/2);assert.equal(FLAT_ISLETS[i.id].home,i.home);}
  assert.equal(FLAT_ISLETS['sea-1-1'].home,'isle-249');
 });
-const nearPoleIsland=(id,p)=>['isle-55','isle-249'].some(pole=>{const q=seaPosition(id,p),c=FLAT_POSITIONS[pole],m=mapOf(pole);return Math.hypot(wrapSea(q.x-c.x),q.y-c.y)<Math.max(m.width,m.height)/2*1.6;});
+const nearPoleIsland=(id,p)=>['isle-55','isle-249'].some(pole=>{const q=seaPosition(id,p),c=FLAT_POSITIONS[pole],m=mapOf(pole);const image=nearestSeaImage(c.x,c.y,q,0);return Math.hypot(q.x-image.x,q.y-image.y)<Math.max(m.width,m.height)/2*1.6;});
 test('sea pin is direct longitude/latitude within one degree, with heading within three degrees',()=>{
  for(const i of WORLD_ISLANDS)for(const lon of [-179.99,-120,-20,0,67,140.8,179.99,540])for(const lat of [-89,-40,0,8,60,89]){
   const p=local(i.id,lon/360*SEA_WIDTH,-lat/360*SEA_WIDTH),f=seaFrame(i.id,p),point=seaPoint(i.id,p);
@@ -131,7 +131,7 @@ test('tap routes around islands work when the nearest destination lies beyond th
 
 test('boats can sail beyond both polar islands without resetting to port',()=>{
  for(const [id,sign]of [['isle-55',-1],['isle-249',1]]){
-  const p={...local(id,0,sign*26499),mode:'sailing',path:[],action:0};
+  const p={...local(id,12000,sign*27001),mode:'sailing',path:[],action:0};
   const before={...p};assert.ok(canSail(p.x,p.y,id));sailStep(p,.05,{x:0,y:sign});
   assert.equal(p.seaCurrent,undefined);close(p.x,before.x);close(p.y,before.y+sign*SAIL_SPEED*.05);
  }
