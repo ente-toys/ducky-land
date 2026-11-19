@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {icelandPieceTile} from '../src/rendering/pixi/art/iceland-art-stream.js';
 import {tileInView,tileResolution,GROUND_BUDGET_BYTES} from '../src/rendering/pixi/art/ground-stream.js';
 const a=JSON.parse(readFileSync('public/pixi-art/themes/snow/art.json'));
 const w=JSON.parse(readFileSync('assets/world/themes/snow/world.json'));
@@ -24,7 +25,7 @@ test('FIX3 stepped sled hill stays free of plant bases and lake has a bench with
 });
 test('FIX3 static SVG path avoids raster worker and sharp close-view demand fits the shared pool',()=>{
  assert.equal(a.raster.enabled,false);
- const all=[...a.ground.tiles,...a.props.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y}))),...a.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-(p.topLeft?0:p.width/2)+t.x,y:p.y-(p.topLeft?0:p.height)+t.y})))];
+ const all=[...a.ground.tiles,...a.props.flatMap(p=>p.tiles?.map(t=>({...t,x:p.x-p.width/2+t.x,y:p.y-p.height+t.y}))??[icelandPieceTile(p,p.src)]),...a.flats.flatMap(p=>p.tiles.map(t=>({...t,x:p.x-(p.topLeft?0:p.width/2)+t.x,y:p.y-(p.topLeft?0:p.height)+t.y})))];
  for(const [name,z] of Object.entries(w.zones))for(const [width,height] of [[1440,900],[390,844]]){
   const camera={x:z.x,y:z.y,zoom:1.8};const visible=all.filter(t=>tileInView(t,camera,width,height));
   let bytes=0;for(const t of visible){const r=tileResolution(t,1.8,2);assert.ok(r>=3.6,name+' soft tile');bytes+=Math.ceil(t.width*r)*Math.ceil(t.height*r)*4;}

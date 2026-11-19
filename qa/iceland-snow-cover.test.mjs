@@ -148,7 +148,8 @@ test('real engine tracks offscreen remote motion and frees local, remote and sle
     const pose = {id: 'abc', x: 100, y: 100, action: 0, turn: 0, travel: 0, emoteVersion: 0, outfit: {}, player: false, mode: 'walking', jumpLeft: 0};
     const entry = {rig: remote, isPlayer: false, outfit: {}, emoteVersion: 0};
     const game = {artShown: 'snow', liveRigs: new Map([['abc', entry]]), rigs: [local],
-      mapSleepers: new Map([['snow', [{rig: sleeper}]]]), chatBubbles: new Map(), arts: new Map(), updateBridgeOver() {}};
+      mapSleepers: new Map([['snow', [{rig: sleeper}]]]), chatBubbles: new Map(), arts: new Map(),
+      updateBridgeOver() {}, updateCrowdResolution: PixiIsland.prototype.updateCrowdResolution};
     for (const t of [0, 90]) PixiIsland.prototype.renderLiveDucks.call(game, [pose], 1 / 60, t, false, () => false);
     assert.equal(remote.snowCover.state.stage, 4); assert.equal(caps(remote).length, 0, 'offscreen does no drawing');
     pose.x += 2;

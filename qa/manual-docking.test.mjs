@@ -86,7 +86,7 @@ test('Dock at the far side of a detached islet leaves the boat by that shore', a
   assert.deepEqual(boardingPoint(boat), {x:actor.x,y:actor.y});
 });
 
-test('restoring the room frees a stranded sailor and removes blocked parked boats', async t => {
+test('restoring the room frees a stranded sailor and returns an expired parked boat', async t => {
   const room = await makeRoom();
   const stranded = {x:4052.81, y:6034.56};
   const blockedParking = {x:3044.54, y:4215.79};
@@ -96,8 +96,8 @@ test('restoring the room frees a stranded sailor and removes blocked parked boat
   const boat = room.boats.find(boat => boat.id === 'home-8');
   Object.assign(boat, {...stranded, occupant:actor.id});
   actor.boatId = boat.id;
-  const parked = {...boat, ...blockedParking, id:'home-4~blocked', occupant:null, parked:true};
-  room.boats.push(parked);
+  const parked = room.boats.find(boat => boat.id === 'home-4');
+  Object.assign(parked, blockedParking, {parked:true, parkedAt:Date.now()-7*60*60*1000});
   room.saveBoats();
   socket.deserializeAttachment = () => room.connections.get(socket);
 
@@ -109,9 +109,14 @@ test('restoring the room frees a stranded sailor and removes blocked parked boat
   assert.equal(recovered.occupant, sailor.id);
   assert.deepEqual([recovered.x, recovered.y], [sailor.x, sailor.y]);
   assert.ok(canSail(recovered.x, recovered.y));
-  assert.ok(!restored.boats.some(boat => boat.id === parked.id));
-  assert.equal(restored.sql.exec('SELECT id FROM boat_states WHERE id=?', parked.id).toArray().length, 0);
-  for (const spot of boatSpots()) {
+  await restored.alarm();
+  const returned = restored.boats.find(boat => boat.id === parked.id);
+  assert.ok(canSail(returned.x, returned.y));
+  assert.equal(returned.parked, false);
+  const saved = restored.sql.exec('SELECT state FROM boat_states WHERE id=?', parked.id).one();
+  assert.deepEqual(JSON.parse(saved.state), returned);
+  for (const [slot, spot] of boatSpots().entries()) {
+    if (recovered.id === `home-${slot}`) continue;
     assert.ok(restored.boats.some(boat => !boat.occupant && boat.islandId === 'home' &&
       boat.x === spot.x && boat.y === spot.y), 'the berth stays filled');
   }
