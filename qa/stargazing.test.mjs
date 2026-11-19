@@ -1,5 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import expansion from '../src/world/home/home-expansion.json' with {type:'json'};
+import {telescopeLandmarks} from '../src/world/telescope-landmarks.js';
+import {WORLD_ISLANDS} from '../src/world/world-map.js';
+import {mapOf} from '../src/world/island-maps.js';
 import {telescopeSpot, telescopeNear, telescopePeerAt} from '../src/rendering/pixi/telescope.js';
 import {starPlace, anonymousStars, backgroundTile, SKY_TILE, onlineConstellation, readSky, skyCounts} from '../src/rendering/pixi/stargaze-sky.js';
 import {makeRoom, addPlayer} from './room-harness.mjs';
@@ -19,6 +24,29 @@ test('a Ducky looks through the telescope from the spot beside its eyepiece', ()
   assert.equal(telescopePeerAt(props, {...idle, x:8110, y:770, action:3}), null, 'a dancing Ducky keeps dancing');
   assert.equal(telescopePeerAt(props, {...idle, x:8225, y:810}), null);
   assert.equal(telescopeNear([], {...idle, x:0, y:0}), null);
+});
+
+test('the maps mark every island telescope at its authored position', () => {
+  assert.deepEqual(Object.keys(telescopeLandmarks).sort(), WORLD_ISLANDS.map(({id}) => id).sort());
+  for (const {id, name} of WORLD_ISLANDS) {
+    const map = mapOf(id);
+    const props = map.art ? JSON.parse(readFileSync(`public${map.art}`, 'utf8')).props : expansion.props;
+    const telescopes = props.filter(prop => /telescope/i.test(prop.asset || prop.name || ''));
+    assert.deepEqual(telescopeLandmarks[id], telescopes.map(({id, x, y}) => ({id, x, y})), name);
+  }
+});
+
+test('the new telescopes are solid and their viewing spots are reachable on foot from the dock', () => {
+  for (const id of ['isle-250', 'isle-249', 'isle-55']) {
+    const map = mapOf(id), nav = map.nav(), {land} = map.HARBOR;
+    const [landmark] = telescopeLandmarks[id];
+    const prop = map.world.props.find(p => p.id === landmark.id);
+    assert.ok(prop.footprint && prop.bodyFootprint, landmark.id);
+    assert.equal(nav.walkable(prop.x, prop.y - 100), false, landmark.id);
+    const {x, y} = telescopeSpot(prop);
+    assert.deepEqual(nav.route(land.x, land.y, x, y).at(-1), [x, y], landmark.id);
+    assert.equal(telescopePeerAt([prop], {...idle, x, y}).id, landmark.id);
+  }
 });
 
 test('every star keeps its place', () => {

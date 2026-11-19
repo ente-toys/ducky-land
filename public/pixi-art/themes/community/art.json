@@ -177922,6 +177922,23 @@
       "lifeGrove": "south-coast",
       "contact": false,
       "wind": false
+    },
+    {
+      "id": "campfire-telescope",
+      "name": "stargazing-telescope",
+      "asset": "stargazing-telescope",
+      "src": "/pixi-art/home-review/hill/telescope.svg",
+      "width": 190,
+      "height": 225,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "telescopeOffsetY": 0,
+      "shadow": false,
+      "x": 4140,
+      "y": 3170
     }
   ],
   "paletteVersion": 3,

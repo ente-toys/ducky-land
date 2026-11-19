@@ -8,6 +8,7 @@ import {flatRigid} from '../../world/rigid.js';
 import {globeScreen,paintWeight} from '../shared/globe-screen.js';
 import {globeDrag,lonLat,centreOf,globeBall} from '../shared/globe-look.js';
 import {mapOf} from '../../world/island-maps.js';
+import {TELESCOPE_ART, telescopeLandmarks} from '../../world/telescope-landmarks.js';
 import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART_ACTIVITY_LIMIT} from '../shared/heart-activity.js';
 import {ISLETS} from '../../world/islets.js';
 import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
@@ -336,6 +337,26 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
   // Everyone playing gets a pin, pooled by player ID.
   const playerPins=new Map();
   const playerPin=player=>{let p=playerPins.get(player.id);if(!p){p=makePin(player.login ? `@${player.login}` : 'Ducky',0x8ed9ec);p.visible=false;app.stage.addChildAt(p,app.stage.getChildIndex(pin));playerPins.set(player.id,p);}return p;};
+  const telescopes = new Container({label: 'Telescope landmarks'});
+  app.stage.addChildAt(telescopes, app.stage.getChildIndex(bogPin));
+  telescopes.visible = false;
+  let telescopePins;
+  function placeTelescopePins() {
+    const pins = Object.entries(telescopeLandmarks).flatMap(([islandId, landmarks]) => landmarks.map(landmark => {
+      const badge = new Container({label: 'Telescope'});
+      badge.addChild(new Graphics().circle(0, 0, 11).fill(PALETTE.cream).stroke({color: PALETTE.ink, width: 2}));
+      const icon = new Sprite();
+      icon.anchor.set(.5);
+      badge.addChild(icon);
+      telescopes.addChild(badge);
+      return {badge, icon, point: spherePoint(islandId, landmark)};
+    }));
+    Assets.load({src: TELESCOPE_ART, data: {resolution: 2}}).then(texture => {
+      if (telescopes.destroyed) return;
+      for (const {icon} of pins) {icon.texture = texture; icon.width = 14; icon.height = 17;}
+    }).catch(() => {});
+    return pins;
+  }
   const sphereMask=new Graphics();app.stage.addChild(sphereMask);pin.mask=sphereMask;
   life.visible = pin.visible = bogPin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
@@ -370,7 +391,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         shader.resources.uWorld = worldTex.source;
         if (old) setTimeout(() => old.destroy(true), 0);
       }
-      if (!on) {if(worldTex&&time-lastGlobeTime>3){shader.resources.uWorld=blank.source;worldTex.destroy(true);worldTex=null;worldVersion=-1;}scene.visible=true;life.visible=pin.visible=bogPin.visible=false;for(const p of playerPins.values())p.visible=false;this.pinIn=this.tagsOut=0;this.worldAt=null;return;}
+      if (!on) {if(worldTex&&time-lastGlobeTime>3){shader.resources.uWorld=blank.source;worldTex.destroy(true);worldTex=null;worldVersion=-1;}scene.visible=true;life.visible=pin.visible=bogPin.visible=telescopes.visible=false;for(const p of playerPins.values())p.visible=false;this.pinIn=this.tagsOut=0;this.worldAt=null;return;}
       if (width !== w || height !== h) {w = width; h = height; rt.resize(w, h); mesh.scale.set(w, h); shader.resources.uScene = rt.source;}
       const live=t < .97 && cam.zoom > .065;
       if (live) {scene.visible = true; app.renderer.render({container: scene, target: rt, clear: true}); this.liveCopies?.(rt);}
@@ -541,6 +562,16 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
         fp.label.visible=fp.visible&&fits(p.x,p.y,fp.tagWidth*fp.scale.x);
       }
       for (const [account,p] of playerPins) if (!shown.has(account)) {if (p.visible) p.visible=false; if (playerPins.size>40) {p.destroy({children:true});playerPins.delete(account);}}
+      telescopes.visible = this.tagsOut > .01;
+      if (telescopes.visible) {
+        telescopes.mask = pin.mask;
+        for (const {badge, point} of telescopePins ??= placeTelescopePins()) {
+          const projected = project(0, 0, point);
+          badge.position.set(projected.x, projected.y);
+          badge.alpha = this.tagsOut * ease(projected.face / .25);
+          badge.visible = badge.alpha > .01;
+        }
+      }
       if (bogIsland) {
         const c = localPoint(id, expMap(bogIsland, 0, 0, Rw)), p = project(c.x, c.y);
         bogPin.position.set(p.x, p.y);
@@ -565,6 +596,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
       return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
-    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); disposed = true; for (const t of Object.values(ghostTex)) t.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); for (const p of playerPins.values()) p.destroy({children: true}); playerPins.clear(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();telescopes.destroy({children:true});sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); disposed = true; for (const t of Object.values(ghostTex)) t.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); for (const p of playerPins.values()) p.destroy({children: true}); playerPins.clear(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }

@@ -64537,6 +64537,23 @@
      "margin": 16
     }
    ]
+  },
+  {
+   "id": "iceland-telescope",
+   "name": "stargazing-telescope",
+   "asset": "stargazing-telescope",
+   "src": "/pixi-art/home-review/hill/telescope.svg",
+   "width": 190,
+   "height": 225,
+   "scale": 1,
+   "anchor": {
+    "x": 0.5,
+    "y": 1
+   },
+   "telescopeOffsetY": 0,
+   "shadow": false,
+   "x": 7510,
+   "y": 5920
   }
  ],
  "flats": [

@@ -7,7 +7,7 @@ const TEAMS = {karma: 'Karma', evil: 'Evil'};   // Karma on the left, Evil on th
 
 // The welcome ticket shown when you dock at the Bog: the island's own picture (the same one the globe uses) as the
 // map, the two team Duckies on its corners, and the game's numbers printed on the stub. The notches are real cuts.
-export function BogWelcome({dialog, onEnter, onLeave, status}) {
+export function BogWelcome({dialog, onEnter, onExplore, onLeave, status}) {
   return <div className="bog-entry">
     <section ref={dialog} className="bog-ticket" role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="bog-ticket-heading" onKeyDown={trapFocus}>
       <div className="bog-ticket-paper" aria-hidden="true"><div className="bog-ticket-sheet"/></div>
@@ -28,7 +28,8 @@ export function BogWelcome({dialog, onEnter, onLeave, status}) {
         </dl>
         <div className="bog-ticket-actions">
           <button className="bog-entry-primary" onClick={onEnter} autoFocus>Enter the Bog</button>
-          <button className="bog-entry-link" onClick={onLeave}>Not now</button>
+          {onExplore && <button className="bog-entry-link" onClick={onExplore}>Explore island</button>}
+          <button className="bog-entry-link" onClick={onLeave}>{onExplore ? 'Back to boat' : 'Not now'}</button>
         </div>
         {status}
       </div>

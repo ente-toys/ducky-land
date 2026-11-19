@@ -7459,7 +7459,7 @@
     "sources": {
       "version": 1,
       "theme": "community",
-      "modelSha256": "a1a92e4f308f73c6ac486b0b6359de7f3db3684944c35cc07a36c4bc0f5a5504",
+      "modelSha256": "76cf85a60d186a86d7b298f27d0e0afd7cce11de34ed65ab20e161d6563f22be",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
@@ -7532,6 +7532,10 @@
         {
           "path": "public/pixi-art/detail/street--picnic-basket.svg",
           "sha256": "a409d0caaac8ffceb93703448d010e612d1550bb81b1301bef1c8c48b97e2c82"
+        },
+        {
+          "path": "public/pixi-art/home-review/hill/telescope.svg",
+          "sha256": "4719e48116c9535cd5ec60fbe63a151fdfa05b10c391f2397122d6dc24533712"
         },
         {
           "path": "public/pixi-art/lily-00.svg",
@@ -7619,7 +7623,7 @@
         },
         {
           "path": "public/pixi-art/themes/community/art.json",
-          "sha256": "38cbc11ec7ee7a219581a353eb209874dedca6340a669e33f996bbac795cbd01"
+          "sha256": "18fad1802ef267fbca419827328121bfd8fc98dafc06e91d149e2a1273695331"
         },
         {
           "path": "public/pixi-art/themes/community/bridge-islet-1.svg",
@@ -8458,14 +8462,14 @@
           "sha256": "939595f5fbd64d88d0b7b11d0695db67edb515664887aef8efc894b9140fcbaf"
         }
       ],
-      "sha256": "a30508233b809354d8d9fba06ae82c74e3f7a9e6f33aff143fd52910cad09ef8"
+      "sha256": "79aa6cf5813f0bbb63daa16d62c353da7ad123de8683637a2b01a448abda9bc4"
     },
     "groundSha256": "56ca5b43b287cbfbfb290f654f917a0311a042d4be767993605833f2ca3519d2",
     "src": "/pixi-art/globe/community.svg",
-    "sha256": "1cdcb1c671b288d5b6c455c1510354c0ebf06084dada79e8fa8685740e43e420",
+    "sha256": "9123be49b87ee3f301ed064e6167feb6b592c28012cfdd192a8b062eacbcbe20",
     "width": 1024,
     "height": 768,
-    "bytes": 740720,
+    "bytes": 742140,
     "groundBytes": 179856,
     "quality": {
       "tolerance": 0.2,
@@ -8483,15 +8487,19 @@
     "sources": {
       "version": 1,
       "theme": "bog",
-      "modelSha256": "9e982c3b41b18ab68d391a99384a4fd914754f5656382b6c9c5b9ea1258814f3",
+      "modelSha256": "984b0dc846abc3faadc39ddfe9b4bfaae0ea53be027293db0e078873afcafa69",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
           "sha256": "43c9fd1318145f12eb4ef1c4e5b3ed663d1e2c376acea24781ee627c0203b53a"
         },
         {
+          "path": "public/pixi-art/home-review/hill/telescope.svg",
+          "sha256": "4719e48116c9535cd5ec60fbe63a151fdfa05b10c391f2397122d6dc24533712"
+        },
+        {
           "path": "public/pixi-art/themes/bog-arena/art.json",
-          "sha256": "0e4db1154e70fdb8790b2ef08c98a4fb985c66c444d196ce4f6f5761264243a9"
+          "sha256": "539112fc73513ae3501c67db975a8ab6a6b1c201f33457e0a7d34e8b4a07d64d"
         },
         {
           "path": "public/pixi-art/themes/bog-arena/ground.svg",
@@ -8910,14 +8918,14 @@
           "sha256": "939595f5fbd64d88d0b7b11d0695db67edb515664887aef8efc894b9140fcbaf"
         }
       ],
-      "sha256": "36e5bbf97e3f5b07080b9a6109fa7850e18f0dcfa18e8c81caff62b882223539"
+      "sha256": "c0c56fa4a9c4225d0a783d6fc479260fe84564db408243f763f1563997c41779"
     },
     "groundSha256": "40584b6e5bda1d8e14c75565e8109d9ee0755a748f82bdd07d34ca1b1622a64e",
     "src": "/pixi-art/globe/bog.svg",
-    "sha256": "08050387758234fce933cb36a59c48180afd1d34a4f2010fc18d1f5b188f8c45",
+    "sha256": "9cabb9302368131747f85889dc08f1dbd9134d95bd8f04da727b7323800f5220",
     "width": 1024,
     "height": 1000,
-    "bytes": 599772,
+    "bytes": 603032,
     "groundBytes": 398644,
     "quality": {
       "tolerance": 0.2,
@@ -8935,15 +8943,19 @@
     "sources": {
       "version": 1,
       "theme": "snow",
-      "modelSha256": "92405b2ab412e4a850804bdb15941c6b96c65f2d4ce5c769d08c733a01be57ec",
+      "modelSha256": "0e75f3c4617bc9dcb00e9807a43f2bef3074dedabfd1cff72003686408d5d18e",
       "files": [
         {
           "path": "assets/world/island-geometry.mjs",
           "sha256": "43c9fd1318145f12eb4ef1c4e5b3ed663d1e2c376acea24781ee627c0203b53a"
         },
         {
+          "path": "public/pixi-art/home-review/hill/telescope.svg",
+          "sha256": "4719e48116c9535cd5ec60fbe63a151fdfa05b10c391f2397122d6dc24533712"
+        },
+        {
           "path": "public/pixi-art/themes/snow/art.json",
-          "sha256": "f4a3c626560619651bbfe92874b100c40d97487c4b3f848e24ac69adc3a2164a"
+          "sha256": "83076bc96d929ee08a52904c0f15585d714588d8396c85a27ddd41c2a192e4a8"
         },
         {
           "path": "public/pixi-art/themes/snow/final/buildings/bakery.svg",
@@ -10538,14 +10550,14 @@
           "sha256": "939595f5fbd64d88d0b7b11d0695db67edb515664887aef8efc894b9140fcbaf"
         }
       ],
-      "sha256": "432eecd6a5972cc965e9e2c27da1d8e1b6f8879cf3c3b9cbf6cb234204a68b22"
+      "sha256": "861485fbae14345a8e8d04e005a0a5cfe99caff522d1d27e533cbd853fc3cb33"
     },
     "groundSha256": "2fdaf51c505df0bc6703d582052b7ebf887085beafe964d8bbdf50495e6a2790",
     "src": "/pixi-art/globe/snow.svg",
-    "sha256": "b803f408cfb883effa881981ba4f8898372e53a5d655b08a79fcee08ff5dd26d",
+    "sha256": "b4bb2b379739592718fbf1e61c3f947698e8f18cf960acbd3d706484027b370d",
     "width": 1024,
     "height": 794,
-    "bytes": 326798,
+    "bytes": 328216,
     "groundBytes": 205378,
     "quality": {
       "tolerance": 0.2,

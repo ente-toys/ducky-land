@@ -69,12 +69,12 @@ test('twenty perimeter trees leave fighting lanes clear and preserve the origina
  const trunks=new Set(trees.map(trunkId));
  const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
  assert.equal(trees.length,20);
- assert.equal(art.props.length,474);
+ assert.equal(art.props.length,475);
  assert.equal(BOG_BLOCKERS.length,328);
  // These fingerprints lock all bushes, walls, ruins, buildings, reeds and
  // unrelated collision to their values before the tree removal. New field cover
  // is verified separately by the field-cover layout checks.
- assert.equal(hash(art.props.filter(p=>!isTree(p)&&!p.id.startsWith('field-cover-'))),'71e61698d28257671ffa5954a867a54ccafa975576137a2a65eccb27358fd700');
+ assert.equal(hash(art.props.filter(p=>!isTree(p)&&!p.id.startsWith('field-cover-')&&p.id!=='bog-cove-telescope')),'71e61698d28257671ffa5954a867a54ccafa975576137a2a65eccb27358fd700');
  assert.equal(hash(BOG_BLOCKERS.filter(b=>!trunks.has(b.id)&&!b.id.startsWith('field-cover-'))),'2d97acdcc19849969075a4af042b956e792a44768486267195506323b533da43');
  for(const p of trees){
   assert.ok(p.x<1400||p.x>6800||p.y<1300||p.y>6300,p.id+' outside fighting lanes');

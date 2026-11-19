@@ -22,7 +22,7 @@ export default function BogEntry({engine,travel,status,onLeave=()=>{},...options
   const clouds=paddle&&<BogClouds key="paddle" text="Paddling to an islet" ready={paddle==='ready'} onGone={()=>{paddling.current=false;setPaddle(null);}}/>;
   // one tree shape either way, so the clouds keep running when the dock closes under them
   return <>
-    {arrived&&open&&game&&<BogDock {...options} engine={game} onLeave={leave} onOut={()=>{if(!paddling.current){paddling.current=true;setPaddle('wait');}}}/>}
+    {arrived&&open&&game&&<BogDock {...options} engine={game} onExplore={()=>setOpen(false)} onLeave={leave} onOut={()=>{if(!paddling.current){paddling.current=true;setPaddle('wait');}}}/>}
     {clouds}
   </>;
 }

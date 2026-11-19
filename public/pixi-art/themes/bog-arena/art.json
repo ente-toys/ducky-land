@@ -13013,6 +13013,23 @@
           244
         ]
       ]
+    },
+    {
+      "id": "bog-cove-telescope",
+      "name": "stargazing-telescope",
+      "asset": "stargazing-telescope",
+      "src": "/pixi-art/home-review/hill/telescope.svg",
+      "width": 190,
+      "height": 225,
+      "scale": 1,
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      },
+      "telescopeOffsetY": 0,
+      "shadow": false,
+      "x": 3630,
+      "y": 7350
     }
   ],
   "flats": [

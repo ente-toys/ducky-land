@@ -3,6 +3,7 @@ import {worldIsland} from '../world/world-map.js';
 import {nearbyMapFrame, nearbyHeading, nearbyFriends, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
 import {BOG_RADAR_ICON, BOG_RADAR_SIZE_PX} from '../features/bog-combat/bog-radar.js';
 import {mapOf} from '../world/island-maps.js';
+import {TELESCOPE_ART, telescopeLandmarks} from '../world/telescope-landmarks.js';
 
 const width = 1000;
 const scale = width / NEARBY_MAP_WIDTH;
@@ -30,7 +31,7 @@ function islandShape(id) {
     .map(outline).join('');
   // the island's walking paths, as faint lines
   const paths = (map.world.paths ?? []).filter(path => path.length > 1).map(path => line(path, 40)).join('');
-  const dock = map.HARBOR.land, shape = {id, d, coast, water, paths, fill: GROUND[map.id] ?? GROUND.home,
+  const dock = map.HARBOR.land, shape = {id, cx: map.cx, cy: map.cy, d, coast, water, paths, fill: GROUND[map.id] ?? GROUND.home,
     dock: {x: Math.round((dock.x - map.cx) * scale), y: Math.round((dock.y - map.cy) * scale)}};
   shapes.set(id, shape);
   return shape;
@@ -102,7 +103,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
   <button type="button" className={`pixi-world-map${globeOpen ? ' pixi-world-map--hidden' : ''}`} disabled={indoors || globeOpen}
     aria-label="Open the world view" title="Open the world view" onClick={() => island.current?.openGlobe()}>
     <svg ref={svg} id="pixi-world-map-view" viewBox={`0 0 ${width} ${height}`} role="img"
-      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
+      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Telescope badges: stargazing spots. Paint gun badge: Booquack Bog, pinned to the rim when distant.`}>
       <defs>
         <clipPath id="pixi-world-map-terrain-clip"><circle cx={width / 2} cy={height / 2} r={width / 2}/></clipPath>
         <pattern id="pixi-world-map-waves" width="180" height="120" patternUnits="userSpaceOnUse">
@@ -131,6 +132,12 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
               {/* free boats, drawn with the game's own boat (side view), kept upright */}
               {item.id === frame.here && frame.boats && frame.boats.split(' ').map(at => <image key={at} href={BOAT}
                 x="-55" y="-80" width="110" height="96" transform={`translate(${at}) rotate(${-item.bearing})`}/>)}
+              {(telescopeLandmarks[item.id] ?? []).map(({id, x, y}) =>
+                <g key={id} transform={`translate(${(x - shape.cx) * scale} ${(y - shape.cy) * scale}) rotate(${-item.bearing}) scale(${iconSize / BOG_RADAR_SIZE_PX})`}>
+                  <title>{island.name} telescope</title>
+                  <circle r="9" fill="#fff9df" stroke="#564537" strokeWidth="1.5"/>
+                  <image href={TELESCOPE_ART} x="-6" y="-7" width="12" height="14"/>
+                </g>)}
             </g>
           </g>;
         })}

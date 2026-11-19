@@ -12,7 +12,7 @@ export function trapFocus(event) {
   if(event.shiftKey&&(active===first||active===event.currentTarget)){event.preventDefault();last?.focus();}
   else if(!event.shiftKey&&(active===last||active===event.currentTarget)){event.preventDefault();first?.focus();}
 }
-export default function BogDock({engine,name='Ducky',profile:providedProfile,onLeave=()=>{},onReturnToDock=()=>{},onOut,initialPanel='welcome',leaveLabel='Back to boat',...options}) {
+export default function BogDock({engine,name='Ducky',profile:providedProfile,onExplore,onLeave=()=>{},onReturnToDock=()=>{},onOut,initialPanel='welcome',leaveLabel='Back to boat',...options}) {
   const [profile]=useState(()=>providedProfile??profileToken()),[team,setTeam]=useState(null),[panel,setPanel]=useState(initialPanel);
   const [data,setData]=useState(null),[status,setStatus]=useState('connecting'),[attempt,setAttempt]=useState(0);
   const dialog=useRef(null),leave=useRef(onLeave);leave.current=onLeave;
@@ -47,6 +47,6 @@ export default function BogDock({engine,name='Ducky',profile:providedProfile,onL
       onReady={()=>setClouds(c=>c==='wait'?'ready':c)}/>{cover}</>;
   const connected=status==='connected'&&data;
   const statusLine=<div className="bog-entry-status" role="status">{status==='disconnected'?<>The bog is unavailable. <button onClick={()=>setAttempt(n=>n+1)}>Reconnect</button></>:status==='connecting'?<FeatherWait text="Connecting to the bog"/>:'Ready to make a splash.'}</div>;
-  if(panel==='welcome')return <BogWelcome dialog={dialog} onEnter={()=>setPanel('teams')} onLeave={onLeave} status={statusLine}/>;
+  if(panel==='welcome')return <BogWelcome dialog={dialog} onEnter={()=>setPanel('teams')} onExplore={onExplore} onLeave={onLeave} status={statusLine}/>;
   return <><BogTeamPick dialog={dialog} data={connected?data:null} onPlay={join} onLeave={onLeave} leaveLabel={leaveLabel} status={statusLine}/>{cover}</>;
 }

@@ -4,7 +4,7 @@ const SPOTS = new WeakMap();
 
 export function telescopeSpot(prop) {
   const scale = prop.scale ?? 1;
-  return {id:prop.id ?? prop.name, x:prop.x-119*scale, y:prop.y-36*scale, turn:Math.PI/2};
+  return {id:prop.id ?? prop.name, x:prop.x-119*scale, y:prop.y+(prop.telescopeOffsetY ?? -36)*scale, turn:Math.PI/2};
 }
 
 export function telescopeSpots(props) {
