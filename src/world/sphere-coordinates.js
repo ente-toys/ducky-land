@@ -27,10 +27,12 @@ export function seaPoint(id,p){
  const flat=seaFrame(id,p).center,q=seaPosition(id,p);
  for(const pole of POLE_ISLANDS){
   const c=FLAT_POSITIONS[pole],m=mapOf(pole),image=nearestSeaImage(c.x,c.y,q,0);
-  const dx=q.x-image.x,dy=(q.y-image.y)*image.flip,d=Math.hypot(dx,dy);
-  const r0=Math.max(m.width,m.height)/2,r1=r0*1.6;
-  if(d>=r1)continue;
-  const art=spherePoint(pole,{x:m.cx+dx,y:m.cy+dy}),t=Math.max(0,(d-r0)/(r1-r0)),v=art.map((a,k)=>a*(1-t)+flat[k]*t),n=Math.hypot(...v);
+  const dx=q.x-image.x,dy=(q.y-image.y)*image.flip;
+  const distance=Math.max(Math.abs(dx)/(m.width/2),Math.abs(dy)/(m.height/2));
+  // Keep the blend close to the island so detached islet pins use the sea chart.
+  if(distance>=1.2)continue;
+  const art=spherePoint(pole,{x:m.cx+dx,y:m.cy+dy});
+  const t=Math.max(0,(distance-1)/.2),v=art.map((a,k)=>a*(1-t)+flat[k]*t),n=Math.hypot(...v);
   return v.map(a=>a/n);
  }
  return flat;
