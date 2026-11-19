@@ -526,6 +526,28 @@
 .pixi-travel-action:active { transform: translateX(-50%) translateY(2px); box-shadow: 0 1px 0 #564537; }
 .pixi-travel-action kbd { padding: 2px 7px; border: 1px solid #56453799; border-radius: 6px; background: #fff9df; font: 600 12px/1.3 system-ui, sans-serif; }
 @media (pointer: coarse) { .pixi-travel-action kbd { display: none; } }
+.pixi-travel-action[data-teleporter] { pointer-events: auto; }
+.pixi-teleporter {
+  position: fixed; z-index: 8; inset: auto 0 max(24px, env(safe-area-inset-bottom)); pointer-events: auto;
+  width: min(420px, calc(100vw - 24px)); max-height: 85dvh; overflow: auto; margin-inline: auto;
+  box-sizing: border-box; padding: 16px; color: #3c3227; background: #fff8de;
+  border: 2px solid #564537; border-radius: 20px; box-shadow: 0 5px 0 #564537, 0 12px 35px #32261742;
+  font: 500 14px/1.35 system-ui, sans-serif;
+}
+.pixi-teleporter header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.pixi-teleporter h2 { margin: 0; font: 700 23px/1.15 Georgia, serif; }
+.pixi-teleporter p { margin: 4px 0 0; color: #65523e; }
+.pixi-teleporter fieldset { display: grid; gap: 5px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.pixi-teleporter legend { padding: 0 0 5px; font-weight: 650; }
+.pixi-teleporter label { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 6px 8px; min-height: 32px; background: #f4e9c9; border: 1px solid transparent; border-radius: 9px; cursor: pointer; }
+.pixi-teleporter label:has(:checked) { background: #e3edd2; border-color: #427360; }
+.pixi-teleporter input { accent-color: #326b58; }
+.pixi-teleporter small { display: block; color: #704c33; }
+.pixi-teleporter button { min-height: 36px; border: 1px solid #564537; border-radius: 10px; background: #ffda69; color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.pixi-teleporter header button { min-width: 36px; font-size: 20px; line-height: 1; }
+.pixi-teleporter .pixi-teleporter-confirm { width: 100%; min-height: 44px; margin-top: 12px; }
+.pixi-teleporter button:disabled { opacity: .55; cursor: default; }
+.pixi-teleporter :focus-visible { outline: 2px solid #27654f; outline-offset: 2px; }
 @keyframes pixi-travel-pop { from { transform: translateX(-50%) scale(.85); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .pixi-travel-action { animation: none; } }
 

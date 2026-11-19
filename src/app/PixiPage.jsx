@@ -48,6 +48,7 @@ export default function PixiPage({signedInEntry = false}) {
   const [online, setOnline] = useState(null);
   const [travel,setTravel] = useState({islandId:'home',mode:'walking',available:3});
   const [travelNotice,setTravelNotice] = useState('');
+  const [teleportSource,setTeleportSource] = useState(null);
   const [latestJoin, setLatestJoin] = useState(null);
   const [error, setError] = useState(false);
   const [cameraReady, setCameraReady] = useState(false);
@@ -118,7 +119,7 @@ export default function PixiPage({signedInEntry = false}) {
         arrivalTimer = setTimeout(() => setArrival(''), 4000);
         if (offline) setTravel({islandId:island.current.islandId,mode:'walking',available:0});
       },
-      onError:() => setError(true),onInteriorChange:setIndoors,onGlobeChange:setGlobeOpen,onPhotoReady:()=>setCameraReady(true)});
+      onError:() => setError(true),onInteriorChange:setIndoors,onGlobeChange:setGlobeOpen,onPhotoReady:()=>setCameraReady(true),onTeleport:setTeleportSource});
     island.current = game;
     // the island's art is in once its canvas says ready (mount resolves earlier, while the art still streams in)
     const drawnPoll = setInterval(() => {if (host.current?.querySelector('canvas[data-state="ready"]')) {clearInterval(drawnPoll); finishHomeHeadStart(); requestAnimationFrame(() => setWorldDrawn(true));}}, 150);
@@ -217,7 +218,8 @@ export default function PixiPage({signedInEntry = false}) {
       <IslandChat key={`chat:${travel.islandId}`} room={room} island={island} editor={chatEditor}/>
     </div>}
     {!error && <div className="pixi-bottom-hud">
-      <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}/>
+      <IslandTravel travel={travel} playing={status==='playing' || offline} room={room} island={island} notice={travelNotice}
+        teleportSource={teleportSource} setTeleportSource={setTeleportSource}/>
       <IslandStargaze island={island} playing={status==='playing' || offline} offline={offline}/>
       <div className="pixi-notifications" ref={setNotificationHost}>
         <IslandPresence online={online} latestJoin={latestJoin}/>
