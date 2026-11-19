@@ -49,6 +49,7 @@ import {CLOUD_TEXTURE} from './globe-clouds.js';
 import {createKarmaView} from './karma-view.js';
 import {isletUnder} from '../../gameplay/boat-build.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
+import {atTeleporter, TELEPORTERS} from '../../gameplay/teleport.js';
 import {isletWalks,isletAt} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf, prepareIslandMap, islandMapReady} from '../../world/island-maps.js';
@@ -109,8 +110,9 @@ function contactShadow(prop) {
 const acquireGround = (src, resolution) => acquire(src, resolution, {mipmaps: false});
 
 export class PixiIsland {
-  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}, onGlobeChange = () => {}, onPhotoReady} = {}) {
+  constructor({onError = () => {}, onInteriorChange = () => {}, room = null, chatLayer = null, chatEditor = null, nameLayer = null, transparent = false, renderResolution, randomArrival = false, onArrival = () => {}, onGlobeChange = () => {}, onPhotoReady, onTeleport} = {}) {
     this.onPhotoReady = onPhotoReady;
+    this.onTeleport = onTeleport;
     this.onGlobeChange = onGlobeChange; this.globeOpen = false;
     this.transparent=transparent;this.renderResolution=renderResolution;
     this.onInteriorChange = onInteriorChange;
@@ -544,7 +546,9 @@ export class PixiIsland {
     const reference={...this.camera};
     const reframe=p=>landed?reframeIslet(previousIsland,id,landed,p):unplaceRigid(previousIsland,id,p,reference);
     const hop=this.ready ? islandOffset(this.islandId,id) : null;
+    const walkingArrival=previousIsland!==id && this.travelMode==='walking' && this.player?.mode==='walking';
     this.islandId=id;
+    this.showTeleporter(id);
     this.archipelago?.setCurrent(id);
     const mapId=artOf(id);
     const previousArt=this.artShown;
@@ -578,7 +582,7 @@ export class PixiIsland {
     this.landingView=null;
     delete this.camera.basis;
     if(this.sailingCamera)this.sailingCamera.active=false;
-    if (hop) {
+    if (hop && !walkingArrival) {
       for (const c of [this.camera, this.target]) Object.assign(c,reframe(c));
     } else {
       const player=this.player;
@@ -588,6 +592,25 @@ export class PixiIsland {
     }
     this.follow=Boolean(this.player);
     this.fitMode=false;
+  }
+
+  showTeleporter(id) {
+    this.teleporter?.destroy();
+    const site=TELEPORTERS.get(id);
+    if (!site || !this.objects) return;
+    const machine=new Graphics()
+      .ellipse(3,2,42,14).fill({color:0x49301e,alpha:.23})
+      .roundRect(-38,-21,76,33,12).fill(0xb97438).stroke({color:0x523825,width:3})
+      .roundRect(-34,-25,68,28,11).fill(0xffd98a).stroke({color:0x523825,width:3})
+      .ellipse(0,-43,24,34).fill(0x23514d).stroke({color:0x523825,width:12})
+      .ellipse(0,-43,23,33).stroke({color:0xffcd62,width:7})
+      .ellipse(0,-43,16,25).fill(0x82e3c2)
+      .moveTo(-8,-45).lineTo(0,-58).lineTo(8,-45).lineTo(0,-31).closePath().fill(0xfff6bb)
+      .circle(-24,-11,4).fill(0x31725e).circle(24,-11,4).fill(0x31725e);
+    machine.position.set(site.x,site.y);
+    machine.zIndex=site.y;
+    machine.upright=true;
+    this.teleporter=this.objects.addChild(machine);
   }
 
   focusHarbor() {
@@ -808,9 +831,10 @@ export class PixiIsland {
 
   travelOptions() {
     const me=this.player;
-    if (!this.room || !me || !islandMapReady(this.islandId)) return {};
+    if (!this.room || !me || this.room.islandId !== this.islandId || !islandMapReady(this.islandId)) return {};
     if (me.mode === 'sailing') return {dock:Boolean(dockingSpot(me))};
     const nav=this.room.navHere?.() ?? this.sim.nav;
+    if (!this.globeBusy() && !this.interior?.active && atTeleporter(me,nav)) return {teleport:true};
     let best=null;
     for (const boat of this.room.boatPoses()) {
       if (boat.occupant || (boat.built && !this.room.ownBoats?.has(boat.id))) continue;
@@ -822,7 +846,8 @@ export class PixiIsland {
   travelAction() {
     if (this.globeBusy()) return;
     const options=this.travelOptions();
-    if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
+    if (options.teleport) {this.trip=null; this.stopInput(); this.onTeleport?.(this.islandId);}
+    else if (options.take) {this.room.board(options.take); this.follow=true; this.fitMode=false;}
     else if (options.dock) this.dock();
   }
 

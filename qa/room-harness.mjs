@@ -2,10 +2,21 @@ import {DatabaseSync} from 'node:sqlite';
 
 globalThis.WebSocketRequestResponsePair ??= class {constructor(request, response) {this.request = request; this.response = response;}};
 
-function fakeStorage() {
+function fakeStorage(transactional) {
   const db = new DatabaseSync(':memory:');
   const cursor = rows => ({toArray: () => rows, one: () => rows[0], [Symbol.iterator]: () => rows[Symbol.iterator]()});
   return {
+    ...(transactional && {transactionSync(callback) {
+      db.exec('BEGIN');
+      try {
+        const result = callback();
+        db.exec('COMMIT');
+        return result;
+      } catch (error) {
+        db.exec('ROLLBACK');
+        throw error;
+      }
+    }}),
     sql: {exec(query, ...binds) {
       const q = query.trim();
       if (/^(SELECT|PRAGMA)/i.test(q) || /RETURNING/i.test(q)) return cursor(db.prepare(q).all(...binds).map(row => ({...row})));
@@ -23,9 +34,9 @@ export function fakeSocket() {
   return socket;
 }
 
-export async function makeRoom() {
+export async function makeRoom({transactional = false} = {}) {
   const {IslandRoom} = await import('../worker/index.js');
-  const ctx = {storage: fakeStorage(), getWebSockets: () => [], setWebSocketAutoResponse() {}, acceptWebSocket() {}, waitUntil() {}};
+  const ctx = {storage: fakeStorage(transactional), getWebSockets: () => [], setWebSocketAutoResponse() {}, acceptWebSocket() {}, waitUntil() {}};
   const room = new IslandRoom(ctx);
   return room;
 }

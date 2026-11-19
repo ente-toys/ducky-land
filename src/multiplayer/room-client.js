@@ -568,6 +568,9 @@ export class RoomClient {
   }
 
   board(boatId) { return this.send({type:'board',boatId}); }
+  teleport(destination) {
+    return this.send({type:'teleport',destination}) ? this.seq : null;
+  }
 
   // free boats this player may take: built boats belong to whoever built them
   usableBoats(boats=this.boats) { return boats.filter(boat => !boat.occupant && (!boat.built || this.ownBoats?.has(boat.id))); }

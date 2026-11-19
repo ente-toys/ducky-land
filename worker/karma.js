@@ -1,4 +1,6 @@
 import {KarmaPool} from '../src/gameplay/karma-pool.js';
+import {BOG_ISLAND,KARMA_REQUIRED} from '../src/features/bog-combat/entry.js';
+import {teleportPrice} from '../src/gameplay/teleport.js';
 
 export class RoomKarma {
   constructor(room){
@@ -23,7 +25,7 @@ export class RoomKarma {
     }
     return this.bogEntries.get(account);
   }
-  beginBogEntry(account,cost=5){
+  beginBogEntry(account,cost=KARMA_REQUIRED){
     const current=this.bogEntry(account);if(current)return current;
     if(this.room.simulation)return null;
     const balance=this.balance(account);if(balance<cost)return null;
@@ -34,6 +36,23 @@ export class RoomKarma {
     };
     if(this.room.ctx.storage.transactionSync)this.room.ctx.storage.transactionSync(save);else save();
     this.balances.set(account,balance-cost);this.bogEntries.set(account,entry);return entry;
+  }
+  payTeleport(account, source, arrival) {
+    const balance = this.balance(account) - teleportPrice(arrival.islandId);
+    if (balance < 0) return null;
+    const enteringBog = arrival.islandId === BOG_ISLAND;
+    const leavingBog = source === BOG_ISLAND;
+    const entry = enteringBog ? {id:crypto.randomUUID(),lives:5,combat:null} : null;
+    this.room.ctx.storage.transactionSync(() => {
+      this.room.sql.exec('INSERT OR REPLACE INTO karma_balances VALUES(?,?)',account,balance);
+      this.room.saveLocation(account,arrival);
+      this.room.sql.exec('DELETE FROM resumes WHERE account=?',account);
+      if (entry) this.room.sql.exec('INSERT OR REPLACE INTO bog_entries VALUES(?,?)',account,JSON.stringify(entry));
+      if (leavingBog) this.room.sql.exec('DELETE FROM bog_entries WHERE account=?',account);
+    });
+    this.balances.set(account,balance);
+    if (enteringBog || leavingBog) this.bogEntries.set(account,entry);
+    return balance;
   }
   saveBogAdmission(account,entry){
     this.room.sql.exec('INSERT OR REPLACE INTO bog_entries VALUES(?,?)',account,JSON.stringify(entry));

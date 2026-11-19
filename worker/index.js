@@ -15,6 +15,7 @@ import {migrateSeaPosition, islandFor, harborOf, boatSpots, boatRoom, freeBoatPo
 import {randomOutfit, validOutfit} from '../src/gameplay/outfits.js';
 import {pickSpawnIsland,pickWorldSpawn} from '../src/gameplay/world-spawn.js';
 import {RoomKarma} from './karma.js';
+import {atTeleporter, TELEPORTERS, teleportPrice} from '../src/gameplay/teleport.js';
 
 const STARGAZER_LIMIT = 5000;
 const RESUME_MS = 30_000;
@@ -103,6 +104,32 @@ export class IslandRoom {
     if(!this.karma.beginBogEntry(info.account))return this.allowLanding(socket,info,islandId);
     info.actor.karma=this.karma.balance(info.account);
     return true;
+  }
+  teleport(info, command) {
+    const {actor, account} = info;
+    const destination = command.destination;
+    const machine = TELEPORTERS.get(destination);
+    if (!account || command.islandId !== actor.islandId ||
+        !atTeleporter(actor,this.navFor(actor.islandId))) return 'Walk up to the teleporter first.';
+    if (actor.islandId === BOG_ISLAND &&
+        [...(this.bog?.members.values() ?? [])].some(member => member.account === account && member.team)) {
+      return 'Return to the island before using the teleporter.';
+    }
+    if (!machine || destination === actor.islandId) return 'Choose another island.';
+    const arrival = {islandId:destination,...machine.arrival,mode:'walking',turn:0};
+    if (!this.standable(arrival)) return 'That teleporter is unavailable.';
+    let balance;
+    try {
+      balance = this.karma.payTeleport(account,actor.islandId,arrival);
+    } catch (error) {
+      console.error('Teleport transaction failed',error);
+      return 'The teleporter is unavailable. Try again.';
+    }
+    if (balance === null) return `You need ${teleportPrice(destination)} golden feathers for that trip.`;
+    Object.assign(actor,arrival,{karma:balance,boatId:null,path:[],travel:0,pace:0,heading:null,
+      sailTarget:null,sailRoute:null,dockTarget:null,docking:false,exitLocked:false,ice:null,jumpLeft:0,action:0,until:0});
+    Object.assign(info,{islandId:destination,boarding:null,landing:null,input:ZERO,inputExpires:0});
+    return null;
   }
   constructor(ctx, bindings, simulation = null, inactiveWorld = false) {
     this.simulation = simulation;
@@ -1030,6 +1057,14 @@ export class IslandRoom {
     }
     if (!command || !Number.isSafeInteger(command.seq) || command.seq <= Math.max(info.ack, info.throttled?.seq ?? 0)) return;
     const actor = info.actor;
+    if (command.type === 'teleport') {
+      const notice = this.teleport(info,command);
+      info.ack = command.seq;
+      this.attach(socket,info);
+      if (notice) this.send(socket,{type:'travel-notice',text:notice});
+      this.broadcast();
+      return;
+    }
     if (command.islandId && command.islandId !== actor.islandId) {
       info.ack=command.seq; this.attach(socket,info); this.broadcast(); return;
     }
