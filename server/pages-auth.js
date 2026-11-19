@@ -1,3 +1,4 @@
+import {roomUpgradeRequestIdHeader} from './room-upgrade.js';
 import {simulationStub, worldName, worldStub} from './simulation-routing.js';
 const sessionCookie = '__Host-ducky_session';
 const flowCookie = '__Host-ducky_oauth';
@@ -42,9 +43,9 @@ function room(env) {
   return worldStub(env,worldName(env));
 }
 
-async function fetchRoom(env, request, contextData) {
+async function fetchRoom(env, request, contextData, getStub = () => room(env)) {
   try {
-    return await room(env).fetch(request);
+    return await getStub().fetch(request);
   } catch (error) {
     if (contextData) contextData.roomBindingFailure = {route: new URL(request.url).pathname, error};
     throw error;
@@ -57,16 +58,24 @@ function call(env, path, data, contextData) {
   }), contextData);
 }
 
+async function fetchRoomUpgrade(env, request, contextData, getStub) {
+  const requestId = contextData?.roomUpgradeRequestId;
+  if (requestId) request.headers.set(roomUpgradeRequestIdHeader, requestId);
+  const response = await fetchRoom(env, request, contextData, getStub);
+  if (requestId) contextData.roomUpgradeStatus = response.status;
+  return response;
+}
+
 async function upgrade(env, roomRequest, original, key, contextData) {
-  if (!env.ISLAND_SIM) return fetchRoom(env,roomRequest,contextData);
+  if (!env.ISLAND_SIM) return fetchRoomUpgrade(env,roomRequest,contextData);
   const mode = await call(env,'/simulation/mode',{world:worldName(env),
     target:original.searchParams.get('protocol')==='2'?env.WORLD_LAYOUT:undefined,id:env.WORLD_MIGRATION_ID,
     fleetRepair:env.WORLD_REPAIR_FLEET==='1'},contextData);
   // Pages and the Worker can deploy in either order from the same commit.
-  if (mode.status===404) return fetchRoom(env,roomRequest,contextData);
+  if (mode.status===404) return fetchRoomUpgrade(env,roomRequest,contextData);
   if (!mode.ok) return mode;
   const {mode:layout} = await mode.json();
-  if (layout === 'legacy') return fetchRoom(env,roomRequest,contextData);
+  if (layout === 'legacy') return fetchRoomUpgrade(env,roomRequest,contextData);
   if (layout !== 'split') return json({error:'World maintenance'},503);
   const url = new URL(roomRequest.url);
   if (original.searchParams.get('protocol') !== '2') return json({error:'Reload to join the world'},426);
@@ -76,12 +85,8 @@ async function upgrade(env, roomRequest, original, key, contextData) {
   if (!admission.ok) return admission;
   const {owner} = await admission.json();
   url.searchParams.set('watch',watch);
-  try {
-    return await simulationStub(env,worldName(env),owner).fetch(new Request(url,{headers:roomRequest.headers}));
-  } catch(error) {
-    if (contextData) contextData.roomBindingFailure = {route:url.pathname,error};
-    throw error;
-  }
+  return fetchRoomUpgrade(env, new Request(url,{headers:roomRequest.headers}), contextData,
+    () => simulationStub(env,worldName(env),owner));
 }
 
 function configured(env) {

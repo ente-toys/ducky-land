@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {productionProxy,PRODUCTION_ORIGIN,productionSignIn} from '../scripts/vite-production-proxy.mjs';
 import {connect} from '../server/pages-auth.js';
+import {roomUpgradeRequestIdHeader} from '../server/room-upgrade.js';
 import {roomBindingFlags,sentryOptions} from '../server/sentry.js';
 
 test('Sentry keeps safe room binding flags and correlates Pages failures by Ray ID',()=>{
@@ -23,6 +24,33 @@ test('a failed room upgrade preserves the binding operation and original error f
   const request=new Request('https://room.example/api/room',{headers:{Upgrade:'websocket',Origin:'https://room.example'}});
   await assert.rejects(()=>connect({request,env,data}),error=>error===failure);
   assert.deepEqual(data.roomBindingFailure,{route:'/room',error:failure});
+});
+
+test('only the split room upgrade receives the correlation ID', async () => {
+  const roomUpgradeRequestId = 'd6fffc47-7966-4e5a-9d7e-c0f4ca190242';
+  const controlRoutes = [];
+  const env = {
+    ISLAND: {idFromName: name => name, get: () => ({fetch(request) {
+      const route = new URL(request.url).pathname;
+      controlRoutes.push(route);
+      assert.equal(request.headers.get(roomUpgradeRequestIdHeader), null);
+      if (route === '/simulation/mode') return Response.json({mode: 'split'});
+      return Response.json({owner: 'home'});
+    }})},
+    ISLAND_SIM: {idFromName: name => name, get: () => ({fetch(request) {
+      assert.equal(new URL(request.url).pathname, '/room');
+      assert.equal(request.headers.get(roomUpgradeRequestIdHeader), roomUpgradeRequestId);
+      return new Response(null, {status: 503});
+    }})},
+  };
+  const data = {roomUpgradeRequestId};
+  const request = new Request('https://room.example/api/room?protocol=2', {
+    headers: {Upgrade: 'websocket', Origin: 'https://room.example'},
+  });
+  const response = await connect({request, env, data});
+  assert.deepEqual(controlRoutes, ['/simulation/mode', '/simulation/admit']);
+  assert.equal(response.status, 503);
+  assert.equal(data.roomUpgradeStatus, 503);
 });
 
 test('API HTTP and WebSocket proxies preserve requests while adapting same-origin loopback traffic',()=>{

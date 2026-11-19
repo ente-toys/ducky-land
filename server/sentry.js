@@ -1,14 +1,16 @@
 import {httpServerIntegration} from '@sentry/cloudflare';
+import {isRoomUpgradeRequestId, isRoomUpgradeRoute} from './room-upgrade.js';
 
 const errorTypes = new Set([
   'Error', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError', 'PagesResponseError',
 ]);
 const spanAttributes = ['sentry.op', 'sentry.origin', 'http.request.method', 'http.response.status_code', 'app.route'];
-const logMessages = new Set(['Pages request completed', 'Pages request failed', 'Room request completed', 'Room request failed', 'Room socket closed', 'Room socket error',
+const logMessages = new Set(['Pages request completed', 'Pages request failed', 'Room request completed', 'Room request failed', 'Room upgrade received', 'Room socket closed', 'Room socket error',
   'Room socket rejected', 'Room initialized', 'Room operation failed', 'Room operation slow', 'Room operation timings']);
 const roomBindingRoutes = new Set(['/room', '/bog-room', '/consume', '/flow', '/friends', '/outfit',
   '/session/access', '/session/get', '/session/new', '/session/revoke', '/stars', '/stars/count']);
 const roomFailureFlags = ['overloaded', 'retryable', 'remote'];
+const roomUpgradeReasons = new Set([...roomFailureFlags, 'unknown', 'upstream_5xx']);
 const socketRejectionReasons = new Set(['rate_limit', 'non_text_message', 'message_too_large']);
 const logNumbers = ['status', 'duration_ms', 'connections', 'players', 'watchers', 'close_code',
   'count', 'mean_ms', 'max_ms', 'slow_count', 'last_checkpoint_ms', 'last_confirmed_checkpoint_ms'];
@@ -21,10 +23,25 @@ export function roomBindingFlags(error) {
     .map(key => [key, error[key]]));
 }
 
-function scrubException({type, mechanism, stacktrace}) {
+export function roomUpgradeFailureReason(error) {
+  return roomFailureFlags.find(flag => error?.[flag] === true) ?? 'unknown';
+}
+
+function roomUpgradeFields(fields = {}) {
+  if (!isRoomUpgradeRequestId(fields.room_upgrade_request_id)) return {};
   return {
-    type: errorTypes.has(type) ? type : 'Error',
-    value: type === 'PagesResponseError' ? 'Pages returned a server error' : 'Unexpected application error',
+    room_upgrade_request_id: fields.room_upgrade_request_id,
+    ...(roomUpgradeReasons.has(fields.room_upgrade_reason) && {room_upgrade_reason: fields.room_upgrade_reason}),
+  };
+}
+
+function scrubException({type, mechanism, stacktrace}, roomUpgradeFailed) {
+  let value = 'Unexpected application error';
+  if (type === 'PagesResponseError') value = 'Pages returned a server error';
+  if (roomUpgradeFailed) value = 'Room Worker WebSocket upgrade failed';
+  return {
+    type: roomUpgradeFailed ? 'RoomUpgradeError' : errorTypes.has(type) ? type : 'Error',
+    value,
     mechanism: mechanism && {type: mechanism.type, handled: mechanism.handled},
     stacktrace: stacktrace && {
       frames: stacktrace.frames?.map(({filename, abs_path, function: name, lineno, colno, in_app}) => ({
@@ -76,6 +93,10 @@ export function sentryOptions(env, service, routes) {
     ],
     beforeSend(event) {
       const route = event.tags?.route ?? routeFor(event.request?.url);
+      const upgrade = roomUpgradeFields(event.tags);
+      const reason = upgrade.room_upgrade_reason;
+      const bindingRoute = event.tags?.room_binding_route;
+      const duration = event.extra?.duration_ms;
       return {
         event_id: event.event_id,
         timestamp: event.timestamp,
@@ -87,8 +108,14 @@ export function sentryOptions(env, service, routes) {
           service,
           ...(routes.has(route) && {route}),
           ...(Number.isInteger(event.tags?.status) && {status: event.tags.status}),
+          ...upgrade,
+          ...(reason && isRoomUpgradeRoute(bindingRoute) && {room_binding_route: bindingRoute}),
         },
-        exception: event.exception && {values: event.exception.values?.map(scrubException)},
+        ...(reason && {
+          fingerprint: ['room-worker-websocket-upgrade', reason],
+          ...(Number.isFinite(duration) && {extra: {duration_ms: duration}}),
+        }),
+        exception: event.exception && {values: event.exception.values?.map(exception => scrubException(exception, Boolean(reason)))},
         debug_meta: event.debug_meta,
       };
     },
@@ -116,6 +143,7 @@ export function sentryOptions(env, service, routes) {
           ...(environment && {'sentry.environment': environment}),
           ...(release && {'sentry.release': release}),
           ...(routes.has(attributes.route) && {route: attributes.route}),
+          ...roomUpgradeFields(attributes),
           ...(log.message === 'Pages request failed' && roomBindingRoutes.has(attributes.room_binding_route) && {
             room_binding_route: attributes.room_binding_route, ...roomBindingFlags(attributes),
           }),

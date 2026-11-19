@@ -1,5 +1,6 @@
 import {env, tracing} from 'cloudflare:workers';
 import {instrumentDurableObjectWithSentry, logger} from '@sentry/cloudflare';
+import {isRoomUpgradeRequestId, isRoomUpgradeRoute, roomUpgradeRequestIdHeader} from '../server/room-upgrade.js';
 import {sentryOptions} from '../server/sentry.js';
 import {WorldService as Room} from './world-service.js';
 import {IslandSimulation as BaseIslandSimulation, SeaSimulation as BaseSeaSimulation} from './simulation.js';
@@ -9,11 +10,19 @@ export class IslandSimulation extends BaseIslandSimulation {
   constructor(ctx, bindings) {
     super(ctx, bindings, tracing);
   }
+
+  fetch(request) {
+    return monitorSimulationUpgrade(request, () => super.fetch(request));
+  }
 }
 
 export class SeaSimulation extends BaseSeaSimulation {
   constructor(ctx, bindings) {
     super(ctx, bindings, tracing);
+  }
+
+  fetch(request) {
+    return monitorSimulationUpgrade(request, () => super.fetch(request));
   }
 }
 
@@ -30,6 +39,30 @@ function roomLog(level, message, attributes) {
   // keeps an exportable record when that scope cannot flush the SDK log.
   try { console[level](message, attributes); } catch {}
   try { logger[level](message, attributes); } catch {}
+}
+
+function roomUpgradeFields(request, route) {
+  if (!isRoomUpgradeRoute(route)) return {};
+  const requestId = request.headers.get(roomUpgradeRequestIdHeader);
+  return isRoomUpgradeRequestId(requestId) ? {room_upgrade_request_id: requestId} : {};
+}
+
+async function monitorSimulationUpgrade(request, run) {
+  const route = new URL(request.url).pathname;
+  const upgrade = roomUpgradeFields(request, route);
+  if (!upgrade.room_upgrade_request_id) return run();
+  const started = Date.now();
+  roomLog('info', 'Room upgrade received', {route, ...upgrade});
+  try {
+    const response = await run();
+    roomLog(response.status >= 500 ? 'error' : 'info', 'Room request completed', {
+      route, ...upgrade, status: response.status, duration_ms: Date.now() - started,
+    });
+    return response;
+  } catch (error) {
+    roomLog('error', 'Room request failed', {route, ...upgrade, duration_ms: Date.now() - started});
+    throw error;
+  }
 }
 
 class MonitoredRoom extends Room {
@@ -164,14 +197,16 @@ class MonitoredRoom extends Room {
   async fetch(request) {
     const route = new URL(request.url).pathname;
     const started = Date.now();
+    const upgrade = roomUpgradeFields(request, route);
+    if (upgrade.room_upgrade_request_id) roomLog('info', 'Room upgrade received', {route, ...upgrade});
     try {
       const response = await super.fetch(request);
       logger[response.status >= 500 ? 'error' : 'info']('Room request completed', {
-        route, status: response.status, duration_ms: Date.now() - started, ...this.logCounts(),
+        route, status: response.status, duration_ms: Date.now() - started, ...upgrade, ...this.logCounts(),
       });
       return response;
     } catch (error) {
-      logger.error('Room request failed', {route, duration_ms: Date.now() - started, ...this.logCounts()});
+      logger.error('Room request failed', {route, duration_ms: Date.now() - started, ...upgrade, ...this.logCounts()});
       throw error;
     }
   }
