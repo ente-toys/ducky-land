@@ -182,12 +182,12 @@
 }
 .pixi-duck-name--self {
   z-index: 1;
-  padding: 2px 7px;
+  padding: 3px 8px;
   color: #332b23;
   background: #ffda69;
   border-color: #564537;
   box-shadow: 0 2px 0 #56453755;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 750;
 }
 .pixi-chat-bubble, .pixi-chat {
