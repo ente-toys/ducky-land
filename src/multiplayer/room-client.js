@@ -13,6 +13,7 @@ import {BOAT_UNVEIL} from '../gameplay/boat-build.js';
 import {islandFor, harborOf, destinationsFor, near, dockingSpot, refusedLandingPosition, landingApproach, setSailDestination, sailStep, SAIL_SPEED, createBoats, fillMoorings, retireBoat, navOf, canWalkTo} from '../gameplay/islands.js';
 
 const ZERO = {x:0,y:0};
+const FRIEND_RECONNECT_DELAY_MS = 3000;
 const HEARTBEAT_INTERVAL_MS = 5000;
 const HEARTBEAT_TIMEOUT_MS = 9000;
 const POSITION_SNAP_DISTANCE = 90;
@@ -94,6 +95,7 @@ export class RoomClient {
     this.onNotice = onNotice;
     this.onNearby = () => {};
     this.onFriendsChanged = () => {};
+    this.hasWelcomed = false;
     this.onKarmaPickup = () => {};
     this.friends = null;
     this.dismissedFriends = new Set();
@@ -182,6 +184,7 @@ export class RoomClient {
     this.sentWatchCell = null;
     this.lastWatchCellAt = -Infinity;
     clearTimeout(this.retryTimer);
+    clearTimeout(this.friendRefreshTimer);
     clearInterval(this.heartbeat);
     const old = this.socket;
     this.socket = null;
@@ -251,7 +254,10 @@ export class RoomClient {
         this.unveil = {id: message.boatId, at: nowSeconds() + BOAT_UNVEIL};
         this.onBoatBuilt?.(message);
       }
-      if (message.type === 'friends-changed') this.onFriendsChanged();
+      if (message.type === 'friends-changed') {
+        clearTimeout(this.friendRefreshTimer);
+        this.onFriendsChanged();
+      }
       if (message.type === 'delta') {
         if (message.epoch !== this.epoch || message.baseTick !== this.tick || message.islandId !== this.islandId) {
           this.recordReconnect('snapshot_mismatch', {
@@ -291,7 +297,13 @@ export class RoomClient {
           this.overloadBackoff = false;
           this.globeFeed = message.globeFeed === true;
           if (this.globeOpen) this.sendGlobeSubscription();
-          this.onFriendsChanged();
+          if (this.hasWelcomed) {
+            // Wait for the connection to settle before catching up on missed friend changes.
+            this.friendRefreshTimer = setTimeout(() => this.onFriendsChanged(), FRIEND_RECONNECT_DELAY_MS);
+          } else {
+            this.hasWelcomed = true;
+            this.onFriendsChanged();
+          }
           socket.send(JSON.stringify({type:'updates',nearby:true}));
         }
         if (['expired', 'signed-out'].includes(message.reason)) this.clearGlobePlayers();
@@ -307,6 +319,7 @@ export class RoomClient {
     };
     socket.onclose = ({code, wasClean}) => {
       if (socket !== this.socket) return;
+      clearTimeout(this.friendRefreshTimer);
       clearInterval(this.heartbeat);
       if (!full && code !== 4001) this.recordReconnect('transport_close', {code, wasClean});
       if (!this.leavingSocket) this.reset();
@@ -679,6 +692,7 @@ export class RoomClient {
     this.resolveInitialIsland=null;
     clearInterval(this.heartbeat);
     clearTimeout(this.retryTimer);
+    clearTimeout(this.friendRefreshTimer);
     const socket = this.socket;
     this.socket = null;
     this.leavingSocket?.close();

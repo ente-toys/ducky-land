@@ -33,11 +33,13 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
   const originals = Object.fromEntries(['window','document','location','history','fetch','WebSocket',
     'IS_REACT_ACT_ENVIRONMENT','toolbarEngines'].map(key=>[key,globalThis[key]]));
   const sockets = [], engines = [], warnings = [], keydowns = new Set(), intervals = new Map();
+  let friendReads = 0;
   Object.assign(globalThis,{window:dom.window,document:dom.window.document,location:dom.window.location,
     history:dom.window.history,IS_REACT_ACT_ENVIRONMENT:true,toolbarEngines:engines,
     fetch:async url=>{
       if (url === '/api/session') return Response.json({user:{accountId,login:'boss',canPlay:true}});
       assert.equal(url,'/api/friends');
+      friendReads++;
       return Response.json({friends:[],incoming:[],outgoing:[]});
     },
     WebSocket:class {
@@ -88,6 +90,7 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     await mount();
     await welcome();
     counts(true);
+    const initialFriendReads = friendReads;
     const client = engines.at(-1).room;
     const friendsChanged = client.onFriendsChanged, nearby = client.onNearby;
     for (let i=0;i<5;i++) {
@@ -111,7 +114,13 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
       assert.equal(document.querySelectorAll('input[aria-label="Message"]').length,1);
       await act(async()=>document.querySelector('.pixi-chat').dispatchEvent(new window.Event('submit',{bubbles:true,cancelable:true})));
       counts(true);
+      await act(async()=>t.mock.timers.tick(650));
+      assert.equal(friendReads,initialFriendReads,'repeated reconnects do not fetch friends');
     }
+    await act(async()=>t.mock.timers.tick(2350));
+    assert.equal(friendReads,initialFriendReads+1,'friends refresh once after the connection settles');
+    await act(async()=>current().receive({type:'friends-changed'}));
+    assert.equal(friendReads,initialFriendReads+2,'friend change events still refresh immediately');
     await act(async()=>client.onNearby({id:'peer',accountId:'99',login:'friend'}));
     assert.equal(document.querySelectorAll('.pixi-friend-prompt').length,1,'one friend notification portal');
     await act(async()=>document.querySelector('.pixi-profile-button').click());
