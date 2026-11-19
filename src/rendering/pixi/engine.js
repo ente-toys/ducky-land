@@ -49,7 +49,7 @@ import {createKarmaView} from './karma-view.js';
 import {createBoatBuildView} from './boat-build-view.js';
 import {isletUnder} from '../../gameplay/boat-build.js';
 import {HARBOR, harborOf, islandFor, near, seaBoundsFor, destinationsFor, offshoreProgress, boardingPoint, dockingSpot, canDock, islandOffset} from '../../gameplay/islands.js';
-import {atTeleporter, TELEPORTERS} from '../../gameplay/teleport.js';
+import {atTeleporter, TELEPORTERS, TELEPORT_COST} from '../../gameplay/teleport.js';
 import {isletWalks} from '../../world/islet-walk.js';
 import {reframeIslet} from '../../world/islet-placement.js';
 import {ambientOf, artOf, mapFor, mapOf, prepareIslandMap, islandMapReady} from '../../world/island-maps.js';
@@ -162,6 +162,7 @@ export class PixiIsland {
   }
 
   get player() { return this.room ? this.room.player : this.sim?.player; }
+  get teleporterUnlocked() { return (this.room?.karma ?? 0) >= TELEPORT_COST; }
 
   async mount(host) {
     this.host = host;
@@ -605,22 +606,33 @@ export class PixiIsland {
   }
 
   showTeleporter(id) {
-    this.teleporter?.destroy();
+    this.teleporter?.destroy({children: true});
+    this.teleporter = null;
     const site=TELEPORTERS.get(id);
     if (!site || !this.objects) return;
-    const machine=new Graphics()
+    const machine=new Container();
+    machine.addChild(new Graphics()
       .ellipse(3,2,42,14).fill({color:0x49301e,alpha:.23})
       .roundRect(-38,-21,76,33,12).fill(0xb97438).stroke({color:0x523825,width:3})
       .roundRect(-34,-25,68,28,11).fill(0xffd98a).stroke({color:0x523825,width:3})
       .ellipse(0,-43,24,34).fill(0x23514d).stroke({color:0x523825,width:12})
       .ellipse(0,-43,23,33).stroke({color:0xffcd62,width:7})
-      .ellipse(0,-43,16,25).fill(0x82e3c2)
-      .moveTo(-8,-45).lineTo(0,-58).lineTo(8,-45).lineTo(0,-31).closePath().fill(0xfff6bb)
-      .circle(-24,-11,4).fill(0x31725e).circle(24,-11,4).fill(0x31725e);
+      .circle(-24,-11,4).fill(0x31725e).circle(24,-11,4).fill(0x31725e));
+    this.teleporterPortal=machine.addChild(new Graphics().ellipse(0,-43,16,25).fill(0xffffff));
+    this.teleporterSpark=machine.addChild(new Graphics()
+      .moveTo(-8,-45).lineTo(0,-58).lineTo(8,-45).lineTo(0,-31).closePath().fill(0xfff6bb));
     machine.position.set(site.x,site.y);
     machine.zIndex=site.y;
     machine.upright=true;
     this.teleporter=this.objects.addChild(machine);
+    this.updateTeleporter();
+  }
+
+  updateTeleporter() {
+    if (!this.teleporter) return;
+    const unlocked = this.teleporterUnlocked;
+    this.teleporterPortal.tint = unlocked ? 0x70caff : 0x000000;
+    this.teleporterSpark.visible = unlocked;
   }
 
   focusHarbor() {
@@ -1769,6 +1781,7 @@ export class PixiIsland {
     }
     this.room?.setAlpha(this.accumulator * 60);
     const player = this.player;
+    this.updateTeleporter();
     if (Boolean(player) !== this.hadPlayer) {
       this.hadPlayer = Boolean(player);
       this.updateControlLabel();
@@ -2020,7 +2033,7 @@ export class PixiIsland {
     if (this.worldView) this.worldView.globeWanted=!this.archipelago || !this.walkSolo();
     if (this.worldView) this.worldView.friends=this.room?.friendMarks?.() ?? [];
     this.renderScreen(() => {
-      this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced);
+      this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced, this.teleporterUnlocked);
       if (this.nameLayer) {
         const tags=1-(this.worldView?.tagsOut ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
         if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}

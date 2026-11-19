@@ -1,6 +1,8 @@
 import {BOG_ISLAND, KARMA_REQUIRED} from '../features/bog-combat/entry.js';
 
-export const TELEPORT_COST = 2;
+export const TELEPORT_COST = 3;
+export const TELEPORTER_MAP_ICON = '/pixi-art/radar-marker/teleporter.svg';
+export const TELEPORTER_LOCKED_MAP_ICON = '/pixi-art/radar-marker/teleporter-locked.svg';
 export const teleportPrice = id => TELEPORT_COST + (id === BOG_ISLAND ? KARMA_REQUIRED : 0);
 
 // Authored in island-local coordinates, with the arrival pad beside each machine.
