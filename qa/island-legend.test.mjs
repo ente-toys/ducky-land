@@ -30,8 +30,9 @@ test('guide opens on demand, stops movement, isolates keys and reopens after dis
     let dialog=document.querySelector('dialog');
     assert.equal(dialog.open,true);
     assert.equal(stops,1);
-    assert.equal(dialog.querySelectorAll('details').length,5);
+    assert.equal(dialog.querySelectorAll('details').length,6);
     assert.match(dialog.textContent,/Each entry to Booquack Bog costs 5 feathers/);
+    assert.match(dialog.textContent,/Harbor teleporters.*3 golden feathers/);
     assert.match(dialog.textContent,/name and online status/);
     dialog.querySelector('summary').dispatchEvent(new window.KeyboardEvent('keydown',{key:' ',bubbles:true}));
     assert.equal(keys,0);

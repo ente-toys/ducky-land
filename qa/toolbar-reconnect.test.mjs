@@ -79,8 +79,8 @@ for (const accountId of ['42','home']) test(`five reconnects and map reloads ret
     assert.equal(document.querySelectorAll('.pixi-profile-button').length,1,'one profile button');
     assert.equal(chatButtons().length,playing ? 1 : 0,'Chat C');
     assert.equal(keydowns.size,playing ? 1 : 0,'one live Chat shortcut');
-    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,150,250,250,500,500,5000] : [80,150,500,500],
-      'one minimap timer, one startup canvas timer, one travel timer, one telescope timer, the profile outfit and feather-chip watchers and one connection heartbeat');
+    assert.deepEqual([...intervals.values()].sort((a,b)=>a-b),playing ? [80,150,250,250,500,500,4000,5000] : [80,150,500,500],
+      'one interval for each watcher, including the friends-map poll and connection heartbeat while playing');
   };
   try {
     const {default:PixiPage} = await import(pageModule);
