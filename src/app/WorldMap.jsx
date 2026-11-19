@@ -1,11 +1,10 @@
 import {useEffect, useRef, useState} from 'react';
 import {worldIsland} from '../world/world-map.js';
-import {nearbyMapFrame, nearbyHeading, nearbyFriends, nearbyOffMapTeleporterBearing, teleporterRimPosition, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
+import {nearbyMapFrame, nearbyHeading, nearbyFriends, NEARBY_MAP_WIDTH, NEARBY_MAP_HEIGHT} from './nearby-map.js';
 import {BOG_RADAR_ICON, BOG_RADAR_SIZE_PX} from '../features/bog-combat/bog-radar.js';
 import {mapOf} from '../world/island-maps.js';
 import {unplaceRigid} from '../world/rigid.js';
 import {TELESCOPE_ART, telescopeLandmarks} from '../world/telescope-landmarks.js';
-import {TELEPORTERS, TELEPORT_COST, TELEPORTER_MAP_ICON, TELEPORTER_LOCKED_MAP_ICON} from '../gameplay/teleport.js';
 
 const width = 1000;
 const scale = width / NEARBY_MAP_WIDTH;
@@ -33,11 +32,8 @@ function islandShape(id) {
     .map(outline).join('');
   // the island's walking paths, as faint lines
   const paths = (map.world.paths ?? []).filter(path => path.length > 1).map(path => line(path, 40)).join('');
-  const machine = TELEPORTERS.get(id);
   const dock = map.HARBOR.land, shape = {id, cx: map.cx, cy: map.cy, d, coast, water, paths, fill: GROUND[map.id] ?? GROUND.home,
-    dock: {x: Math.round((dock.x - map.cx) * scale), y: Math.round((dock.y - map.cy) * scale)}, teleporter: machine && {
-      x: (machine.x - map.cx) * scale, y: (machine.y - map.cy) * scale,
-    }};
+    dock: {x: Math.round((dock.x - map.cx) * scale), y: Math.round((dock.y - map.cy) * scale)}};
   shapes.set(id, shape);
   return shape;
 }
@@ -48,7 +44,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
   const radar = useRef(null);
   if (!radar.current) radar.current = {x: 0, y: 0, visible: false};
   const [iconSize, setIconSize] = useState(125);
-  const [frame, setFrame] = useState({islands: [], playing: false, heading: 0, bogX: 0, bogY: 0, bogVisible: false, here: '', boats: '', friends: [], teleporterUnlocked: false, teleporterBearing: null});
+  const [frame, setFrame] = useState({islands: [], playing: false, heading: 0, bogX: 0, bogY: 0, bogVisible: false, here: '', boats: '', friends: []});
   const mapUnitsPerPixel = iconSize / BOG_RADAR_SIZE_PX;
   const outlineRadius = width / 2 + 2 * mapUnitsPerPixel; // centre of the 4px border
   useEffect(() => {
@@ -88,12 +84,10 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
       const friends = nearbyFriends(here, engine.player ?? engine.camera, engine.room?.friendMarks?.() ?? [], width / 2 / scale)
         .map(f => ({...f, x: Math.round(f.x * scale), y: Math.round(f.y * scale)}));
       const friendsKey = friends.map(f => `${f.accountId}:${f.x},${f.y},${f.rim}`).join(' ');
-      const teleporterUnlocked = engine.teleporterUnlocked;
-      const teleporterBearing = nearbyOffMapTeleporterBearing(here, player, teleporterUnlocked);
-      setFrame(previous => previous.friendsKey === friendsKey && previous.here === here && previous.boats === boats && previous.playing === playing && previous.heading === heading && previous.bogX === bogX && previous.bogY === bogY && previous.bogVisible === bogVisible && previous.teleporterUnlocked === teleporterUnlocked && previous.teleporterBearing === teleporterBearing && islands.every((item, index) => {
+      setFrame(previous => previous.friendsKey === friendsKey && previous.here === here && previous.boats === boats && previous.playing === playing && previous.heading === heading && previous.bogX === bogX && previous.bogY === bogY && previous.bogVisible === bogVisible && islands.every((item, index) => {
         const old = previous.islands[index];
         return old?.id === item.id && old.x === item.x && old.y === item.y && old.flip === item.flip && Math.abs(old.bearing-item.bearing)<.1;
-      }) ? previous : {islands, playing, heading, bogX, bogY, bogVisible, here, boats, friends, friendsKey, teleporterUnlocked, teleporterBearing});
+      }) ? previous : {islands, playing, heading, bogX, bogY, bogVisible, here, boats, friends, friendsKey});
     }
     update();
     const timer = setInterval(update, 80);
@@ -107,13 +101,6 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
     window.addEventListener('keydown', key);
     return () => window.removeEventListener('keydown', key);
   }, [globeOpen, island]);
-  const teleporterSize = 21 * mapUnitsPerPixel;
-  // Leave a small gap between the Bog badge’s outer ring and the portal pin.
-  const bogBadge = frame.bogVisible ? {x: frame.bogX, y: frame.bogY, clearance: iconSize * .63 + teleporterSize / 2 + 2 * mapUnitsPerPixel} : null;
-  const rimTeleporter = !indoors && !globeOpen && frame.teleporterBearing !== null
-    ? teleporterRimPosition(frame.teleporterBearing, outlineRadius, bogBadge) : null;
-  const teleporterGuide = rimTeleporter ? 'The pin on the rim marks the direction to this island’s harbor teleporter.'
-    : frame.playing && !frame.teleporterUnlocked ? `Collect ${TELEPORT_COST} golden feathers to show your harbor teleporter on the rim when it’s off the map.` : '';
   return <>
   {globeOpen && <button type="button" className="pixi-world-back" onClick={() => island.current?.closeGlobe()}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#564537" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -121,7 +108,7 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
   <button type="button" className={`pixi-world-map${globeOpen ? ' pixi-world-map--hidden' : ''}`} disabled={indoors || globeOpen}
     aria-label="Open the world view" title="Open the world view" onClick={() => island.current?.openGlobe()}>
     <svg ref={svg} id="pixi-world-map-view" viewBox={`0 0 ${width} ${height}`} role="img"
-      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Portal pins mark harbor teleporters. ${teleporterGuide} Telescope badges: stargazing spots. Paint gun badge: Booquack, pinned to the rim when distant.`}>
+      aria-label={`Three nearest islands, cropped around ${frame.playing ? 'your duck. White arrow: your duck and direction' : 'the current view. White dot: view centre'}. Telescope badges: stargazing spots. Paint gun badge: Booquack, pinned to the rim when distant.`}>
       <defs>
         <clipPath id="pixi-world-map-terrain-clip"><circle cx={width / 2} cy={height / 2} r={width / 2}/></clipPath>
         <pattern id="pixi-world-map-waves" width="180" height="120" patternUnits="userSpaceOnUse">
@@ -165,17 +152,6 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
       {frame.bogVisible && <image href={BOG_RADAR_ICON}
         x={width / 2 + frame.bogX - iconSize / 2} y={height / 2 + frame.bogY - iconSize / 2}
         width={iconSize} height={iconSize}><title>Booquack</title></image>}
-      {frame.islands.map(({id, x, y, flip}) => {
-        const {teleporter} = islandShape(id);
-        if (!teleporter || (rimTeleporter && id === frame.here)) return null;
-        const pinX = x + teleporter.x, pinY = y + teleporter.y * flip;
-        if (Math.hypot(pinX, pinY) > width / 2) return null;
-        return <image key={id} href={frame.teleporterUnlocked ? TELEPORTER_MAP_ICON : TELEPORTER_LOCKED_MAP_ICON}
-          width={teleporterSize} height={teleporterSize}
-          x={(width - teleporterSize) / 2 + pinX} y={height / 2 + pinY - teleporterSize * .94}>
-          <title>{worldIsland(id).name} harbor teleporter</title>
-        </image>;
-      })}
       {frame.friends.map(f => <g key={f.accountId} transform={`translate(${width / 2 + f.x} ${height / 2 + f.y})`}
         opacity={f.rim ? .85 : 1}>
         <title>@{f.login}</title>
@@ -183,10 +159,6 @@ export default function WorldMap({island, globeOpen = false, indoors = false}) {
           transform={`rotate(${f.bearing})`}/>}
         <circle r={f.rim ? 18 : 24} fill={FRIEND} stroke="#20272a" strokeWidth="7"/>
       </g>)}
-      {rimTeleporter && <image href={TELEPORTER_MAP_ICON} width={teleporterSize} height={teleporterSize}
-        x={(width - teleporterSize) / 2 + rimTeleporter.x} y={(height - teleporterSize) / 2 + rimTeleporter.y}>
-        <title>{worldIsland(frame.here).name} harbor teleporter · off map</title>
-      </image>}
       {frame.playing
         ? <path d="M0,-31 L22,25 L0,14 L-22,25Z" fill="#fff" stroke="#20272a" strokeWidth="9"
           strokeLinejoin="round" transform={`translate(${width / 2} ${height / 2}) rotate(${frame.heading})`}><title>Your duck</title></path>

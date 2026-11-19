@@ -2028,7 +2028,7 @@ export class PixiIsland {
     if (this.worldView) this.worldView.globeWanted=!this.archipelago || !this.walkSolo();
     if (this.worldView) this.worldView.players=(this.room?.globePlayers ?? []).filter(player => player.id !== this.room?.id);
     this.renderScreen(() => {
-      this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced, this.teleporterUnlocked);
+      this.worldView?.update(this.globeT||0, this.width, this.height, performance.now() / 1000, this.camera, this.archipelago, this.mapHere(), this.birdZoom(), !this.gestures.pointers.size, this.player, reduced);
       if (this.nameLayer) {
         const tags=1-(this.worldView?.tagsOut ?? 0), css=tags >= 1 ? '' : tags.toFixed(3);
         if (css !== this.tagOpacity) {this.tagOpacity=css; this.nameLayer.style.opacity=css; this.nameLayer.style.pointerEvents=tags < .5 ? 'none' : '';}

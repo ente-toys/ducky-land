@@ -13,7 +13,6 @@ import {createHeartLocations,HEART_ACTIVITY_INTERVAL,HEART_ACTIVITY_CHANCE,HEART
 import {ISLETS} from '../../world/islets.js';
 import {cloudState,CLOUD_SHADER} from './globe-clouds.js';
 import {BOG_RADAR_ICON} from '../../features/bog-combat/bog-radar.js';
-import {TELEPORTERS, TELEPORTER_MAP_ICON, TELEPORTER_LOCKED_MAP_ICON} from '../../gameplay/teleport.js';
 
 import {Assets, Container, GlProgram, Graphics, Mesh, MeshGeometry, RenderTexture, Shader, Sprite, Text, Texture} from 'pixi.js';
 import {PALETTE} from '../shared/palette.js';
@@ -358,25 +357,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
     }).catch(() => {});
     return pins;
   }
-  const teleporterLayer = new Container({label: 'Harbor teleporters', visible: false});
-  app.stage.addChildAt(teleporterLayer, app.stage.getChildIndex(pin) + 1);
-  const teleporterPins = Array.from(TELEPORTERS, ([id, machine]) => {
-    const marker = teleporterLayer.addChild(new Container({visible: false}));
-    const glow = marker.addChild(new Sprite({texture: glowTex, anchor: .5, tint: 0x429aff}));
-    glow.y = -12;
-    glow.setSize(56);
-    const icon = marker.addChild(new Sprite({anchor: {x: .5, y: .94}}));
-    return {marker, glow, icon, point: spherePoint(id, machine)};
-  });
-  let teleporterTextures;
-  Assets.load([TELEPORTER_MAP_ICON, TELEPORTER_LOCKED_MAP_ICON]).then(textures => {
-    if (disposed) return;
-    teleporterTextures = textures;
-    for (const {icon} of teleporterPins) {
-      icon.texture = textures[TELEPORTER_LOCKED_MAP_ICON];
-      icon.setSize(24);
-    }
-  }).catch(() => {});
   const sphereMask=new Graphics();app.stage.addChild(sphereMask);pin.mask=sphereMask;
   life.visible = pin.visible = bogPin.visible = false;
   const u = shader.resources.viewUniforms.uniforms;
@@ -397,10 +377,9 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
     tagsOut: 0,
     // Set by the engine: the globe opens only from the globe button.
     globeWanted: true,
-    update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false, teleporterUnlocked=false) {
+    update(t, width, height, time, cam, arch, worldSize, floorZoom, idle, me, reduced=false) {
       const on = t > .001;
       mesh.visible = on;
-      teleporterLayer.visible = on;
       if(on)lastGlobeTime=time;
       if(t>.97)skyOpenedAt??=time;
       else skyOpenedAt=null;
@@ -423,7 +402,7 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       const clouds=cloudState(ball,time,reduced);u.uCloudPhase=clouds.phase;u.uCloudFade=clouds.fade;
       u.uSkyTime=reduced||skyOpenedAt===null?-1:time-skyOpenedAt;
       const masking=ball>.999;sphereMask.clear();if(masking)sphereMask.circle(w/2,h/2,Rp*horizonRatio(ball)).fill(0xffffff);
-      pin.mask=masking?sphereMask:null;bogPin.mask=pin.mask;teleporterLayer.mask=pin.mask;
+      pin.mask=masking?sphereMask:null;bogPin.mask=pin.mask;
       const basis=cam.basis??{a:1,b:0,c:0,d:1};u.uBasis.set([basis.a,basis.b,basis.c,basis.d]);
       this.roll=0;
       u.uAnchor.set(anchor.center);u.uEast.set(anchor.east);u.uNorth.set(anchor.north);
@@ -541,17 +520,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       } else ripples.length = 0;
       // Island name tags leave as the globe arrives, with or without your own pin (guests have none).
       this.tagsOut = ease((t - .12) / .15);
-      teleporterLayer.alpha = this.tagsOut;
-      const glowAlpha = ease((ball - .25) / .55);
-      const teleporterTexture = teleporterTextures?.[teleporterUnlocked ? TELEPORTER_MAP_ICON : TELEPORTER_LOCKED_MAP_ICON];
-      for (const {marker, glow, icon, point} of teleporterPins) {
-        const p = project(0, 0, point);
-        marker.alpha = ease(p.face / .25);
-        marker.visible = Boolean(teleporterTexture) && marker.alpha > .01;
-        if (teleporterTexture) icon.texture = teleporterTexture;
-        marker.position.set(p.x, p.y);
-        glow.alpha = glowAlpha;
-      }
       this.pinIn = me ? this.tagsOut : 0;
       if (me) {
         const point=globePlayerPoint(id,me),p=project(me.x,me.y,point);
@@ -628,6 +596,6 @@ export function createWorldView(app, scene, isletView, cloudTexture=Texture.EMPT
       let dlon=next.lon-before.lon;dlon-=2*Math.PI*Math.round(dlon/(2*Math.PI));
       return {aim:centreOf(next.lon,next.lat),dlon,dlat:next.lat-before.lat};
     },
-    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();teleporterLayer.destroy({children: true});telescopes.destroy({children:true});sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); disposed = true; for (const t of Object.values(ghostTex)) t.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); for (const p of playerPins.values()) p.destroy({children: true}); playerPins.clear(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
+    destroy() {for (const texture of shoreTextures.values()) texture.destroy(true); shoreTextures.clear();telescopes.destroy({children:true});sphereMask.destroy();mesh.destroy(); life.destroy({children: true}); glowTex.destroy(true); heartTex.destroy(true); disposed = true; for (const t of Object.values(ghostTex)) t.destroy(true); pin.destroy({children: true}); bogPin.destroy({children: true}); for (const p of playerPins.values()) p.destroy({children: true}); playerPins.clear(); shader.destroy(); rt.destroy(true); blank.destroy(true); worldTex?.destroy(true); geometry.destroy();},
   };
 }
