@@ -1142,10 +1142,6 @@ export class IslandRoom {
           this.send(socket,{type:'travel-notice',text:'Boat taken.'});
           break;
         }
-        if (boat.owner && boat.owner !== info.account) {
-          this.send(socket,{type:'travel-notice',text:'Someone else built that boat.'});
-          break;
-        }
         info.input=ZERO;
         const nav=this.navFor(actor.islandId), deck=boardingPoint(boat,nav);
         if (near(actor,deck,45) || setWalkDestination(actor,nav,deck.x,deck.y)) info.boarding=boat.id;

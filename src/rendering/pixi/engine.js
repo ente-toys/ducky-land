@@ -856,7 +856,7 @@ export class PixiIsland {
     if (!this.globeBusy() && !this.interior?.active && atTeleporter(me,nav)) return {teleport:true};
     let best=null;
     for (const boat of this.room.boats ?? this.room.boatPoses()) {
-      if (boat.islandId !== this.islandId || boat.occupant || (boat.built && !this.room.ownBoats?.has(boat.id))) continue;
+      if (boat.islandId !== this.islandId || boat.occupant) continue;
       const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }

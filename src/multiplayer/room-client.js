@@ -582,7 +582,8 @@ export class RoomClient {
   }
 
   // free boats this player may take: built boats belong to whoever built them
-  usableBoats(boats=this.boats) { return boats.filter(boat => !boat.occupant && (!boat.built || this.ownBoats?.has(boat.id))); }
+  // Any free boat can be taken by anyone, including one another player built.
+  usableBoats(boats=this.boats) { return boats.filter(boat => !boat.occupant); }
 
   build() { return this.player?.mode === 'walking' && this.send({type:'build'}); }
 
