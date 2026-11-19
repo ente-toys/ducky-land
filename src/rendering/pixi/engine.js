@@ -204,10 +204,11 @@ export class PixiIsland {
       // server is still deciding where this Duck is.
       if(this.room)warmIslandIndex();
       // Choose the authoritative island before any shared asset can pick a tier.
+      let spawnIsland;
       if(this.room){
-        const id=await this.room.waitForIsland();
-        await recoverArt(()=>this.prepareIsland(id),{label:'Spawn sheets'});
-        await prepareIslandMap(id);
+        spawnIsland=await this.room.waitForIsland();
+        if(this.disposed||!spawnIsland)return;
+        await recoverArt(()=>this.prepareIsland(spawnIsland),{label:'Spawn sheets',timeoutMs:4000});
       }
       this.loaded.push('/pixi-art/water-texture.svg');
       const seaTexture=await acquire('/pixi-art/water-texture.svg');
@@ -232,8 +233,7 @@ export class PixiIsland {
       this.initialSpawn=this.randomArrival&&!this.room?await pickWorldSpawn({hasRoom:id=>id==='home',homeNav:this.sim.nav,prepareIsland:prepareIslandMap}):null;
       const startingIsland=this.room ? await this.room.waitForIsland() : 'home';
       if(this.disposed||!startingIsland)return;
-      // Fetch the island's layout alongside its sheets, not after them.
-      await Promise.all([recoverArt(()=>this.prepareIsland(startingIsland),{label:'Spawn sheets'}),prepareIslandMap(startingIsland)]);
+      if(startingIsland!==spawnIsland)await recoverArt(()=>this.prepareIsland(startingIsland),{label:'Spawn sheets',timeoutMs:4000});
       const prepareHome=artOf(startingIsland)==='home';
       // Sounds and the boat list need nothing from the island being built.
       // Start them here; startup preparation below waits on the same loads.
@@ -1362,12 +1362,20 @@ export class PixiIsland {
     // Sailing can replace a speculative destination while its art is loading.
     // A released scene must not be promoted to ready by that request's watchdog.
     const cancelled=()=>this.disposed||(mapId!==this.artShown&&mapId!==this.destinationArt);
+    const currentLayoutMissing=()=>{
+      const id=this.room?.islandId??this.islandId;
+      return artOf(id)===mapId&&!islandMapReady(id);
+    };
     const request=recoverArt(()=>this.ensureArt(mapId),{
       label:`Island ${mapId} preparation`,timeoutMs,cancelled,
-      valid:()=>!!this.artReady(mapId),
+      valid:()=>!!this.artReady(mapId)&&!currentLayoutMissing(),
       retry:()=>{const art=this.arts?.get(mapId);if(art?.failed)this.arts.delete(mapId);},
       fallback:()=>{
         if(cancelled())return;
+        if(mapId===this.artShown && this.player?.mode!=='sailing' && currentLayoutMissing()){
+          this.onError(new Error(`Could not load the layout for ${mapId}`));
+          return;
+        }
         // Retry failure must not keep already mounted pieces hidden. Startup
         // still gates the normal reveal, and the 15s watchdog covers hangs.
         const art=this.arts?.get(mapId);
@@ -1699,6 +1707,7 @@ export class PixiIsland {
         }
       }
       this.travelMode=this.room.mode; this.stopInput(); this.updateControlLabel();
+      if(this.travelMode==='walking'&&!islandMapReady(this.islandId))void this.ensureMapArt(this.artShown);
       this.follow=Boolean(this.player); this.fitMode=false;
     }
     const actor = this.player;
@@ -2221,7 +2230,7 @@ export class PixiIsland {
           .catch(error => console.error('Could not update an outfit',error))
           .finally(() => {entry.outfitLoading = false;});
       }
-      const look=this.travelView?.fx.duck(pose,reducedMotion) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
+      const look=this.travelView?.fx.duck(pose,reducedMotion,this.islandId) ?? {x,y,scale:.88*.24*3,sx:1,sy:1,rotation:0,alpha:1,mask:null,speed:travel,turn,deck:true};
       const peer = telescopePeerAt(scopeProps, {...pose,x,y,action,travel});
       if (look.mask && !entry.seatMask) {
         entry.seatMask=new Graphics(); this.objects.addChild(entry.seatMask);

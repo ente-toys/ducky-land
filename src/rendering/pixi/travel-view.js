@@ -1,5 +1,6 @@
 import {Container, Graphics, Sprite, Text} from 'pixi.js';
 import {boatSpots} from '../../gameplay/islands.js';
+import {islandMapReady} from '../../world/island-maps.js';
 import {createHarbor} from './harbor.js';
 import {createSailingFX} from './sailing-fx.js';
 import {sailingUpright} from './sailing-upright.js';
@@ -18,7 +19,8 @@ const HOP=.5, DRIFT=.9, DRIFT_PX=36;
 const smooth=u => u*u*(3-2*u);
 const bobIn=k => k>=1 ? 0 : (1-k)**2*Math.cos(k*Math.PI*1.5);
 const driftBy=(heading,d) => ({x:-Math.sin(heading)*d,y:-Math.cos(heading)*d*.45});
-const atMooring=boat => boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);
+const atMooring=boat => islandMapReady(boat.islandId) &&
+  boatSpots(boat.islandId).some(spot => spot.x === boat.x && spot.y === boat.y);
 function uprightVessel(entry,camera,fx){
   entry.root.rotation=entry.seat?.roll??0;
   entry.root.skew.set(0,0);entry.root.scale.set(1,1/TILT);

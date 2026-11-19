@@ -5,6 +5,7 @@ const {extensions,ExtensionType,glUploadImageResource}=Pixi;
 // GPU textures stay intact; the HTTP cache replaces their decoded CPU copy.
 const pictures=new Map(), gameContexts=new WeakMap(), gates=new WeakMap();
 const close=resource=>{resource?.close?.();};
+const PIXEL_RELOAD_TIMEOUT_MS=4000;
 export function cacheBackedPixels(source,reload) {
   if(typeof source.resource?.close!=='function')return source;
   pictures.set(source,{reload,uploaded:false,pending:null});
@@ -19,8 +20,16 @@ export function releaseArtPixels(source) {
 extensions?.add({extension:{type:ExtensionType?.TextureUploaderWebGL,name:'cacheBackedImage'},
   id:'cacheBackedImage',upload(source,texture,gl,webGLVersion,targetOverride,forceAllocation=false){
     if(gl.isContextLost())return;
-    if(!source.resource)throw Error(`Picture needs recovery: ${source.label}`);
+    const entry=pictures.get(source);
+    const renderer=gameContexts.get(gl);
     const w=source.pixelWidth,h=source.pixelHeight,target=targetOverride||texture.target;
+    if(!source.resource){
+      if(!renderer||entry?.degraded!==renderer)throw Error(`Picture needs recovery: ${source.label}`);
+      // Keep the atlas frame geometry. Every frame samples the same transparent pixel.
+      gl.texImage2D(target,0,texture.internalFormat,1,1,0,texture.format,texture.type,null);
+      texture.width=texture.height=1;
+      return;
+    }
     if(webGLVersion===2&&w*h*4>8*1048576&&source.resourceWidth===w&&source.resourceHeight===h){
       // Keep the complete texture and its original mipmaps. Small row uploads
       // avoid a sheet-sized client/driver transfer buffer without resampling.
@@ -37,7 +46,7 @@ extensions?.add({extension:{type:ExtensionType?.TextureUploaderWebGL,name:'cache
         texture.width=w;texture.height=h;
       }finally{gl.pixelStorei(gl.UNPACK_SKIP_ROWS,skip);gl.pixelStorei(gl.UNPACK_SKIP_PIXELS,pixels);}
     }else glUploadImageResource.upload(source,texture,gl,webGLVersion,targetOverride,forceAllocation);
-    if(gameContexts.has(gl)){const entry=pictures.get(source);entry.uploaded=true;entry.renderer=gameContexts.get(gl);releaseArtPixels(source);}
+    if(renderer){entry.uploaded=true;entry.renderer=renderer;entry.degraded=null;releaseArtPixels(source);}
   },
 });
 // Snow profiles read alpha on the CPU. Preserve their exact 192px sample,
@@ -74,13 +83,29 @@ export async function prepareTreePixels(renderer,root){
 async function reloadPixels(source){
   const entry=pictures.get(source);
   if(!entry||source.destroyed||source.resource)return;
-  if(!entry.pending)entry.pending=Promise.resolve().then(entry.reload).then(resource=>{
-    if(source.destroyed)close(resource);else source.resource=resource;
-  }).finally(()=>{entry.pending=null;});
+  if(!entry.pending){
+    let timer, expired=false;
+    const deadline=new Promise((_,reject)=>{
+      timer=setTimeout(()=>{
+        expired=true;
+        reject(Error(`Picture reload timed out: ${source.label}`));
+      },PIXEL_RELOAD_TIMEOUT_MS);
+    });
+    const reload=Promise.resolve().then(entry.reload).then(resource=>{
+      if(expired||source.destroyed)close(resource);
+      else source.resource=resource;
+    });
+    entry.pending=Promise.race([reload,deadline]).finally(()=>{clearTimeout(timer);entry.pending=null;});
+  }
   await entry.pending;
 }
 export function installPixelRecovery(renderer,{lost=()=>{},restored=()=>{},failed=()=>{}}={}) {
   const canvas=renderer.canvas;gameContexts.set(renderer.gl,renderer);let dead=false,epoch=0;
+  const releaseGate=()=>{
+    const gate=gates.get(renderer);
+    gates.delete(renderer);
+    gate?.resolve();
+  };
   const onLost=event=>{
     event.preventDefault();epoch++;
     if(!gates.has(renderer)){let resolve;const promise=new Promise(r=>resolve=r);gates.set(renderer,{promise,resolve});}
@@ -88,21 +113,34 @@ export function installPixelRecovery(renderer,{lost=()=>{},restored=()=>{},faile
   };
   const onRestored=async()=>{
     const version=epoch;
+    const failures=[];
     try{
       // One sheet at a time. Never rebuild a second full island in CPU memory.
       for(const [source,entry] of pictures){
         if(dead||version!==epoch)return;
         if(entry.renderer!==renderer||!entry.uploaded||source.destroyed)continue;
-        await reloadPixels(source);
+        try{
+          await reloadPixels(source);
+        }catch(error){
+          if(dead||version!==epoch)return;
+          entry.degraded=renderer;
+          failures.push(error);
+        }
         if(dead||version!==epoch)return;
         if(source.destroyed)continue;
         renderer.texture.bindSource(source);
         await new Promise(resolve=>requestAnimationFrame(resolve));
       }
-      if(!dead&&version===epoch){gates.get(renderer)?.resolve();gates.delete(renderer);restored();}
-    }catch(error){if(!dead&&version===epoch)failed(error);}
+      if(!dead&&version===epoch){
+        releaseGate();
+        if(failures.length)console.warn(`WebGL restored with ${failures.length} unavailable texture(s)`,failures[0]);
+        restored();
+      }
+    }catch(error){
+      if(!dead&&version===epoch){releaseGate();failed(error);}
+    }
   };
   canvas.addEventListener('webglcontextlost',onLost);
   canvas.addEventListener('webglcontextrestored',onRestored);
-  return ()=>{dead=true;epoch++;canvas.removeEventListener('webglcontextlost',onLost);canvas.removeEventListener('webglcontextrestored',onRestored);gates.get(renderer)?.resolve();gates.delete(renderer);gameContexts.delete(renderer.gl);for(const entry of pictures.values())if(entry.renderer===renderer){entry.renderer=null;entry.uploaded=false;}};
+  return ()=>{dead=true;epoch++;canvas.removeEventListener('webglcontextlost',onLost);canvas.removeEventListener('webglcontextrestored',onRestored);releaseGate();gameContexts.delete(renderer.gl);for(const entry of pictures.values())if(entry.renderer===renderer){entry.renderer=null;entry.uploaded=false;entry.degraded=null;}};
 }

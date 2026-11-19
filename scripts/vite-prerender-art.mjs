@@ -452,7 +452,7 @@ export function prerenderArt() {
       if(id.endsWith('/world/prop-outlines/bog-scene.js'))return {code:lazyPinkScene(code,bogURL),map:null};
       if(id.endsWith('/world/prop-outlines/snow-scene.js'))return {code:lazyPinkScene(code,snowURL),map:null};
       if(id.endsWith('/world/prop-outlines/library-scene.js'))return {code:lazyPinkScene(code,libraryURL),map:null};
-      if(id.endsWith('/world/prop-outlines/community-scene.js'))return {code:lazyPinkScene(code,communityURL).replaceAll('Rosybutton','Campfire Commons'),map:null};
+      if(id.endsWith('/world/prop-outlines/community-scene.js'))return {code:lazyPinkScene(code,communityURL),map:null};
       if(id.endsWith('/world/prop-outlines/pink-scene.js'))return {code:lazyPinkScene(code,pinkURL),map:null};
       if(id.endsWith('/world/home/placements.js'))return {code:indexHomeGeometry(code),map:null};
       if(id.endsWith('/app/home-head-start.js'))return {code:code.replaceAll('__HOME_SCENE_URL__',JSON.stringify(homeURL)),map:null};
@@ -464,7 +464,7 @@ export function prerenderArt() {
 }
 
 export function lazyPinkScene(code,url){
-  const deferred=code.replace(/(?:const|let|var)\s+readPacked\s*=\s*async\s*\(\s*\)\s*=>\s*packed\s*;?/,`const readPacked=async()=>{const response=await fetch(${JSON.stringify(url)});if(!response.ok)throw Error('Rosybutton layout unavailable');return response.json();};`);
+  const deferred=code.replace(/(?:const|let|var)\s+readPacked\s*=\s*async\s*\(\s*\)\s*=>\s*packed\s*;?/,`const readPacked=async signal=>{const response=await fetch(${JSON.stringify(url)},{signal});if(!response.ok)throw Error('Island layout unavailable (HTTP '+response.status+')');return response.json();};`);
   if(deferred===code)throw Error('Rosybutton scene loader transform did not match');
   return deferred.replace(/import\s+packed\s+from\s+[^;]+;/,'const packed=null;');
 }

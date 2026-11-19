@@ -13,19 +13,26 @@ import {createBogFeel} from './feel.js';
 import {createBogSounds} from './sounds.js';
 import {createBogReadability} from './readability.js';
 import {loadBushRustleArt,createBushRustle} from './bush-rustle-view.js';
+import {prepareIslandMap} from '../../world/island-maps.js';
 
-export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},onStatus=()=>{},loadGun=loadGunC,loadGhosts=loadKnockoutArt,loadPickups=loadPickupArt,loadLeaves=loadBushRustleArt,signal,Room=BogCombatRoom,blockers=getBogBlockers(),navigation=engine.room?.navHere()??engine.sim?.nav,...options}={}) {
+export async function attachBogCombat(engine,{onLeave=()=>{},onSnapshot=()=>{},onStatus=()=>{},loadGun=loadGunC,loadGhosts=loadKnockoutArt,loadPickups=loadPickupArt,loadLeaves=loadBushRustleArt,signal,Room=BogCombatRoom,blockers=getBogBlockers(),navigation,...options}={}) {
   if(import.meta.env?.DEV&&engine.bogCombat?.room.demoSpectator)engine.bogCombat.leave(false);
   if(engine.bogCombat)throw new Error('Bog combat is already attached');
-  if(!engine.canvas||!engine.objects||!navigation)throw new Error('Mount the Bog island before attaching combat');
-  const [guns,ghostArt,pickupArt,leafArt]=await Promise.all([loadGun(),loadGhosts(),loadPickups(),loadLeaves()]);
+  if(!engine.canvas||!engine.objects)throw new Error('Mount the Bog island before attaching combat');
+  const islandId=options.islandId??engine.islandId;
+  signal?.throwIfAborted();
+  const [guns,ghostArt,pickupArt,leafArt]=await Promise.all([
+    loadGun(),loadGhosts(),loadPickups(),loadLeaves(),prepareIslandMap(islandId),
+  ]);
   signal?.throwIfAborted();
   if(engine.disposed)throw new Error('The island was disposed while loading Gun C');
   if(engine.bogCombat)throw new Error('Bog combat is already attached');
+  navigation??=engine.room?.navHere()??engine.sim?.nav;
+  if(!navigation)throw new Error('Mount the Bog island before attaching combat');
   const previousRoom=engine.room,render=engine.renderLiveDucks,disposeEngine=engine.dispose;
   const attachments=new Map();let disposed=false,lastTotals=null;
   engine.stopInput();
-  const room=new Room({...options,islandId:options.islandId??engine.islandId,blockers,navigation,onStatus,onExit:()=>{leave(false);onLeave({...lastTotals,out:true});},onSnapshot:(snapshot,self)=>{
+  const room=new Room({...options,islandId,blockers,navigation,onStatus,onExit:()=>{leave(false);onLeave({...lastTotals,out:true});},onSnapshot:(snapshot,self)=>{
     if(self)lastTotals={stats:{...self.stats},medalCase:{...self.medalCase}};
     onSnapshot(snapshot,self);
   }});

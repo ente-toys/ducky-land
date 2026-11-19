@@ -1,6 +1,8 @@
 import {AlphaFilter, Assets, Container, Graphics, Sprite} from 'pixi.js';
 import {blendBoatViews, boatPin} from './boat-blend.js';
 import {HARBOR, boardingPoint} from '../../gameplay/islands.js';
+import {islandMapReady} from '../../world/island-maps.js';
+import {placeRigid, unplaceRigid} from '../../world/rigid.js';
 import {PALETTE} from '../shared/palette.js';
 import {LEGACY_SEAT, loadBoatViews} from './boat-views.js';
 
@@ -16,8 +18,13 @@ const angleDiff=(a,b)=>Math.atan2(Math.sin(a-b),Math.cos(a-b));
 const clock=()=>performance.now()/1000/(globalThis.__duckySailSlow||1);
 if (globalThis.location) globalThis.__duckySailSlow=Number(new URLSearchParams(location.search).get('sailslow'))||1;
 const phaseOf=id=>{let h=7;for (const c of String(id)) h=(h*31+c.charCodeAt(0))>>>0;return h%6283/1000;};
-export function standFor(boat) {
-  return boat ? boardingPoint(boat) : {x:HARBOR.land.x,y:HARBOR.land.y};
+export function standFor(boat, chartIsland=boat?.islandId??'home', fallback=boat) {
+  if(!boat)return {x:HARBOR.land.x,y:HARBOR.land.y};
+  const islandId=boat.islandId??chartIsland;
+  if(!islandMapReady(islandId))return {...fallback};
+  const local=unplaceRigid(chartIsland,islandId,boat);
+  const stand=boardingPoint({...local,islandId,landing:boat.landing});
+  return placeRigid(chartIsland,islandId,stand,boat);
 }
 
 let PIER=HARBOR.pier;
@@ -85,6 +92,8 @@ export async function createSailingFX({water,objects}) {
       }
       if (!s.occupant && boat.occupant) s.trail.length=0;
       s.occupant=boat.occupant;
+      s.islandId=boat.islandId;
+      s.landing=boat.landing;
       const px=s.x, py=s.y;
       if (s.glide) {
         const u=clamp((now-s.glide.start)/1.1,0,1), e=1-(1-u)**3;
@@ -227,7 +236,7 @@ export async function createSailingFX({water,objects}) {
       for (const [id,d] of ducks) if (now-d.seen>3) ducks.delete(id);
     },
     holding(id) {const d=ducks.get(id); return Boolean(d?.anim && clock()-d.anim.start<HOLD);},
-    duck(pose,reduced) {
+    duck(pose,reduced,chartIsland=pose.islandId??'home') {
       const now=clock(), sailing=pose.mode==='sailing';
       let d=ducks.get(pose.id);
       if (!d) {d={mode:pose.mode,x:pose.x,y:pose.y,anim:null,boatId:pose.boatId}; ducks.set(pose.id,d);}
@@ -239,8 +248,11 @@ export async function createSailingFX({water,objects}) {
       if (d.mode!==pose.mode) {
         if (sailing) d.anim={kind:'board',start:now,from:{x:d.x,y:d.y},landed:false};
         else {
+          const from={x:d.x,y:d.y};
           const b=d.boatId && boats.get(d.boatId);
-          d.anim={kind:'land',start:now,from:{x:d.x,y:d.y},stand:standFor(b||{x:d.x,y:d.y}),landed:false,mask:d.mask};
+          const landing={x:pose.x,y:pose.y};
+          const stand=reduced?landing:standFor(b||{...from,islandId:pose.islandId},chartIsland,landing);
+          d.anim={kind:'land',start:now,from,stand,landed:false,mask:d.mask};
         }
         d.mode=pose.mode;
       }
@@ -259,7 +271,8 @@ export async function createSailingFX({water,objects}) {
           scale:a.kind==='board'?DUCK_SCALE:DUCK_SCALE*SEAT_SCALE,speed:0});
         else out.alpha=(u-.45)/.55;
       } else if (a?.kind==='board') {
-        const stand=standFor(found?.s||seat), walk=Math.hypot(stand.x-a.from.x,stand.y-a.from.y), tw=clamp(walk/360,0,.45), tq=.12, th=.4, ts=.34;
+        const stand=a.stand??=standFor(found?.s??pose,chartIsland,a.from);
+        const walk=Math.hypot(stand.x-a.from.x,stand.y-a.from.y), tw=clamp(walk/360,0,.45), tq=.12, th=.4, ts=.34;
         const e=now-a.start, hop=Math.hypot(seat.x-stand.x,seat.y-stand.y);
         if (e<tw) {
           const u=e/tw;

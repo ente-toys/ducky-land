@@ -1,7 +1,7 @@
 import {Container, Graphics} from 'pixi.js';
 import {PALETTE} from '../shared/palette.js';
 import {islandFor, near} from '../../gameplay/islands.js';
-import {mapFor, mapOf} from '../../world/island-maps.js';
+import {islandMapReady, mapFor, mapOf, THEME_OF} from '../../world/island-maps.js';
 
 const {ink, wood, darkWood, cream, sandShade} = PALETTE;
 
@@ -63,20 +63,24 @@ export function drawJetty(container, {x, y, length, angle = 0, width = 104, scal
 
 export function createHarbor(decks, objects) {
   const jetties = new Map();
+  let shown = 'home';
   const jettyFor = mapId => {
     if (!jetties.has(mapId)) {
+      for (const [islandId, theme] of THEME_OF) {
+        if (theme === mapId && !islandMapReady(islandId)) return;
+      }
       const {JETTY, HARBOR} = mapFor(mapId);
       const alongside = m => {const t = (m.x - JETTY.foot.x) * JETTY.dir.x + (m.y - JETTY.foot.y) * JETTY.dir.y, p = JETTY.along(Math.max(0, Math.min(JETTY.length, t)));
         return t > 0 && t < JETTY.length + 60 && Math.hypot(m.x - p.x, m.y - p.y) < 260;};
       const built = drawJetty(decks, {x: JETTY.foot.x, y: JETTY.foot.y, length: JETTY.length, angle: JETTY.angle, width: JETTY.width,
         wetFrom: JETTY.wetFrom, art: JETTY.art, moorings: HARBOR.moorings.map(m => alongside(m) ? m : null)});
-      built.root.label = `Jetty ${mapId}`; built.root.visible = false;
+      built.root.label = `Jetty ${mapId}`; built.root.visible = mapId === shown;
       jetties.set(mapId, built);
     }
     return jetties.get(mapId);
   };
-  let current = mapFor('home'), jetty = jettyFor('home');
-  jetty.root.visible = true;
+  let current = mapFor('home');
+  jettyFor(shown);
   const JETTY = () => current.JETTY;
   const ropes = new Graphics({label: 'Mooring ropes'});
   decks.addChild(ropes);
@@ -107,10 +111,14 @@ export function createHarbor(decks, objects) {
       for (const node of [ropes, flowers, flag]) node.destroy({children: true});
     },
     transient: () => [flag, flowers],
-    show(mapId) {jettyFor(mapId); for (const [id, j] of jetties) j.root.visible = id === mapId;},
+    show(mapId) {
+      shown = mapId;
+      jettyFor(shown);
+      for (const [id, j] of jetties) j.root.visible = id === shown;
+    },
     switchIsland(id) {
       const island = islandFor(id);
-      current = mapOf(id); jetty = jettyFor(current.id); this.show(current.id); placeFlag();
+      current = mapOf(id); this.show(current.id); placeFlag();
       accent = island.accent;
       flowers.clear();
       if (id !== 'home') for (const [fx, fy] of [[-150, 70], [-118, 92], [150, 100], [184, 80], [60, 120]]) {
@@ -123,6 +131,8 @@ export function createHarbor(decks, objects) {
     update(boats, t, reduced) {
       if (!reduced) drawCloth(t, false);
       ropes.clear();
+      const jetty = jettyFor(current.id);
+      if (!jetty) return;
       for (const boat of boats) {
         if (boat.occupant) continue;
         const i = current.HARBOR.moorings.findIndex(m => near(boat, m, 30));

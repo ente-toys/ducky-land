@@ -16,13 +16,28 @@ export default function BogGame({engine,team,name='Ducky',profile,accountId,navi
   useEffect(()=>{
     const abort=new AbortController();
     let active=true,current;setState({status:'connecting'});
-    const timeout=setTimeout(()=>{if(active&&!current?.room.client.snapshot)setState({status:'disconnected',error:'The bog did not respond. Try reconnecting.'});},10000);
+    let timeout=setTimeout(()=>{
+      if(!active)return;
+      abort.abort();
+      setState({status:'disconnected',error:'The bog did not finish loading. Try reconnecting.'});
+    },25000);
     attachBogCombat(engine,{...options,signal:abort.signal,team,name,profile,navigation,blockers,
       onLeave:totals=>leave.current(totals),
       onSnapshot:(snapshot,self)=>{if(active){clearTimeout(timeout);setState({status:'connected',snapshot,self});if(self)ready.current?.();}},
       onStatus:(status,details)=>{if(active)setState(previous=>({...previous,status,error:details?`Connection closed (${details.code}): ${details.reason}`:null}));},
-    }).then(value=>{current=value;if(!active)value.leave(false);else layer.current=value;})
-      .catch(error=>{if(active)setState({status:'disconnected',error:error.message});});
+    }).then(value=>{
+      clearTimeout(timeout);
+      current=value;
+      if(!active){value.leave(false);return;}
+      layer.current=value;
+      if(!value.room.client.snapshot)timeout=setTimeout(()=>{
+        if(active&&!value.room.client.snapshot)setState({status:'disconnected',error:'The bog did not respond. Try reconnecting.'});
+      },10000);
+    })
+    .catch(error=>{
+      clearTimeout(timeout);
+      if(active&&!abort.signal.aborted)setState({status:'disconnected',error:error.message});
+    });
     return()=>{active=false;abort.abort();clearTimeout(timeout);current?.leave(false);if(layer.current===current)layer.current=null;};
   },[engine,team,name,profile,navigation,blockers,attempt]);
   const {self,snapshot,status,error}=state;

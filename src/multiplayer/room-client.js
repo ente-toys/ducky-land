@@ -514,7 +514,7 @@ export class RoomClient {
   }
 
   predict(command, now) {
-    if(!islandMapReady(this.islandId))return;
+    if(this.player.mode!=='sailing'&&!islandMapReady(this.islandId))return;
     if (command.type==='input' && typeof command.reducedMotion==='boolean') this.player.reducedMotion=command.reducedMotion;
     if (command.type === 'jump') return startJump(this.player);
     if (command.stop === true) {this.player.path=[];this.player.sailTarget=null;this.player.docking=false;this.player.pace=0;this.player.heading=null;}
@@ -636,7 +636,7 @@ export class RoomClient {
   }
 
   step(dt, input) {
-    if (!this.player || !islandMapReady(this.islandId)) return;
+    if (!this.player || (this.player.mode!=='sailing'&&!islandMapReady(this.islandId))) return;
     const now = nowSeconds();
     const {x,y,turn}=this.player;
     this.prev = {x:x+this.offsetX, y:y+this.offsetY, turn};
