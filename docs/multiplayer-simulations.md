@@ -28,6 +28,12 @@ Start the existing realtime fixture with `node server.mjs` for the network tests
 
 Review each trial's actor count, transfers, observer closes, join p95, per-owner p99 and maximum tick gap, and shutdown timestamp. The local pass measures behavior in workerd. Match production Sentry's Worker version to the GitHub deployment check when checking live behavior.
 
+## Diagnosing snapshot delivery
+
+Load-test players can request `room-timing` on their WebSocket. Responses identify the simulation owner, room epoch, Worker version, current tick, and outstanding snapshot acknowledgments. Their snapshots also carry a Worker timestamp for ten seconds after a probe. Compare Worker frame spacing with client arrival spacing and local event-loop delay. The launcher records round-trip times to the room and HTTP timings for the Cloudflare-managed `/cdn-cgi/trace` and app `/api/session` routes.
+
+To compare delivery from a separate network, run `node scripts/probe-edge.mjs` there while the load test runs. Compare UTC timestamps and `edgeColo` for the two observers. A slow launcher-only control is evidence for its path when the independent observer reaches the same colo. Slow controls from both networks can indicate a shared edge problem. These checks cannot fully separate an edge WebSocket issue from a WebSocket-specific path issue without matching platform telemetry.
+
 ## During cutover
 
 The private world object journals the migration ID, pauses gameplay, checkpoints live state, and closes legacy sockets. Older tabs need a refresh. Each island imports its players, boats and Bog records, and the sea imports occupied boats and sailors. The world verifies the imported records before opening the new layout. Sessions, social data, currency balances and global feather inventory stay in the original object. A retry with the same migration ID resumes the migration.

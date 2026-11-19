@@ -233,6 +233,15 @@ test(
     assert.equal(watcher.snapshot.islandId, 'blossom');
     const player = await join('play=1&testSession=' + token);
     assert.equal(player.welcome.protocol, 2);
+    assert.equal(player.snapshot.roomSentAt, undefined);
+    player.socket.send(JSON.stringify({type: 'room-timing', id: 13}));
+    const probe = await wait(() => player.messages.find(m => m.type === 'room-timing' && m.id === 13));
+    assert.equal(probe.owner, 'home');
+    assert.equal(probe.epoch, player.snapshot.epoch);
+    assert.ok(Number.isFinite(probe.roomAt));
+    const timedSnapshot = await wait(() => player.messages.find(m => m.type === 'snapshot' && m.roomSentAt));
+    assert.ok(timedSnapshot.roomSentAt >= probe.roomAt);
+    assert.ok(timedSnapshot.tick > probe.tick);
     assert.ok((await request('/migrate?world=other&target=split&id=other-cutover')).ok);
     const isolated = await join('world=other&play=0&watch=home');
     assert.equal(isolated.welcome.protocol, 2);

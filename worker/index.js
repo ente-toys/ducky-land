@@ -805,6 +805,10 @@ export class IslandRoom {
         globeField = legacyGlobeFields.get(named);
       }
       const view = snapshotView(islandId, named, info);
+      if (now - (info.lastTimingProbeAt ?? -Infinity) <= 10_000) {
+        globeField += `,"roomSentAt":${Date.now()}`;
+        info.lastTimingSnapshot = tick;
+      }
       if (self && info.nearby && !view.playerIds.has(actor.id)) {
         self.pose = named ? {...wirePose(actor),login:info.login,accountId:info.account} : wirePose(actor);
       }
@@ -945,6 +949,19 @@ export class IslandRoom {
       }
       info.throttled = {seq: command.seq, movement};
       if (!this.timer) this.timer = setInterval(() => this.step(),50);
+      return;
+    }
+    if (command?.type === 'room-timing') {
+      if (!info.actor || !info.account?.startsWith('test-') || !Number.isSafeInteger(command.id) ||
+          command.id < 0 || now - (info.lastTimingProbeAt ?? -Infinity) < 1000) return;
+      info.lastTimingProbeAt = now;
+      this.send(socket, {
+        type:'room-timing', id:command.id, roomAt:now, epoch:this.epoch,
+        owner:this.simulation?.owner ?? 'legacy', workerVersion:this.env?.CF_VERSION_METADATA?.id,
+        tick:this.tickCount, snapshotTick:info.lastTimingSnapshot ?? null,
+        pendingAcks:info.unacknowledged?.length ?? 0,
+        maxTickGapMs:this.health?.maxGap ?? null, slowTicks:this.health?.over150 ?? null,
+      });
       return;
     }
     if (command?.type === 'globe-subscription') {

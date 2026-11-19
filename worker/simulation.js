@@ -138,6 +138,10 @@ class LocalSimulation extends IslandRoom {
       this.health.ticks++;
       this.health.maxGap = Math.max(this.health.maxGap, gap);
       if (gap > 150) this.health.over150++;
+      if (gap >= 500 && now >= (this.nextSlowTickLogAt ?? 0)) {
+        this.nextSlowTickLogAt = now + 15_000;
+        console.warn('Room operation slow', {...this.diagnostics(), operation:'tick_gap', duration_ms:gap});
+      }
     }
     super.step();
     this.lastTick = this.timer ? now : undefined;
