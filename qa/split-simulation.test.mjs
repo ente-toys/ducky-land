@@ -7,6 +7,7 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {build} from 'esbuild';
 import {Miniflare, convertV4MiniflareOptions} from 'miniflare';
 import {boardingPoint, canSail, harborOf, navOf} from '../src/gameplay/islands.js';
+import {mapOf} from '../src/world/island-maps.js';
 
 test(
   'split world migrates, routes spawns and sailors, and returns unattended boats after restart',
@@ -51,6 +52,14 @@ test(
         }
         if(new URL(request.url).pathname==='/fixture/stages')
           return Response.json(this.sql.exec('SELECT state FROM simulation_transfers').toArray());
+        if(new URL(request.url).pathname==='/fixture/invalidate-resume') {
+          const {account}=await request.json();
+          const {owner}=this.directory.find(account);
+          const island=simulationStub(this.env,this.settings.world,owner);
+          const result=await internalPost(island,'/fixture/invalidate-resume',{account});
+          if(result.ok) this.sql.exec('DELETE FROM simulation_spawn_generations WHERE account=?',account);
+          return result;
+        }
         if(new URL(request.url).pathname==='/simulation/commit' && this.env.HOLD_COMMIT==='1')return new Response(null,{status:503});
         const response=await super.fetch(request);
         if(new URL(request.url).pathname==='/simulation/commit' && response.ok && !this.lostCommit) {
@@ -77,6 +86,13 @@ test(
       async fetch(request) {
         const path=new URL(request.url).pathname;
         if(path==='/fixture/fleet')return Response.json(this.room.boats);
+        if(path==='/fixture/invalidate-resume') {
+          const {account}=await request.json();
+          const [row]=this.room.sql.exec(
+            "UPDATE resumes SET pose=json_set(pose,'$.x',1000000000,'$.y',1000000000) WHERE account=? RETURNING account",account
+          ).toArray();
+          return new Response(null,{status:row?204:404});
+        }
         if(path==='/fixture/seed-replica') {
           const boat=this.room.boats.find(item=>item.id==='blossom-0');
           this.room.boats=this.room.boats.filter(item=>item!==boat);
@@ -152,6 +168,8 @@ test(
       if(url.pathname==='/economy')return internalPost(worldStub(env,world),'/fixture/economy',{});
       if(url.pathname==='/staged')return simulationStub(env,world,'sea').fetch('https://island.internal/fixture/staged');
       if(url.pathname==='/stage-status')return internalPost(worldStub(env,world),'/fixture/stages',{});
+      if(url.pathname==='/invalidate-resume')
+        return internalPost(worldStub(env,world),'/fixture/invalidate-resume',await request.json());
       if(url.pathname==='/seed-presence') {
         const count=Number(url.searchParams.get('count'));
         return internalPost(presenceStub(env,world),'/publish',{
@@ -337,15 +355,15 @@ test(
         headers: {'X-Multiplayer-Test-Id': '919c4104-faed-4a20-931c-9b3abec359ab', Origin: 'https://game.test'},
       });
       assert.equal(response.status, 200);
-      return (await response.json()).token;
+      return response.json();
     };
-    const homeToken = await newSpawnToken();
+    const {token: homeToken} = await newSpawnToken();
     assert.ok((await request('/seed-presence?world=spawn&count=14')).ok);
     const homeSpawn = await join('world=spawn&play=1&testSession=' + homeToken);
     assert.equal(homeSpawn.snapshot.islandId, 'home', 'spectators do not contribute to the threshold');
     homeSpawn.socket.close();
 
-    const overflowToken = await newSpawnToken();
+    const {token: overflowToken, user: overflowUser} = await newSpawnToken();
     assert.ok((await request('/seed-presence?world=spawn&count=15')).ok);
     const overflowParams = 'world=spawn&play=1&testSession=' + overflowToken;
     const overflow = await join(overflowParams);
@@ -357,6 +375,17 @@ test(
     assert.equal(rejoined.welcome.id, overflow.welcome.id);
     assert.equal(rejoined.snapshot.islandId, overflow.snapshot.islandId);
     rejoined.socket.close();
+
+    await waitAsync(async () => (await request('/invalidate-resume?world=spawn', {
+      method: 'POST', body: JSON.stringify({account: overflowUser.accountId}),
+    })).ok);
+    const recovered = await join(overflowParams);
+    assert.equal(recovered.snapshot.islandId, overflow.snapshot.islandId);
+    const duck = recovered.snapshot.players.find((p) => p.id === recovered.welcome.id);
+    assert.ok(duck, 'a returning duck with an unwalkable save must join as a player');
+    assert.equal(duck.mode, 'walking');
+    assert.ok(mapOf(recovered.snapshot.islandId).nav().walkable(duck.x, duck.y));
+    recovered.socket.close();
 
     const teleportSession = await request('/session?world=teleport', {
       method:'POST',

@@ -586,9 +586,9 @@ export class IslandRoom {
     return Number.isFinite(x) && Number.isFinite(y) && canWalkTo(islandId, x, y) && this.navFor(islandId).walkable(x, y);
   }
 
-  pickSpawn(_account, occupied, onlinePlayers = 0, initialSpawn = false) {
+  pickSpawn(_account, occupied, onlinePlayers = 0, allowIslandSpawn = false) {
     const islandId = this.simulation?.owner ?? pickSpawnIsland(onlinePlayers);
-    if (this.simulation && islandId !== 'home' && !initialSpawn) return null;
+    if (this.simulation && islandId !== 'home' && !allowIslandSpawn) return null;
     return pickWorldSpawn({occupied, hasRoom:id => id === islandId}) ??
       {islandId, ...mapOf(islandId).spawn, name:islandFor(islandId).name};
   }
@@ -608,15 +608,16 @@ export class IslandRoom {
     // Revalidate walking poses in case the map changed while the room was offline.
     const resumed = resume ? JSON.parse(resume.pose) : null;
     const live = previous?.[1].actor;
-    const resumable = (resumeId && resumed?.id === resumeId || this.simulation && resumed) &&
-      (resumed.mode !== 'walking' || !islandFor(resumed.islandId) || this.standable(resumed));
-    const from = (live && (live.id === resumeId || this.simulation) ? live : null) ?? (resumable ? resumed : null);
+    const saved = resumed && (this.simulation || resumed.id === resumeId) ? resumed : null;
+    const unwalkable = saved?.mode === 'walking' && islandFor(saved.islandId) && !this.standable(saved);
+    const from = (live && (live.id === resumeId || this.simulation) ? live : null) ?? (unwalkable ? null : saved);
     let spawn = null;
     if (canPlay && !from) {
       const actors = [...this.connections.values()].flatMap(info => info.actor ? [info.actor] : []);
       const held = this.sql.exec('SELECT pose FROM resumes WHERE expires>?', now).toArray().map(row => JSON.parse(row.pose));
-      spawn = this.pickSpawn(user.account, [...actors, ...held], actors.length,
-        request.headers.get('X-Initial-Spawn') === '1');
+      const allowIslandSpawn = request.headers.get('X-Initial-Spawn') === '1' ||
+        (unwalkable && Boolean(islandFor(this.simulation?.owner)));
+      spawn = this.pickSpawn(user.account, [...actors, ...held], actors.length, allowIslandSpawn);
     }
     const playing = Boolean(canPlay && (from || spawn));
     const [client, socket] = Object.values(new WebSocketPair());
@@ -625,7 +626,8 @@ export class IslandRoom {
     if (playing) {
       const [x,y] = mapOf('home').world.zones.plaza.spawn;
       const savedOutfit = this.sql.exec('SELECT outfit FROM outfits WHERE account=?',user.account).toArray()[0];
-      const outfit = savedOutfit ? JSON.parse(savedOutfit.outfit) : validOutfit(from?.outfit) ? from.outfit : randomOutfit();
+      const previousOutfit = (from ?? saved)?.outfit;
+      const outfit = savedOutfit ? JSON.parse(savedOutfit.outfit) : validOutfit(previousOutfit) ? previousOutfit : randomOutfit();
       if (!savedOutfit) this.sql.exec('INSERT INTO outfits (account,outfit) VALUES(?,?)',user.account,JSON.stringify(outfit));
       const pose = from ?? {islandId:spawn.islandId, x:spawn.x, y:spawn.y};
       info.actor = {id:crypto.randomUUID(), turn:0, emoteVersion:0,
