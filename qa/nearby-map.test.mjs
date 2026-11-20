@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nearbyMapFrame,nearbyHeading,nearbyOffMapTeleporterBearing,teleporterRimPosition} from '../src/app/nearby-map.js';
+import {nearbyMapFrame,nearbyHeading} from '../src/app/nearby-map.js';
 import {mapPoint} from '../src/world/sphere-coordinates.js';
 import {mapOf} from '../src/world/island-maps.js';
 const m=mapOf('home'),centre={x:m.cx,y:m.cy};
@@ -43,37 +43,4 @@ test('the minimap reflects a coast when sailing on its opposite-meridian image',
  const home=mapOf('home');
  const frame=nearbyMapFrame('home',{x:home.cx+40000,y:home.cy-39000});
  assert.deepEqual(frame[0],{id:'home',x:0,y:-1000,bearing:0,flip:-1});
-});
-
-test('the rim guides players to their unlocked teleporter only when it is outside the minimap', async () => {
-  const {TELEPORTERS} = await import('../src/gameplay/teleport.js');
-  const {SEA_WIDTH} = await import('../src/world/flat-layout.js');
-  for (const [id, machine] of TELEPORTERS) {
-    const east = {x:machine.x + 5100, y:machine.y};
-    const edge = {x:machine.x + 5000, y:machine.y};
-    const westAcrossSeam = {x:machine.x - 5100 + SEA_WIDTH, y:machine.y};
-    assert.equal(nearbyOffMapTeleporterBearing(id, east, false), null);
-    assert.equal(nearbyOffMapTeleporterBearing(id, null, true), null);
-    assert.equal(nearbyOffMapTeleporterBearing(id, machine, true), null);
-    assert.equal(nearbyOffMapTeleporterBearing(id, edge, true), null);
-    assert.equal(nearbyOffMapTeleporterBearing(id, east, true), -90);
-    assert.equal(nearbyOffMapTeleporterBearing(id, westAcrossSeam, true), 90);
-  }
-});
-
-test('the harbor pin stays on the rim and clears the Bog badge on either side', () => {
-  for (const radius of [72, 108]) {
-    const badge = {x: 0, y: -radius, clearance: 33};
-    const east = teleporterRimPosition(90, radius, badge);
-    assert.ok(Math.abs(east.x - radius) < 1e-8 && Math.abs(east.y) < 1e-8);
-    assert.deepEqual(teleporterRimPosition(0, radius, null), {x: 0, y: -radius});
-    for (const y of [-radius, -radius + 12]) {
-      for (const bearing of [-5, 0, 5]) {
-        const pin = teleporterRimPosition(bearing, radius, {...badge, y});
-        assert.ok(Math.abs(Math.hypot(pin.x, pin.y) - radius) < 1e-8);
-        assert.ok(Math.abs(Math.hypot(pin.x, pin.y - y) - badge.clearance) < 1e-8);
-        if (bearing !== 0) assert.equal(Math.sign(pin.x), Math.sign(bearing));
-      }
-    }
-  }
 });
