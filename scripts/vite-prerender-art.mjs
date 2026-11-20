@@ -25,6 +25,8 @@ const DUCK_MANIFEST = '/pixi-duck/manifest.json', DUCK_PARTS = '/pixi-duck/frame
 export const startupPreloads = urls => [...new Set(urls.filter(Boolean))]
   .map(href => ({tag:'link',attrs:{rel:'preload',as:'fetch',href,crossorigin:''},injectTo:'head'}));
 const VERSION = 1;
+// Bump when placement changes to invalidate sheets from earlier builds.
+const SHEET_PACKING_VERSION = 1;
 
 // Uniform screen-density steps keep continuous pieces aligned across sheets.
 // Requests above the emitted range retain their exact SVG raster fallback.
@@ -112,10 +114,16 @@ export async function collectPlacedArt(root) {
   const ponds = JSON.parse(await readFile(path.join(root, 'src/rendering/pixi/environment/pond-regions.json'), 'utf8'));
   for (const asset of ponds.assets) entries.push({...asset, src: `/pixi-duck/float/parts/${asset.name}-duck.svg`, resolution: 1});
   const startup = [];
+  // One Ducky wearing an outfit uploads that outfit's whole sheet, so a sheet
+  // holds only the frames the Ducky manifest can ask for. Older drawings of
+  // the same angles stay on disk and were about half of several cap sheets.
+  const worn = new Set(JSON.parse(await readFile(path.join(root,'public/pixi-duck/manifest.json'),'utf8')).wardrobe
+    .flatMap(item => Object.values(item.frames).flat().map(frame => frame.url)));
   for (const dir of ['/pixi-duck','/pixi-art/boat/spin','/pixi-art/boat-build']) {
     for (const file of await readdir(path.join(root,'public',dir),{recursive:true})) {
       if (!file.endsWith('.svg') || dir==='/pixi-duck' && file.startsWith('float/')) continue;
       const outfit=/^(?:frames\/)?(cap-\d+|shoes-(?:fit-)?\d+|acc-\d+|shades-\d+)/.exec(file);
+      if (outfit && !worn.has(dir+'/'+file)) continue;
       startup.push({src:dir+'/'+file,resolution:dir.includes('/boat/')?1.25:dir.includes('boat-build')?(file==='build.svg'?1:4):1,
         theme:outfit?'wardrobe-'+outfit[1]:dir.includes('/boat/')&&!/boat-(00|24)\.svg$/.test(file)?'boat-spin':dir.includes('boat-build')&&file==='build.svg'?'boat-burst':'startup',lossless:true});
     }
@@ -272,7 +280,11 @@ export function prerenderArt() {
         const members=previousGroups.get(group);
         const sameMembers=members?.size===pieces.length&&pieces.every(p=>members.has(p.src+'\0'+p.tier.url));
         const lossless=!group.includes('/ground/opaque/'),quality=lossless?92:90;
-        const old=pieces.map(p=>sameMembers&&previous[p.src]?.tiers.find(t=>(t.group===group||!t.group&&t.atlasFallback==='oversized')&&t.url===p.tier.url&&(t.atlasFallback==='oversized'&&t.sheetLimit===4096||t.sheet&&t.sheetLimit===4096&&t.sheetWidth<=4096&&t.sheetHeight<=4096&&t.lossless===lossless&&(quality===92||t.sheetQuality===quality)&&t.sheetEffort===4)));
+        const old=pieces.map(p=>sameMembers&&previous[p.src]?.tiers.find(t=>
+          (t.group===group||!t.group&&t.atlasFallback==='oversized')&&t.url===p.tier.url&&t.sheetLimit===4096&&(
+            t.atlasFallback==='oversized'||t.sheet&&t.sheetPackingVersion===SHEET_PACKING_VERSION&&
+            t.sheetWidth<=4096&&t.sheetHeight<=4096&&t.lossless===lossless&&
+            (quality===92||t.sheetQuality===quality)&&t.sheetEffort===4)));
         if(old.every(Boolean)){
           const urls=[...new Set(old.flatMap(t=>[t.sheet]).filter(Boolean))];
           const files=await Promise.all(urls.map(async url=>{
@@ -306,7 +318,7 @@ export function prerenderArt() {
           for(const frame of sheet.frames) Object.assign(frame.piece.tier,{sheet:config.base+name,
             lossless:sheet.lossless,x:frame.x,y:frame.y,frameWidth:frame.width,frameHeight:frame.height,
             offsetX:frame.offsetX,offsetY:frame.offsetY,sheetWidth:sheet.width,sheetHeight:sheet.height,
-            group,gutter:2,sheetLimit:4096,sheetEffort:4,sheetQuality:quality});
+            group,gutter:2,sheetLimit:4096,sheetEffort:4,sheetQuality:quality,sheetPackingVersion:SHEET_PACKING_VERSION});
         }
         config.logger.info(`Art sheets ${group}: ${sheets.length}, ${pieces.filter(p=>p.tier.atlasFallback).length} oversized fallbacks, ${(sheets.reduce((n,s)=>n+s.bytes.length,0)/1048576).toFixed(2)} MiB, ${sheets.map(s=>`${s.width}x${s.height}`).join(' ')}`);
       };
@@ -491,26 +503,36 @@ export async function packArtSheets(pieces, limit=4096, {lossless=true,quality=9
     else{images.set(digest,frame);frames.push(frame);}
   }
   frames.sort((a,b)=>Math.max(b.width,b.height)-Math.max(a.width,a.height)||b.width*b.height-a.width*a.height);
-  const sheets=[];
-  for(const frame of frames){
-    const w=frame.width+4,h=frame.height+4;
-    let best;
-    for(const sheet of sheets)for(const [i,r]of sheet.free.entries())if(w<=r.w&&h<=r.h){
-      const score=r.w*r.h-w*h;if(!best||score<best.score)best={sheet,i,r,score};
+  // Least leftover area alone can stack equal frames down one narrow column and
+  // leave most of the sheet empty (16 cap frames took 4008x3856). Also try the
+  // rectangle that grows the sheet least, and keep whichever has fewer texels.
+  const place=tight=>{
+    const sheets=[];
+    for(const frame of frames){
+      const w=frame.width+4,h=frame.height+4;
+      let best;
+      for(const sheet of sheets)for(const [i,r]of sheet.free.entries())if(w<=r.w&&h<=r.h){
+        const score=r.w*r.h-w*h,growth=tight?Math.max(sheet.width,r.x+w)*Math.max(sheet.height,r.y+h)-sheet.width*sheet.height:0;
+        if(!best||growth<best.growth||growth===best.growth&&score<best.score)best={sheet,i,r,score,growth};
+      }
+      if(!best){const sheet={free:[{x:0,y:0,w:limit,h:limit}],frames:[],width:0,height:0};sheets.push(sheet);best={sheet,i:0,r:sheet.free[0]};}
+      const {sheet,i,r}=best;sheet.free.splice(i,1);
+      // Guillotine split, retaining disjoint free rectangles.
+      if(r.w-w>r.h-h){
+        if(r.w>w)sheet.free.push({x:r.x+w,y:r.y,w:r.w-w,h:r.h});
+        if(r.h>h)sheet.free.push({x:r.x,y:r.y+h,w,h:r.h-h});
+      }else{
+        if(r.w>w)sheet.free.push({x:r.x+w,y:r.y,w:r.w-w,h});
+        if(r.h>h)sheet.free.push({x:r.x,y:r.y+h,w:r.w,h:r.h-h});
+      }
+      sheet.frames.push({frame,x:r.x+2,y:r.y+2});
+      sheet.width=Math.max(sheet.width,r.x+w);sheet.height=Math.max(sheet.height,r.y+h);
     }
-    if(!best){const sheet={free:[{x:0,y:0,w:limit,h:limit}],frames:[],width:0,height:0};sheets.push(sheet);best={sheet,i:0,r:sheet.free[0]};}
-    const {sheet,i,r}=best;sheet.free.splice(i,1);
-    // Guillotine split, retaining disjoint free rectangles.
-    if(r.w-w>r.h-h){
-      if(r.w>w)sheet.free.push({x:r.x+w,y:r.y,w:r.w-w,h:r.h});
-      if(r.h>h)sheet.free.push({x:r.x,y:r.y+h,w,h:r.h-h});
-    }else{
-      if(r.w>w)sheet.free.push({x:r.x+w,y:r.y,w:r.w-w,h});
-      if(r.h>h)sheet.free.push({x:r.x,y:r.y+h,w:r.w,h:r.h-h});
-    }
-    frame.x=r.x+2;frame.y=r.y+2;sheet.frames.push(frame);
-    sheet.width=Math.max(sheet.width,r.x+w);sheet.height=Math.max(sheet.height,r.y+h);
-  }
+    return sheets;
+  };
+  const texels=list=>list.reduce((n,s)=>n+s.width*s.height,0);
+  const loose=place(false),tight=place(true),sheets=texels(tight)<texels(loose)?tight:loose;
+  for(const sheet of sheets)sheet.frames=sheet.frames.map(({frame,x,y})=>Object.assign(frame,{x,y}));
   for(const sheet of sheets){
     const pixels=Buffer.alloc(sheet.width*sheet.height*4);
     for(const f of sheet.frames){
