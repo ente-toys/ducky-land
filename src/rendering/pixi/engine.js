@@ -857,10 +857,19 @@ export class PixiIsland {
     let best=null;
     for (const boat of this.room.boats ?? this.room.boatPoses()) {
       if (boat.islandId !== this.islandId || boat.occupant) continue;
-      const deck=boardingPoint(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
+      const deck=this.boardingDeck(boat, nav), d=Math.hypot(deck.x-me.x, deck.y-me.y);
       if (d < 260 && (!best || d < best.d)) best={id:boat.id, d};
     }
     return best ? {take: best.id} : {};
+  }
+  // A moored boat's boarding point only changes when the boat or the walkable map does.
+  boardingDeck(boat, nav) {
+    const decks=this.boardingDecks??=new Map(), saved=decks.get(boat.id);
+    if (saved && saved.nav === nav && saved.x === boat.x && saved.y === boat.y && saved.landing === boat.landing) return saved.deck;
+    if (decks.size > 1024) decks.clear();
+    const deck=boardingPoint(boat, nav);
+    decks.set(boat.id, {nav, x:boat.x, y:boat.y, landing:boat.landing, deck});
+    return deck;
   }
   travelAction() {
     if (this.globeBusy()) return;
