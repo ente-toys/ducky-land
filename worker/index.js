@@ -18,6 +18,8 @@ import {RoomKarma} from './karma.js';
 import {atTeleporter, TELEPORTERS, teleportPrice} from '../src/gameplay/teleport.js';
 
 const STARGAZER_LIMIT = 5000;
+const TEST_LOGIN = /^test-[0-9a-f]{8}$/;
+const TEST_LOGIN_GLOB = 'test-' + '[0-9a-f]'.repeat(8);
 const RESUME_MS = 30_000;
 const BOAT_RETURN_MS = 6 * 60 * 60 * 1000;
 export const BOAT_RETURN_RETRY_MS = 60_000;
@@ -530,15 +532,15 @@ export class IslandRoom {
     const user = this.session(data.digest, now);
     if (!user) return reply({error:'Please sign in again to look through the telescope.'},401);
     const count = this.sql.exec('SELECT count,checked FROM star_count WHERE id=1').toArray()[0];
-    const named = new Map(this.sql.exec('SELECT account,login FROM accounts WHERE account IN (SELECT account FROM stargazers) ORDER BY account LIMIT ?', STARGAZER_LIMIT)
+    const named = new Map(this.sql.exec('SELECT account,login FROM accounts WHERE account IN (SELECT account FROM stargazers) AND login NOT GLOB ? ORDER BY account LIMIT ?', TEST_LOGIN_GLOB, STARGAZER_LIMIT)
       .toArray().map(row => [row.account,row.login]));
-    const playing = [...this.connections.values()].filter(info => info.actor && info.account && info.expires > now);
+    const playing = [...this.connections.values()].filter(info => info.actor && info.account && info.expires > now && !TEST_LOGIN.test(info.login));
     for (const info of playing) if (info.login) named.set(info.account, info.login);
     const players = [...named], online = [...new Set(playing.map(info => info.account))];
     const friends = this.sql.exec('SELECT friend_account_id AS account FROM friends WHERE owner_account_id=?', user.account)
       .toArray().map(row => row.account);
     return reply({total:count?.count ?? null, checked:count?.checked ?? 0,
-      me:{accountId:user.account,login:user.login,starred:!!user.canPlay}, players, online, friends});
+      me:{accountId:user.account,login:user.login,starred:!!user.canPlay && !TEST_LOGIN.test(user.login)}, players, online, friends});
   }
 
   saveOutfit(data, now) {

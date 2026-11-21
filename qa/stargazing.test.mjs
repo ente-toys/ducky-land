@@ -125,6 +125,11 @@ test('the room remembers who starred and answers the telescope', async () => {
   await post(room, '/session/new', {digest:'d-antara', account:'7', login:'antara', canPlay:true, githubToken:'t'});
   await post(room, '/session/new', {digest:'d-prag', account:'3', login:'prag', canPlay:true, githubToken:'t'});
   await post(room, '/session/new', {digest:'d-guest', account:'5', login:'no-star', canPlay:false, githubToken:'t'});
+  const tester = addPlayer(room, 2, {x:100, y:100});
+  await post(room, '/session/new', {digest:'d-test', account:tester.account, login:'test-e344cf70', canPlay:true, githubToken:'t'});
+  room.connections.get(tester.socket).login = 'test-e344cf70';
+  const testSky = await (await post(room, '/stars', {digest:'d-test'})).json();
+  assert.equal(testSky.me.starred, false);
   assert.equal((await post(room, '/stars', {digest:'nobody'})).status, 401);
   let sky = await (await post(room, '/stars', {digest:'d-antara'})).json();
   assert.deepEqual(sky.players, [['3','prag'], ['7','antara']], 'only people who starred are named');
