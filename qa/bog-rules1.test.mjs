@@ -4,14 +4,12 @@ import {createBogCombat} from '../src/features/bog-combat/sim.js';
 import {RULES} from '../src/features/bog-combat/rules.js';
 import {BOG_ISLAND} from '../src/features/bog-combat/entry.js';
 import {mapOf} from '../src/world/island-maps.js';
-import {ISLETS} from '../src/world/islets.js';
 import {angle} from '../src/world/sphere.js';
 import {worldIsland} from '../src/world/world-map.js';
-import {isletWalk} from '../src/world/islet-walk.js';
 import {LiveBogRoom} from '../worker/bog-room.js';
-import {bogExitIslet,setBogExitRandom} from '../worker/bog-exit.js';
-import {createBoats} from '../src/gameplay/islands.js';
-import {buildSpot,strandedIslet} from '../src/gameplay/boat-build.js';
+import {bogExitIsland} from '../worker/bog-exit.js';
+import {strandedIslet} from '../src/gameplay/boat-build.js';
+import {atTeleporter} from '../src/gameplay/teleport.js';
 import {makeRoom,addPlayer,fakeSocket} from './room-harness.mjs';
 import {createDemo} from '../src/features/bog-combat/demo.js';
 import {BOG_COMBAT} from '../src/features/bog-combat/config.js';
@@ -29,7 +27,6 @@ function landed(room,n,balance=10){
 function peer(){const socket=fakeSocket();socket.serializeAttachment=value=>socket.saved=value;socket.deserializeAttachment=()=>socket.saved;return socket;}
 function stop(room){clearInterval(room.timer);room.bog?.dispose();}
 
-setBogExitRandom(()=>.25);
 
 test('seven-second hiding is omitted from enemies, visible to allies, untaggable, and firing reveals immediately',()=>{
  const sim=createBogCombat({blockers:[],bounds:{width:1000,height:1000},pads:team=>[{x:team==='karma'?200:600,y:300}]}),p=sim.join({id:'p',team:'karma'});
@@ -96,7 +93,7 @@ test('combat reconnect and hibernated socket restore retain paid entry, lives, h
  }finally{if(restored)stop(restored);stop(room);}
 });
 
-test('fifth tag keeps visible knockout then exits to the nearest world islet dock, with a new fee on re-entry',async()=>{
+test('fifth tag keeps visible knockout then paddles home to the Homeland teleporter pad, with a new fee on re-entry',async()=>{
  const room=await makeRoom();try{
   const p=landed(room,8300,15),service=room.bog=new LiveBogRoom(room),socket=peer();service.open(socket,{digest:p.account,team:'evil'});
   const fighter=service.arena.state.players.get(service.members.get(socket).id);
@@ -108,14 +105,15 @@ test('fifth tag keeps visible knockout then exits to the nearest world islet doc
   assert.ok(service.arena.snapshot('karma').players.some(q=>q.id===fighter.id&&!q.alive&&q.out));
   for(let i=0;i<120;i++)service.step();assert.ok(service.members.has(socket),'knockout remains visible');
   for(let i=0;i<65;i++)service.step();assert.equal(service.members.has(socket),false);
-  const dest=bogExitIslet();assert.ok(ISLETS.some(i=>i.id===dest.islet));
-  assert.deepEqual([p.actor.x,p.actor.y],[isletWalk(dest.islet).land.x,isletWalk(dest.islet).land.y]);
+  const dest=bogExitIsland();assert.equal(p.actor.islandId,'home');
+  assert.deepEqual([p.actor.x,p.actor.y],[dest.x,dest.y]);
   assert.equal(p.actor.mode,'walking');assert.equal(p.actor.boatId,null);assert.ok(room.navFor(p.actor.islandId).walkable(p.actor.x,p.actor.y));
-  // the paddled-out Duck finds no boat at its islet: it gathers materials and builds one to sail away
-  assert.equal(strandedIslet(p.actor.islandId,p.actor,room.boats),isletWalk(dest.islet),'stranded, no boat added');
+  // never stranded: the Duck lands on a real island beside the teleporter, not on a sea islet
+  assert.equal(strandedIslet(p.actor.islandId,p.actor,room.boats),null,'not stranded');
+  assert.ok(atTeleporter(p.actor,room.navFor('home')),'teleporter in reach');
   assert.equal(room.karma.bogEntry(p.account),null);assert.equal(room.karma.balance(p.account),10);
   assert.equal(p.socket.notes.findLast(m=>m.type==='travel-notice').text,`Out of lives! Paddled to ${dest.name}`);
-  assert.equal(socket.notes.findLast(m=>m.type==='arena-exit').destination.islet,dest.islet);
+  assert.equal(socket.notes.findLast(m=>m.type==='arena-exit').destination.islandId,'home');
   assert.equal(service.profile(p.account).stats.tags,3);assert.equal(service.profile(p.account).medalCase['first-splat'],true);
   const harbor=mapOf(BOG_ISLAND).HARBOR,boat=room.boats.find(b=>b.islandId===BOG_ISLAND&&!b.occupant);
   Object.assign(boat,{...harbor.water,occupant:p.actor.id});Object.assign(p.actor,{...harbor.water,islandId:BOG_ISLAND,mode:'sailing',boatId:boat.id,docking:true});room.step();
@@ -142,26 +140,12 @@ test('authoritative exit stops the arena client without reconnecting',()=>{
  assert.equal(exit.type,'arena-exit');assert.equal(client.closed,true);assert.equal(client.socket.readyState,3);assert.equal(retries,0);
 });
 
-test('out of lives picks a random islet, every islet reachable',()=>{
- const seen=new Set();for(let i=0;i<ISLETS.length;i++){setBogExitRandom(()=>(i+.5)/ISLETS.length);seen.add(bogExitIslet().islet);}
- setBogExitRandom(()=>.25);assert.equal(seen.size,ISLETS.length);
-});
-test('a Bog drop-off adds no boat: the duck is stranded on its islet and can build one from the shore',t=>{
- t.after(()=>setBogExitRandom(()=>.25));
- for(const [index,islet] of ISLETS.entries()){
-  setBogExitRandom(()=>(index+.5)/ISLETS.length);
-  const destination=bogExitIslet(),walk=isletWalk(islet.id),duck={mode:'walking',x:destination.x,y:destination.y};
-  assert.equal(strandedIslet(destination.islandId,duck,createBoats()),walk,islet.id);
-  const shore=walk.world.coast.map(([x,y])=>walk.nav.nearest(x,y,300)).find(p=>p&&buildSpot(destination.islandId,{x:p[0],y:p[1]}));
-  assert.ok(shore,`${islet.id}: a shore to build from`);
- }
-});
 test('closing the combat socket on the fifth tag cannot postpone the authoritative exit',async()=>{
  const room=await makeRoom();try{
   const p=landed(room,8400,10),service=room.bog=new LiveBogRoom(room),socket=peer();service.open(socket,{digest:p.account,team:'karma'});
   const fighter=service.arena.state.players.get(service.members.get(socket).id);
   fighter.lives=1;fighter.shieldUntil=0;fighter.hits=RULES.hitsPerHeart-1;hit(service.arena,fighter);service.step();assert.equal(fighter.lives,0);
   service.close(socket);
-  const dest=bogExitIslet();assert.deepEqual([p.actor.x,p.actor.y],[dest.x,dest.y]);assert.equal(room.karma.bogEntry(p.account),null);
+  const dest=bogExitIsland();assert.deepEqual([p.actor.x,p.actor.y],[dest.x,dest.y]);assert.equal(room.karma.bogEntry(p.account),null);
  }finally{stop(room);}
 });
