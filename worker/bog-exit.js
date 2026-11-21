@@ -1,11 +1,8 @@
-import {ISLETS} from '../src/world/islets.js';
-import {isletWalk} from '../src/world/islet-walk.js';
+import {TELEPORTERS} from '../src/gameplay/teleport.js';
 
-let pick=Math.random;
-export function setBogExitRandom(random=Math.random){pick=random;}
-export function bogExitIslet(){
- const islet=ISLETS[Math.min(ISLETS.length-1,Math.floor(pick()*ISLETS.length))];
- const walk=isletWalk(islet.id);
- const name=islet.name??islet.art.replace(/^\d+-/,'').split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ');
- return {islet:islet.id,islandId:islet.home,name,...walk.land};
+// Out of lives: paddle home to Homeland's teleporter pad, where boats and the teleporter are in reach.
+// (Sea islets had no way off once boat building was retired for the fixed fleet.)
+export function bogExitIsland(){
+ const {arrival}=TELEPORTERS.get('home');
+ return {islandId:'home',name:'Homeland',x:arrival.x,y:arrival.y};
 }

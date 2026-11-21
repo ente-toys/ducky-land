@@ -70,14 +70,13 @@ test('main-island walking pins retain their existing projection',()=>{
  }
 });
 
-test('final Bog knockout world snapshot pins the returned Ducky on Broken Shipwreck instead of Bog',async()=>{
+test('final Bog knockout world snapshot puts the returned Ducky on Homeland, not Bog',async()=>{
  const {makeRoom,addPlayer,fakeSocket}=await import('./room-harness.mjs');
  const {LiveBogRoom}=await import('../worker/bog-room.js');
- const {setBogExitRandom}=await import('../worker/bog-exit.js');
+ const {bogExitIsland}=await import('../worker/bog-exit.js');
  const {RULES}=await import('../src/features/bog-combat/rules.js');
  const room=await makeRoom();
  try{
-  const index=ISLETS.findIndex(i=>i.id==='sea-3-1'),islet=ISLETS[index];setBogExitRandom(()=>(index+.5)/ISLETS.length);
   const h=harborOf('isle-249'),p=addPlayer(room,9451,{islandId:'isle-249',...h.water,mode:'sailing'});
   const boat=room.boats.find(b=>b.islandId==='isle-249'&&!b.occupant);
   Object.assign(boat,{...h.water,occupant:p.actor.id});Object.assign(p.actor,{boatId:boat.id,docking:true});
@@ -87,11 +86,10 @@ test('final Bog knockout world snapshot pins the returned Ducky on Broken Shipwr
   fighter.lives=1;fighter.shieldUntil=0;fighter.hits=RULES.hitsPerHeart-1;
   combat.arena.state.shots.push({id:999,owner:'enemy',team:'evil',x:fighter.x,y:fighter.y,dx:1,dy:0,left:RULES.range,colour:0});
   for(let i=0;i<190;i++)combat.step();
-  assert.equal(socket.notes.find(m=>m.type==='arena-exit').destination.islet,islet.id);
+  const dest=bogExitIsland();
+  assert.equal(socket.notes.find(m=>m.type==='arena-exit').destination.islandId,'home');
   const snapshot=JSON.parse(p.socket.last),own=snapshot.players.find(q=>q.id===p.actor.id);
-  assert.equal(snapshot.islandId,islet.home);assert.equal(own.mode,'walking');
-  checkWalking(islet,own);
-  const before=spherePoint(snapshot.islandId,own),after=globePlayerPoint(snapshot.islandId,own);
-  assert.ok(degrees(before,after)>140,'regression exercises the old wrong-hemisphere pin');
- }finally{setBogExitRandom();clearInterval(room.timer);room.bog?.dispose();}
+  assert.equal(snapshot.islandId,'home');assert.equal(own.mode,'walking');
+  assert.deepEqual([Math.round(own.x),Math.round(own.y)],[dest.x,dest.y]);
+ }finally{clearInterval(room.timer);room.bog?.dispose();}
 });
